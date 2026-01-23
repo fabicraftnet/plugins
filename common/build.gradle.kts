@@ -9,4 +9,5 @@ dependencies {
 	compileOnly(libs.adventure.text.minimessage)
 	compileOnly(libs.cloud.minecraftExtras)
 	compileOnly(libs.slf4j)
+	compileOnlyApi(libs.plugin.luckperms)
 }

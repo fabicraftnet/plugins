@@ -9,6 +9,7 @@ import net.fabicraft.paper.command.commands.BuilderCommand;
 import net.fabicraft.paper.command.commands.CrafterCommand;
 import net.fabicraft.paper.command.commands.SignCommand;
 import net.fabicraft.paper.locale.PaperTranslationManager;
+import net.fabicraft.paper.luckperms.PaperLuckPermsManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
@@ -31,10 +32,13 @@ public final class FabiCraftPaper extends JavaPlugin {
 			))
 			.build();
 	private PaperCommandManager<Source> commandManager;
+	private PaperLuckPermsManager luckPermsManager;
 
 	@Override
 	public void onEnable() {
 		new PaperTranslationManager(getSLF4JLogger());
+
+		this.luckPermsManager = new PaperLuckPermsManager(getSLF4JLogger());
 
 		setupCommandManager();
 		registerCommands();
@@ -43,6 +47,10 @@ public final class FabiCraftPaper extends JavaPlugin {
 
 	public PaperCommandManager<Source> commandManager() {
 		return this.commandManager;
+	}
+
+	public PaperLuckPermsManager luckPermsManager() {
+		return this.luckPermsManager;
 	}
 
 	public void reload() {

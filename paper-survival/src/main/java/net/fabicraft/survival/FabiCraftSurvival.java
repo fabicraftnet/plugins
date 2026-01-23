@@ -1,7 +1,9 @@
 package net.fabicraft.survival;
 
 import net.fabicraft.paper.FabiCraftPaper;
+import net.fabicraft.paper.luckperms.PaperLuckPermsManager;
 import net.fabicraft.survival.command.PaperSurvivalCommand;
+import net.fabicraft.survival.command.commands.RolePlayCommand;
 import net.fabicraft.survival.command.commands.SetFirstSpawnCommand;
 import net.fabicraft.survival.listener.PlayerListener;
 import net.fabicraft.survival.locale.SurvivalTranslationManager;
@@ -40,6 +42,10 @@ public final class FabiCraftSurvival extends JavaPlugin {
 		return this.fabiCraftPaper.commandManager();
 	}
 
+	public PaperLuckPermsManager luckPermsManager() {
+		return this.fabiCraftPaper.luckPermsManager();
+	}
+
 	private void registerListeners() {
 		PluginManager manager = getServer().getPluginManager();
 		List.of(
@@ -49,7 +55,8 @@ public final class FabiCraftSurvival extends JavaPlugin {
 
 	private void registerCommands() {
 		List.of(
-				new SetFirstSpawnCommand(this)
+				new SetFirstSpawnCommand(this),
+				new RolePlayCommand(this)
 		).forEach(PaperSurvivalCommand::register);
 	}
 
