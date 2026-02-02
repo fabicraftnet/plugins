@@ -10,7 +10,7 @@ import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 public final class BuilderCommand extends PaperCommand<FabiCraftPaperCore> {
-	private static final String PERMISSION_NIGHTVISION = "fabicraft.paper.command.builder.nightvision";
+	private static final String PERMISSION_NIGHTVISION = "fabicraft.paper.core.command.builder.nightvision";
 
 	public BuilderCommand(FabiCraftPaperCore plugin) {
 		super(plugin, plugin.commandManager());

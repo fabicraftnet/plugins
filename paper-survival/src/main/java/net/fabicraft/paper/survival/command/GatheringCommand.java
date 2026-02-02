@@ -41,19 +41,22 @@ public final class GatheringCommand extends PaperCommand<FabiCraftPaperSurvival>
 	public void register() {
 		var builder = super.manager.commandBuilder("gathering");
 		super.manager.command(builder
+				.literal("add")
 				.senderType(PlayerSource.class)
 				.permission(PERMISSION_ADD)
 				.required("name", StringParser.stringParser())
+				.required("material", MaterialParser.materialParser())
+				.required("goal", IntegerParser.integerParser(1))
 				.handler(this::handleAdd)
 		);
 		super.manager.command(builder
+				.literal("remove")
 				.permission(PERMISSION_REMOVE)
 				.required("name", StringParser.stringParser())
-				.required("material", MaterialParser.materialParser())
-				.required("goal", IntegerParser.integerParser(1))
 				.handler(this::handleRemove)
 		);
 		super.manager.command(builder
+				.literal("list")
 				.permission(PERMISSION_LIST)
 				.handler(this::handleList)
 		);
@@ -62,7 +65,7 @@ public final class GatheringCommand extends PaperCommand<FabiCraftPaperSurvival>
 	private void handleAdd(CommandContext<PlayerSource> context) {
 		Player player = context.sender().source();
 		Block block = player.getTargetBlockExact(10);
-		if (!(block instanceof Container)) {
+		if (block == null || !(block.getState() instanceof Container)) {
 			player.sendMessage(COMPONENT_ADD_BLOCK_NOT_CONTAINER);
 			return;
 		}

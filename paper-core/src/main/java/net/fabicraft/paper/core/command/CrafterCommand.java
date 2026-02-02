@@ -9,7 +9,7 @@ import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 public final class CrafterCommand extends PaperCommand<FabiCraftPaperCore> {
-	private static final String PERMISSION = "fabicraft.paper.command.crafter";
+	private static final String PERMISSION = "fabicraft.paper.core.command.crafter";
 
 	public CrafterCommand(FabiCraftPaperCore plugin) {
 		super(plugin, plugin.commandManager());

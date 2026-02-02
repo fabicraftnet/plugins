@@ -4,6 +4,7 @@ import net.fabicraft.common.command.TranslatableCaptionProvider;
 import net.fabicraft.common.command.exception.ExceptionHandlers;
 import net.fabicraft.paper.common.command.PaperCommand;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
+import net.fabicraft.paper.survival.command.GatheringCommand;
 import net.fabicraft.paper.survival.command.RolePlayCommand;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
 import net.fabicraft.paper.survival.listener.GatheringListener;
@@ -71,7 +72,8 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 
 	private void registerCommands() {
 		List.of(
-				new RolePlayCommand(this)
+				new RolePlayCommand(this),
+				new GatheringCommand(this)
 		).forEach(PaperCommand::register);
 	}
 }

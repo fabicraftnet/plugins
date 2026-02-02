@@ -23,30 +23,30 @@ import org.incendo.cloud.parser.standard.StringParser;
 
 
 public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
-	private static final String PERMISSION = "fabicraft.paper.command.sign";
+	private static final String PERMISSION = "fabicraft.paper.core.command.sign";
 	private static final Component COMPONENT_ERROR = Components.translatable(
-			"fabicraft.paper.command.sign.error",
+			"fabicraft.paper.core.command.sign.error",
 			MessageType.ERROR
 	);
 	private static final Component COMPONENT_GLOWING_TRUE = Components.translatable(
-			"fabicraft.paper.command.sign.glowing.true",
+			"fabicraft.paper.core.command.sign.glowing.true",
 			MessageType.SUCCESS
 	);
 	private static final Component COMPONENT_GLOWING_FALSE = Components.translatable(
-			"fabicraft.paper.command.sign.glowing.false",
+			"fabicraft.paper.core.command.sign.glowing.false",
 			MessageType.SUCCESS
 	);
 	private static final TranslatableComponent COMPONENT_COLOR_SET = Components.translatable(
-			"fabicraft.paper.command.sign.color.set",
+			"fabicraft.paper.core.command.sign.color.set",
 			MessageType.SUCCESS
 	);
 
 	private static final Component COMPONENT_COLOR_CLEAR = Components.translatable(
-			"fabicraft.paper.command.sign.color.clear",
+			"fabicraft.paper.core.command.sign.color.clear",
 			MessageType.SUCCESS
 	);
 	private static final TranslatableComponent COMPONENT_LINE = Components.translatable(
-			"fabicraft.paper.command.sign.line",
+			"fabicraft.paper.core.command.sign.line",
 			MessageType.SUCCESS
 	);
 
