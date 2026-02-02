@@ -10,4 +10,5 @@ dependencies {
 	api(libs.cloud.minecraftExtras)
 	compileOnly(libs.slf4j)
 	compileOnlyApi(libs.plugin.luckperms)
+	compileOnlyApi(libs.plugin.miniplaceholders)
 }

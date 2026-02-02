@@ -11,16 +11,16 @@ import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> {
-	private static final String PERMISSION = "fabicraft.survival.command.roleplay";
+	private static final String PERMISSION = "fabicraft.paper.survival.command.roleplay";
 	private static final String GROUP_NAME = "roleplay";
 	private static final TranslatableComponent COMPONENT_ADD = Components.translatable(
-			"fabicraft.survival.command.roleplay.add",
+			"fabicraft.paper.survival.command.roleplay.add",
 			MessageType.SUCCESS,
 			"/rpchat",
 			"/nickname"
 	);
 	private static final TranslatableComponent COMPONENT_REMOVE = Components.translatable(
-			"fabicraft.survival.command.roleplay.remove",
+			"fabicraft.paper.survival.command.roleplay.remove",
 			MessageType.SUCCESS
 	);
 	private final PaperLuckPermsManager luckPermsManager;

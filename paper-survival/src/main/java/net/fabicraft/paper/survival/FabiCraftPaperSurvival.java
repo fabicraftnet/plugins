@@ -5,8 +5,10 @@ import net.fabicraft.common.command.exception.ExceptionHandlers;
 import net.fabicraft.paper.common.command.PaperCommand;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
 import net.fabicraft.paper.survival.command.RolePlayCommand;
-import net.fabicraft.paper.survival.listener.PlayerListener;
+import net.fabicraft.paper.survival.gathering.GatheringManager;
+import net.fabicraft.paper.survival.listener.GatheringListener;
 import net.fabicraft.paper.survival.locale.SurvivalTranslationManager;
+import net.fabicraft.paper.survival.placeholder.MiniPlaceholders;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.execution.ExecutionCoordinator;
@@ -19,21 +21,29 @@ import java.util.List;
 public final class FabiCraftPaperSurvival extends JavaPlugin {
 	private PaperCommandManager<Source> commandManager;
 	private PaperLuckPermsManager luckPermsManager;
+	private GatheringManager gatheringManager;
 
 	@Override
 	public void onEnable() {
 		new SurvivalTranslationManager(getSLF4JLogger());
 
+		this.gatheringManager = new GatheringManager();
 		this.luckPermsManager = new PaperLuckPermsManager(getSLF4JLogger());
 
 		setupCommandManager();
 		registerCommands();
 
 		registerListeners();
+
+		new MiniPlaceholders(this).register();
 	}
 
 	public PaperCommandManager<Source> commandManager() {
 		return this.commandManager;
+	}
+
+	public GatheringManager gatheringManager() {
+		return this.gatheringManager;
 	}
 
 	public PaperLuckPermsManager luckPermsManager() {
@@ -55,7 +65,7 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 	private void registerListeners() {
 		PluginManager manager = getServer().getPluginManager();
 		List.of(
-				new PlayerListener(this)
+				new GatheringListener(this)
 		).forEach(listener -> manager.registerEvents(listener, this));
 	}
 

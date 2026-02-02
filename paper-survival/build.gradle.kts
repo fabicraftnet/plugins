@@ -22,6 +22,10 @@ paperPluginYaml {
 				required = true
 				load = PaperPluginYaml.Load.BEFORE
 			}
+			register("MiniPlaceholders") {
+				required = true
+				load = PaperPluginYaml.Load.BEFORE
+			}
 		}
 	}
 }
