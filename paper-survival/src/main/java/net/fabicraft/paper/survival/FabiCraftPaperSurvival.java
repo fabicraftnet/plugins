@@ -5,10 +5,8 @@ import net.fabicraft.common.command.exception.ExceptionHandlers;
 import net.fabicraft.paper.common.command.PaperCommand;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
 import net.fabicraft.paper.survival.command.RolePlayCommand;
-import net.fabicraft.paper.survival.command.SetFirstSpawnCommand;
 import net.fabicraft.paper.survival.listener.PlayerListener;
 import net.fabicraft.paper.survival.locale.SurvivalTranslationManager;
-import net.fabicraft.paper.survival.spawn.FirstSpawnManager;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.execution.ExecutionCoordinator;
@@ -19,7 +17,6 @@ import org.incendo.cloud.paper.util.sender.Source;
 import java.util.List;
 
 public final class FabiCraftPaperSurvival extends JavaPlugin {
-	private FirstSpawnManager firstSpawnManager;
 	private PaperCommandManager<Source> commandManager;
 	private PaperLuckPermsManager luckPermsManager;
 
@@ -27,19 +24,12 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 	public void onEnable() {
 		new SurvivalTranslationManager(getSLF4JLogger());
 
-		this.firstSpawnManager = new FirstSpawnManager(this);
-		this.firstSpawnManager.load();
-
 		this.luckPermsManager = new PaperLuckPermsManager(getSLF4JLogger());
 
 		setupCommandManager();
 		registerCommands();
 
 		registerListeners();
-	}
-
-	public FirstSpawnManager firstSpawnManager() {
-		return this.firstSpawnManager;
 	}
 
 	public PaperCommandManager<Source> commandManager() {
@@ -71,7 +61,6 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 
 	private void registerCommands() {
 		List.of(
-				new SetFirstSpawnCommand(this),
 				new RolePlayCommand(this)
 		).forEach(PaperCommand::register);
 	}
