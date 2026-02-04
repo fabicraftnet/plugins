@@ -5,9 +5,8 @@ import net.fabicraft.common.command.exception.ExceptionHandlers;
 import net.fabicraft.paper.common.command.PaperCommand;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
 import net.fabicraft.paper.survival.command.SurvivalCommandPreProcessor;
-import net.fabicraft.paper.survival.command.commands.FabiCraftCommand;
+import net.fabicraft.paper.survival.command.commands.FabiCraftSurvivalCommand;
 import net.fabicraft.paper.survival.command.commands.GatheringCommand;
-import net.fabicraft.paper.survival.command.commands.ReloadCommand;
 import net.fabicraft.paper.survival.command.commands.RolePlayCommand;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
 import net.fabicraft.paper.survival.items.CustomItemManager;
@@ -106,9 +105,8 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 
 	private void registerCommands() {
 		List.of(
-				new FabiCraftCommand(this),
+				new FabiCraftSurvivalCommand(this),
 				new GatheringCommand(this),
-				new ReloadCommand(this),
 				new RolePlayCommand(this)
 		).forEach(PaperCommand::register);
 	}
