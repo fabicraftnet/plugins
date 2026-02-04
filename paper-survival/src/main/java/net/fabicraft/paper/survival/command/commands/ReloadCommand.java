@@ -1,4 +1,4 @@
-package net.fabicraft.paper.survival.command;
+package net.fabicraft.paper.survival.command.commands;
 
 import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
