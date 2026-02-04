@@ -1,18 +1,18 @@
 package net.fabicraft.paper.survival.gathering;
 
-import org.bukkit.Location;
+import io.papermc.paper.math.BlockPosition;
 import org.bukkit.Material;
 
 public final class Gathering {
 	private final String identifier;
-	private final Location containerLocation;
+	private final BlockPosition containerPosition;
 	private final Material gatherableMaterial;
 	private final int gatheredGoal;
 	private int gatheredAmount;
 
-	public Gathering(String identifier, Location containerLocation, Material gatherableMaterial, int gatheredAmount, int gatheredGoal) {
+	public Gathering(String identifier, BlockPosition containerPosition, Material gatherableMaterial, int gatheredAmount, int gatheredGoal) {
 		this.identifier = identifier;
-		this.containerLocation = containerLocation;
+		this.containerPosition = containerPosition;
 		this.gatherableMaterial = gatherableMaterial;
 		this.gatheredAmount = gatheredAmount;
 		this.gatheredGoal = gatheredGoal;
@@ -27,8 +27,8 @@ public final class Gathering {
 		return identifier;
 	}
 
-	public Location containerLocation() {
-		return containerLocation;
+	public BlockPosition containerPosition() {
+		return containerPosition;
 	}
 
 	public Material gatherableMaterial() {

@@ -74,7 +74,7 @@ public final class GatheringCommand extends PaperCommand<FabiCraftPaperSurvival>
 		Material material = context.get("material");
 		int goal = context.get("goal");
 
-		Gathering gathering = new Gathering(name.toLowerCase(Locale.ROOT), block.getLocation(), material, 0, goal);
+		Gathering gathering = new Gathering(name.toLowerCase(Locale.ROOT), block.getLocation().toBlock(), material, 0, goal);
 		this.gatheringManager.add(gathering);
 
 		TranslatableComponent component = Components.translatable(

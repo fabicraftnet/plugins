@@ -6,6 +6,7 @@ import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.gathering.Gathering;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,7 +27,8 @@ public final class GatheringListener implements Listener {
 
 	@EventHandler
 	public void onContainerOpen(PlayerInteractEvent event) {
-		if (!event.hasBlock() || !(event.getClickedBlock() instanceof Container container)) {
+		Block clicked = event.getClickedBlock();
+		if (clicked == null || !(clicked.getState() instanceof Container container)) {
 			return;
 		}
 		Gathering gathering = plugin.gatheringManager().gathering(container.getLocation());

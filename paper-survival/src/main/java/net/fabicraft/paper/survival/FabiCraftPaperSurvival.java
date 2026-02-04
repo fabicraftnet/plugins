@@ -5,6 +5,7 @@ import net.fabicraft.common.command.exception.ExceptionHandlers;
 import net.fabicraft.paper.common.command.PaperCommand;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
 import net.fabicraft.paper.survival.command.GatheringCommand;
+import net.fabicraft.paper.survival.command.ReloadCommand;
 import net.fabicraft.paper.survival.command.RolePlayCommand;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
 import net.fabicraft.paper.survival.listener.GatheringListener;
@@ -17,6 +18,7 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.paper.util.sender.PaperSimpleSenderMapper;
 import org.incendo.cloud.paper.util.sender.Source;
 
+import java.io.IOException;
 import java.util.List;
 
 public final class FabiCraftPaperSurvival extends JavaPlugin {
@@ -28,7 +30,9 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 	public void onEnable() {
 		new SurvivalTranslationManager(getSLF4JLogger());
 
-		this.gatheringManager = new GatheringManager();
+		this.gatheringManager = new GatheringManager(this);
+
+
 		this.luckPermsManager = new PaperLuckPermsManager(getSLF4JLogger());
 
 		setupCommandManager();
@@ -37,6 +41,12 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 		registerListeners();
 
 		new MiniPlaceholders(this).register();
+
+		try {
+			load();
+		} catch (IOException e) {
+			getSLF4JLogger().error("Couldn't load plugin", e);
+		}
 	}
 
 	public PaperCommandManager<Source> commandManager() {
@@ -49,6 +59,10 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 
 	public PaperLuckPermsManager luckPermsManager() {
 		return this.luckPermsManager;
+	}
+
+	public void load() throws IOException {
+		this.gatheringManager.load();
 	}
 
 	private void setupCommandManager() {
@@ -73,7 +87,8 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 	private void registerCommands() {
 		List.of(
 				new RolePlayCommand(this),
-				new GatheringCommand(this)
+				new GatheringCommand(this),
+				new ReloadCommand(this)
 		).forEach(PaperCommand::register);
 	}
 }
