@@ -6,13 +6,12 @@ import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.gathering.Gathering;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 
 public final class GatheringListener implements Listener {
 	private static final TranslatableComponent COMPONENT_GATHERING_COMPLETED = Components.translatable(
@@ -26,19 +25,24 @@ public final class GatheringListener implements Listener {
 	}
 
 	@EventHandler
-	public void onContainerOpen(PlayerInteractEvent event) {
-		Block clicked = event.getClickedBlock();
-		if (clicked == null || !(clicked.getState() instanceof Container container)) {
+	public void onContainerOpen(InventoryOpenEvent event) {
+		if (!(event.getInventory().getHolder() instanceof Container container)) {
 			return;
 		}
-		Gathering gathering = plugin.gatheringManager().gathering(container.getLocation());
+
+		Gathering gathering = this.plugin.gatheringManager().gathering(container.getLocation());
 		if (gathering == null) {
 			return;
 		}
+
+		event.setCancelled(true);
+
 		if (gathering.isCompleted()) {
 			event.getPlayer().sendMessage(COMPONENT_GATHERING_COMPLETED);
-			event.setCancelled(true);
+			return;
 		}
+
+		event.getPlayer().openInventory(gathering.inventoryHolder().getInventory());
 	}
 
 	@EventHandler
@@ -68,7 +72,7 @@ public final class GatheringListener implements Listener {
 			event.getDestination().close();
 		}
 
-		if (!event.getItem().getType().equals(gathering.gatherableMaterial())) {
+		if (!event.getItem().getType().equals(gathering.material())) {
 			event.setCancelled(true);
 		}
 

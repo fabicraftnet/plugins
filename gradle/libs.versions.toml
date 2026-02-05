@@ -4,7 +4,7 @@ adventure = "4.25.0"
 
 [libraries]
 platform-paper = { module = "io.papermc.paper:paper-api", version = "1.21.11-R0.1-SNAPSHOT" }
-platform-velocity = { module = "com.velocitypowered:velocity-api", version = "3.4.0-SNAPSHOT"}
+platform-velocity = { module = "com.velocitypowered:velocity-api", version = "3.4.0-SNAPSHOT" }
 
 # Common
 adventure = { module = "net.kyori:adventure-api", version.ref = "adventure" }
@@ -12,11 +12,11 @@ adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", 
 slf4j = { module = "org.slf4j:slf4j-api", version = "2.0.16" }
 
 # Cloud
-cloud-core ={ module = "org.incendo:cloud-core", version = "2.0.0" }
+cloud-core = { module = "org.incendo:cloud-core", version = "2.0.0" }
 cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud-minecraft" }
 cloud-velocity = { module = "org.incendo:cloud-velocity", version.ref = "cloud-minecraft" }
 cloud-minecraftExtras = { module = "org.incendo:cloud-minecraft-extras", version.ref = "cloud-minecraft" }
 
-plugin-luckperms = { module = "net.luckperms:api", version = "5.5"}
+plugin-luckperms = { module = "net.luckperms:api", version = "5.5" }
 plugin-miniplaceholders = { module = "io.github.miniplaceholders:miniplaceholders-api", version = "3.1.0" }
 plugin-worldguard = { module = "com.sk89q.worldguard:worldguard-bukkit", version = "7.0.13" }

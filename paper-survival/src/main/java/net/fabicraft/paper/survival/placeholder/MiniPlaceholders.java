@@ -2,38 +2,22 @@ package net.fabicraft.paper.survival.placeholder;
 
 import io.github.miniplaceholders.api.Expansion;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
-import net.fabicraft.paper.survival.gathering.Gathering;
-import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.fabicraft.paper.survival.gathering.GatheringManager;
+import net.fabicraft.paper.survival.placeholder.gathering.*;
 
 public final class MiniPlaceholders {
 	private final Expansion expansion;
 
 	public MiniPlaceholders(FabiCraftPaperSurvival plugin) {
-		Expansion.Builder builder = Expansion.builder("fabicraft_paper_survival");
-		builder.globalPlaceholder("gathering_amount", ((queue, context) -> {
-			if (!queue.hasNext()) {
-				return Tag.preProcessParsed("You need to provide a name");
-			}
-			String name = queue.pop().value();
-			Gathering gathering = plugin.gatheringManager().gathering(name);
-			if (gathering == null) {
-				return Tag.preProcessParsed("Unknown gathering");
-			}
+		Expansion.Builder builder = Expansion.builder("fabicraftpapersurvival");
 
-			return Tag.preProcessParsed(String.valueOf(gathering.gatheredAmount()));
-		}));
-		builder.globalPlaceholder("gathering_goal", ((queue, context) -> {
-			if (!queue.hasNext()) {
-				return Tag.preProcessParsed("You need to provide a name");
-			}
-			String name = queue.pop().value();
-			Gathering gathering = plugin.gatheringManager().gathering(name);
-			if (gathering == null) {
-				return Tag.preProcessParsed("Unknown gathering");
-			}
+		GatheringManager gatheringManager = plugin.gatheringManager();
+		builder.globalPlaceholder("gathering_collected", new GatheringCollectedPlaceholder(gatheringManager));
+		builder.globalPlaceholder("gathering_displayname", new GatheringDisplayNamePlaceholder(gatheringManager));
+		builder.globalPlaceholder("gathering_goal", new GatheringGoalPlaceholder(gatheringManager));
+		builder.globalPlaceholder("gathering_identifier", new GatheringIdentifierPlaceholder(gatheringManager));
+		builder.globalPlaceholder("gathering_item", new GatheringItemPlaceholder(gatheringManager));
 
-			return Tag.preProcessParsed(String.valueOf(gathering.gatheredGoal()));
-		}));
 		this.expansion = builder.build();
 	}
 

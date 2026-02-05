@@ -2,10 +2,16 @@ package net.fabicraft.paper.survival.gathering;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import io.papermc.paper.math.BlockPosition;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
+import net.fabicraft.paper.survival.gson.BlockPositionTypeAdapter;
+import net.fabicraft.paper.survival.gson.MiniMessageTypeAdapter;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -14,7 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class GatheringManager {
-	private final Gson gson = new Gson();
+	private final Gson gson = new GsonBuilder()
+			.registerTypeAdapter(BlockPosition.class, new BlockPositionTypeAdapter())
+			.registerTypeAdapter(Component.class, new MiniMessageTypeAdapter())
+			.create();
 	private final Path path;
 	private final FabiCraftPaperSurvival plugin;
 	private List<Gathering> gatherings = new ArrayList<>();
@@ -66,5 +75,13 @@ public final class GatheringManager {
 			}
 		}
 		return null;
+	}
+
+	public void save() {
+		try (BufferedWriter writer = Files.newBufferedWriter(this.path)) {
+			this.gson.toJson(this.gatherings, writer);
+		} catch (Exception e) {
+			this.plugin.getSLF4JLogger().warn("Failed to write sogaccounts.json", e);
+		}
 	}
 }

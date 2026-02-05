@@ -17,5 +17,6 @@ public final class SurvivalCommandPreProcessor<C> implements CommandPreprocessor
 	public void accept(@NonNull CommandPreprocessingContext<C> context) {
 		CommandContext<C> commandContext = context.commandContext();
 		commandContext.store(SurvivalCommandContextKeys.CUSTOM_ITEM_MANAGER_KEY, this.plugin.customItemManager());
+		commandContext.store(SurvivalCommandContextKeys.GATHERING_MANAGER_KEY, this.plugin.gatheringManager());
 	}
 }
