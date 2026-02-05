@@ -16,4 +16,8 @@ public final class GatheringInventoryHolder implements InventoryHolder {
 	public @NotNull Inventory getInventory() {
 		return Bukkit.createInventory(this, 27, this.gathering.displayName());
 	}
+
+	public Gathering gathering() {
+		return this.gathering;
+	}
 }

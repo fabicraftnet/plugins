@@ -4,14 +4,16 @@ import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.gathering.Gathering;
+import net.fabicraft.paper.survival.gathering.GatheringInventoryHolder;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Container;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public final class GatheringListener implements Listener {
 	private static final TranslatableComponent COMPONENT_GATHERING_COMPLETED = Components.translatable(
@@ -46,46 +48,41 @@ public final class GatheringListener implements Listener {
 	}
 
 	@EventHandler
-	public void onContainerAdd(InventoryMoveItemEvent event) {
-		if (!(event.getInitiator().getHolder() instanceof Player player)) {
+	public void onContainerAdd(InventoryClickEvent event) {
+		Inventory mainInventory = event.getInventory();
+		Inventory clickedInventory = event.getClickedInventory();
+
+		if (clickedInventory == null || !(mainInventory.getHolder() instanceof GatheringInventoryHolder gatheringInventoryHolder)) {
 			return;
 		}
 
-		if (event.getSource().getHolder() instanceof Container container) {
-			Gathering gathering = plugin.gatheringManager().gathering(container.getLocation());
-			if (gathering != null) {
-				event.setCancelled(true);
-			}
+		if (mainInventory.equals(clickedInventory)) {
+			event.setCancelled(true);
 		}
 
-		if (!(event.getDestination().getHolder() instanceof Container container)) {
-			return;
-		}
-
-		Gathering gathering = plugin.gatheringManager().gathering(container.getLocation());
-		if (gathering == null) {
-			return;
-		}
+		Gathering gathering = gatheringInventoryHolder.gathering();
 
 		if (gathering.isCompleted()) {
 			event.setCancelled(true);
-			event.getDestination().close();
+			mainInventory.close();
 		}
 
-		if (!event.getItem().getType().equals(gathering.material())) {
+		ItemStack cursorItem = event.getCursor();
+		if (!cursorItem.getType().equals(gathering.material())) {
 			event.setCancelled(true);
 		}
 
-		int amount = event.getItem().getAmount();
+		int amount = cursorItem.getAmount();
 		if (gathering.add(amount)) {
 			TranslatableComponent component = Components.translatable(
 					"fabicraft.paper.survival.gathering.completed.broadcast",
 					MessageType.SUCCESS,
-					Components.player(player),
+					Components.player(event.getWhoClicked()),
 					gathering.identifier()
 			);
 			Bukkit.broadcast(component);
 		}
-		Bukkit.getScheduler().runTaskLater(this.plugin, () -> event.getDestination().remove(event.getItem()), 20);
+		this.plugin.gatheringManager().save();
+		Bukkit.getScheduler().runTaskLater(this.plugin, () -> mainInventory.remove(cursorItem), 20);
 	}
 }
