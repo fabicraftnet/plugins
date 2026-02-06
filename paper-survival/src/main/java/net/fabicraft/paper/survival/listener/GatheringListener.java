@@ -8,8 +8,10 @@ import net.fabicraft.paper.survival.gathering.GatheringInventoryHolder;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Container;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
@@ -49,40 +51,67 @@ public final class GatheringListener implements Listener {
 
 	@EventHandler
 	public void onContainerAdd(InventoryClickEvent event) {
-		Inventory mainInventory = event.getInventory();
-		Inventory clickedInventory = event.getClickedInventory();
-
-		if (clickedInventory == null || !(mainInventory.getHolder() instanceof GatheringInventoryHolder gatheringInventoryHolder)) {
+		Inventory topInventory = event.getView().getTopInventory();
+		if (!(topInventory.getHolder() instanceof GatheringInventoryHolder gatheringInventoryHolder)) {
 			return;
 		}
 
-		if (mainInventory.equals(clickedInventory)) {
-			event.setCancelled(true);
-		}
-
 		Gathering gathering = gatheringInventoryHolder.gathering();
-
-		if (gathering.isCompleted()) {
-			event.setCancelled(true);
-			mainInventory.close();
-		}
-
 		ItemStack cursorItem = event.getCursor();
-		if (!cursorItem.getType().equals(gathering.material())) {
+		ItemStack clickedItem = event.getCurrentItem();
+
+		//Player clicked the top inventory
+		if (topInventory.equals(event.getClickedInventory())) {
+			if (clickedItem == null && cursorItem.getType().equals(gathering.material())) {
+				addToGathering(gathering, event.getWhoClicked(), cursorItem);
+				return;
+			}
 			event.setCancelled(true);
+			return;
 		}
 
-		int amount = cursorItem.getAmount();
+		//Player clicked the bottom inventory
+		if (clickedItem == null) {
+			return;
+		}
+
+		if (!clickedItem.getType().equals(gathering.material())) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)) {
+			return;
+		}
+
+		addToGathering(gathering, event.getWhoClicked(), clickedItem);
+	}
+
+	private void addToGathering(Gathering gathering, HumanEntity humanEntity, ItemStack itemStack) {
+		int amount = itemStack.getAmount();
 		if (gathering.add(amount)) {
+			closeForEveryone(gathering);
 			TranslatableComponent component = Components.translatable(
 					"fabicraft.paper.survival.gathering.completed.broadcast",
 					MessageType.SUCCESS,
-					Components.player(event.getWhoClicked()),
+					Components.player(humanEntity),
 					gathering.identifier()
 			);
 			Bukkit.broadcast(component);
 		}
 		this.plugin.gatheringManager().save();
-		Bukkit.getScheduler().runTaskLater(this.plugin, () -> mainInventory.remove(cursorItem), 20);
+	}
+
+	private void closeForEveryone(Gathering gathering) {
+		this.plugin.getServer().getOnlinePlayers().forEach(player -> {
+			Inventory topInventory = player.getOpenInventory().getTopInventory();
+			if (!(topInventory.getHolder() instanceof GatheringInventoryHolder gatheringInventoryHolder)) {
+				return;
+			}
+			if (!gatheringInventoryHolder.gathering().equals(gathering)) {
+				return;
+			}
+			topInventory.close();
+		});
 	}
 }
