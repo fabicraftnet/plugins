@@ -40,6 +40,7 @@ public final class PlayerListener implements Listener {
 			inventory.addItem(ItemStack.of(Material.GOLDEN_SHOVEL));
 		}
 		inventory.addItem(ItemStack.of(Material.BREAD, 16));
+		inventory.addItem(ItemStack.of(Material.BAMBOO_RAFT));
 	}
 
 	@EventHandler
