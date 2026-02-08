@@ -63,6 +63,7 @@ public final class GatheringCommand extends PaperCommand<FabiCraftPaperSurvival>
 				.permission(PERMISSION_LIST)
 				.handler(this::handleList)
 		);
+
 		var editBuilder = builder.literal("edit")
 				.required("gathering", GatheringParser.gatheringParser())
 				.permission(PERMISSION_EDIT);
@@ -70,6 +71,11 @@ public final class GatheringCommand extends PaperCommand<FabiCraftPaperSurvival>
 				.literal("displayname")
 				.required("displayName", ComponentParser.miniMessageParser(StringParser.StringMode.GREEDY))
 				.handler(this::handleEditDisplayName)
+		);
+		super.manager.command(editBuilder
+				.literal("goal")
+				.required("goal", IntegerParser.integerParser(1))
+				.handler(this::handleEditGoal)
 		);
 	}
 
@@ -135,6 +141,20 @@ public final class GatheringCommand extends PaperCommand<FabiCraftPaperSurvival>
 				"fabicraft.paper.survival.command.gathering.edit.displayname",
 				MessageType.INFO,
 				displayName
+		);
+		context.sender().source().sendMessage(component);
+	}
+
+	private void handleEditGoal(CommandContext<Source> context) {
+		Gathering gathering = context.get("gathering");
+		int goal = context.get("goal");
+		gathering.goal(goal);
+		this.gatheringManager.save();
+
+		TranslatableComponent component = Components.translatable(
+				"fabicraft.paper.survival.command.gathering.edit.goal",
+				MessageType.INFO,
+				goal
 		);
 		context.sender().source().sendMessage(component);
 	}

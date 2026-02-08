@@ -8,22 +8,22 @@ import org.bukkit.inventory.InventoryHolder;
 public final class Gathering {
 	private final String identifier;
 	private final BlockPosition containerPosition;
-	private final Material gatherableMaterial;
-	private final int gatheredGoal;
-	private int gatheredAmount;
+	private final Material material;
+	private int goal;
+	private int collected;
 	private Component displayName;
 	private transient InventoryHolder inventoryHolder;
 
-	public Gathering(String identifier, BlockPosition containerPosition, Material gatherableMaterial, int gatheredAmount, int gatheredGoal) {
+	public Gathering(String identifier, BlockPosition containerPosition, Material material, int collected, int goal) {
 		this.identifier = identifier;
 		this.containerPosition = containerPosition;
-		this.gatherableMaterial = gatherableMaterial;
-		this.gatheredAmount = gatheredAmount;
-		this.gatheredGoal = gatheredGoal;
+		this.material = material;
+		this.collected = collected;
+		this.goal = goal;
 	}
 
 	public boolean add(int amount) {
-		this.gatheredAmount = Math.min(this.gatheredAmount + amount, this.gatheredGoal);
+		this.collected = Math.min(this.collected + amount, this.goal);
 		return isCompleted();
 	}
 
@@ -36,19 +36,19 @@ public final class Gathering {
 	}
 
 	public Material material() {
-		return gatherableMaterial;
+		return material;
 	}
 
 	public int collected() {
-		return gatheredAmount;
+		return collected;
 	}
 
 	public int goal() {
-		return gatheredGoal;
+		return goal;
 	}
 
 	public boolean isCompleted() {
-		return this.gatheredAmount >= this.gatheredGoal;
+		return this.collected >= this.goal;
 	}
 
 	public void displayName(Component displayName) {
@@ -64,5 +64,9 @@ public final class Gathering {
 			this.inventoryHolder = new GatheringInventoryHolder(this);
 		}
 		return this.inventoryHolder;
+	}
+
+	public void goal(int goal) {
+		this.goal = goal;
 	}
 }

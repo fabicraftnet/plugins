@@ -71,6 +71,11 @@ public final class GatheringListener implements Listener {
 		}
 
 		//Player clicked the bottom inventory
+		if (event.getAction().equals(InventoryAction.COLLECT_TO_CURSOR)) {
+			event.setCancelled(true);
+			return;
+		}
+
 		if (clickedItem == null) {
 			return;
 		}
