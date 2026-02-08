@@ -100,7 +100,7 @@ public final class GatheringListener implements Listener {
 					"fabicraft.paper.survival.gathering.completed.broadcast",
 					MessageType.SUCCESS,
 					Components.player(humanEntity),
-					gathering.identifier()
+					gathering.displayName()
 			);
 			Bukkit.broadcast(component);
 		}
