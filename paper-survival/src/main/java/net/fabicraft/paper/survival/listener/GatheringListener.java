@@ -5,7 +5,6 @@ import net.fabicraft.common.locale.MessageType;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.gathering.Gathering;
 import net.fabicraft.paper.survival.gathering.GatheringInventoryHolder;
-import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Container;
 import org.bukkit.entity.HumanEntity;
@@ -18,10 +17,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public final class GatheringListener implements Listener {
-	private static final TranslatableComponent COMPONENT_GATHERING_COMPLETED = Components.translatable(
-			"fabicraft.paper.survival.gathering.completed",
-			MessageType.ERROR
-	);
 	private final FabiCraftPaperSurvival plugin;
 
 	public GatheringListener(FabiCraftPaperSurvival plugin) {
@@ -42,7 +37,11 @@ public final class GatheringListener implements Listener {
 		event.setCancelled(true);
 
 		if (gathering.isCompleted()) {
-			event.getPlayer().sendMessage(COMPONENT_GATHERING_COMPLETED);
+			event.getPlayer().sendMessage(Components.translatable(
+					"fabicraft.paper.survival.gathering.completed",
+					MessageType.ERROR,
+					gathering.displayName()
+			));
 			return;
 		}
 
@@ -96,13 +95,12 @@ public final class GatheringListener implements Listener {
 		int amount = itemStack.getAmount();
 		if (gathering.add(amount)) {
 			closeForEveryone(gathering);
-			TranslatableComponent component = Components.translatable(
+			Bukkit.broadcast(Components.translatable(
 					"fabicraft.paper.survival.gathering.completed.broadcast",
 					MessageType.SUCCESS,
 					Components.player(humanEntity),
 					gathering.displayName()
-			);
-			Bukkit.broadcast(component);
+			));
 		}
 		this.plugin.gatheringManager().save();
 	}
