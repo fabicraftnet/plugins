@@ -5,6 +5,7 @@ import net.fabicraft.common.command.TranslatableCaptionProvider;
 import net.fabicraft.common.command.exception.ExceptionHandlers;
 import net.fabicraft.common.locale.BrandColor;
 import net.fabicraft.paper.common.command.PaperCommand;
+import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
 import net.fabicraft.paper.core.command.BuilderCommand;
 import net.fabicraft.paper.core.command.CrafterCommand;
 import net.fabicraft.paper.core.command.SignCommand;
@@ -29,10 +30,13 @@ public final class FabiCraftPaperCore extends JavaPlugin {
 			))
 			.build();
 	private PaperCommandManager<Source> commandManager;
+	private PaperLuckPermsManager luckPermsManager;
 
 	@Override
 	public void onEnable() {
 		new CoreTranslationManager(getSLF4JLogger());
+
+		this.luckPermsManager = new PaperLuckPermsManager(getSLF4JLogger());
 
 		setupCommandManager();
 		registerCommands();
@@ -45,6 +49,10 @@ public final class FabiCraftPaperCore extends JavaPlugin {
 
 	public void reload() {
 
+	}
+
+	public PaperLuckPermsManager luckPermsManager() {
+		return this.luckPermsManager;
 	}
 
 	private void setupCommandManager() {

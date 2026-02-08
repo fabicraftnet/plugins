@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 
 import java.util.Locale;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class LuckPermsManager<P> {
 	protected final LuckPerms luckPerms;
@@ -52,6 +54,10 @@ public abstract class LuckPermsManager<P> {
 
 		Tristate tristate = user.data().contains(groupNode(groupName), NodeEqualityPredicate.ONLY_KEY);
 		return tristate == Tristate.TRUE;
+	}
+
+	public CompletableFuture<Boolean> hasPermission(UUID uuid, String permission) {
+		return this.luckPerms.getUserManager().loadUser(uuid).thenApply(user -> user.getCachedData().getPermissionData().checkPermission(permission).asBoolean());
 	}
 
 	private void pushMessagingServiceUpdate() {

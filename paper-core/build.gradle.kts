@@ -24,4 +24,7 @@ paperPluginYaml {
 			}
 		}
 	}
+	permissions {
+		register("fabicraft.paper.core.join.bypass")
+	}
 }
