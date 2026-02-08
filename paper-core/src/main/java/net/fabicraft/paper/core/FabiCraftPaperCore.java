@@ -9,10 +9,12 @@ import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
 import net.fabicraft.paper.core.command.BuilderCommand;
 import net.fabicraft.paper.core.command.CrafterCommand;
 import net.fabicraft.paper.core.command.SignCommand;
+import net.fabicraft.paper.core.listener.PlayerListener;
 import net.fabicraft.paper.core.locale.CoreTranslationManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.PaperCommandManager;
@@ -76,6 +78,9 @@ public final class FabiCraftPaperCore extends JavaPlugin {
 	}
 
 	private void registerListeners() {
-
+		PluginManager manager = getServer().getPluginManager();
+		List.of(
+				new PlayerListener(this)
+		).forEach(listener -> manager.registerEvents(listener, this));
 	}
 }
