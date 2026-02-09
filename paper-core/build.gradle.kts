@@ -27,6 +27,10 @@ paperPluginYaml {
 				load = PaperPluginYaml.Load.BEFORE
 				required = true
 			}
+			register("HuskHomes") {
+				load = PaperPluginYaml.Load.BEFORE
+				required = false
+			}
 		}
 	}
 	permissions {
