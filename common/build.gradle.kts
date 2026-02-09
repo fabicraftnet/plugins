@@ -11,4 +11,5 @@ dependencies {
 	compileOnly(libs.slf4j)
 	compileOnlyApi(libs.plugin.luckperms)
 	compileOnlyApi(libs.plugin.miniplaceholders)
+	api(libs.dazzleconf)
 }

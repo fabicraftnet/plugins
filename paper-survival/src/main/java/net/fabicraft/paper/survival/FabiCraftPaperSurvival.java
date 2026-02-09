@@ -4,10 +4,13 @@ import net.fabicraft.common.command.TranslatableCaptionProvider;
 import net.fabicraft.common.command.exception.ExceptionHandlers;
 import net.fabicraft.paper.common.command.PaperCommand;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
+import net.fabicraft.paper.survival.afk.AfkManager;
 import net.fabicraft.paper.survival.command.SurvivalCommandPreProcessor;
 import net.fabicraft.paper.survival.command.commands.FabiCraftSurvivalCommand;
 import net.fabicraft.paper.survival.command.commands.GatheringCommand;
 import net.fabicraft.paper.survival.command.commands.RolePlayCommand;
+import net.fabicraft.paper.survival.config.ConfigManager;
+import net.fabicraft.paper.survival.config.SurvivalConfig;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
 import net.fabicraft.paper.survival.items.CustomItemManager;
 import net.fabicraft.paper.survival.listener.GatheringListener;
@@ -25,16 +28,23 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public final class FabiCraftPaperSurvival extends JavaPlugin {
+	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 	private PaperCommandManager<Source> commandManager;
 	private PaperLuckPermsManager luckPermsManager;
 	private GatheringManager gatheringManager;
 	private CustomItemManager customItemManager;
+	private ConfigManager configManager;
+	private AfkManager afkManager;
 
 	@Override
 	public void onEnable() {
 		new SurvivalTranslationManager(getSLF4JLogger());
+
+		this.configManager = new ConfigManager(this);
 
 		this.gatheringManager = new GatheringManager(this);
 		this.customItemManager = new CustomItemManager(this);
@@ -45,6 +55,8 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 		registerCommands();
 
 		registerListeners();
+
+		this.afkManager = new AfkManager(this);
 
 		new MiniPlaceholders(this).register();
 
@@ -68,6 +80,7 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 	}
 
 	public void load() throws IOException {
+		this.configManager.load();
 		this.gatheringManager.load();
 		this.customItemManager.load();
 	}
@@ -93,6 +106,18 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 	@Override
 	public @NotNull Path getDataPath() {
 		return getServer().getPluginsFolder().toPath().resolve("FabiCraft/survival");
+	}
+
+	public ScheduledExecutorService executor() {
+		return this.executor;
+	}
+
+	public SurvivalConfig config() {
+		return this.configManager.config();
+	}
+
+	public AfkManager afkManager() {
+		return this.afkManager;
 	}
 
 	private void registerListeners() {

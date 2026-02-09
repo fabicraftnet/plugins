@@ -23,6 +23,10 @@ paperPluginYaml {
 				load = PaperPluginYaml.Load.BEFORE
 				required = true
 			}
+			register("LuckPerms") {
+				load = PaperPluginYaml.Load.BEFORE
+				required = true
+			}
 		}
 	}
 	permissions {

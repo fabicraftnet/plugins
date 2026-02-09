@@ -9,6 +9,7 @@ platform-velocity = { module = "com.velocitypowered:velocity-api", version = "3.
 # Common
 adventure = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
+dazzleconf = { module = "space.arim.dazzleconf:dazzleconf-toml", version = "2.0.0-M2" }
 slf4j = { module = "org.slf4j:slf4j-api", version = "2.0.16" }
 
 # Cloud
