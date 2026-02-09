@@ -26,7 +26,7 @@ public final class AfkManager {
 			long timeoutNanos = TimeUnit.SECONDS.toNanos(plugin.config().afkTimeoutSeconds());
 			Long nanoTime = System.nanoTime();
 			this.afkSinceMap.forEach((key, value) -> {
-				if (value - nanoTime < timeoutNanos) {
+				if (nanoTime - value < timeoutNanos) {
 					return;
 				}
 				Player player = plugin.getServer().getPlayer(key);
@@ -48,7 +48,7 @@ public final class AfkManager {
 			return false;
 		}
 
-		return afkSince - System.nanoTime() > this.plugin.config().afkTimeoutSeconds();
+		return System.nanoTime() - afkSince > TimeUnit.SECONDS.toNanos(this.plugin.config().afkTimeoutSeconds());
 	}
 
 	public void remove(UUID uuid) {
