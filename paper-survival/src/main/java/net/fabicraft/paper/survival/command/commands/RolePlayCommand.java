@@ -1,5 +1,7 @@
 package net.fabicraft.paper.survival.command.commands;
 
+import net.draycia.carbon.api.CarbonChat;
+import net.draycia.carbon.api.CarbonChatProvider;
 import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
 import net.fabicraft.paper.common.command.PaperCommand;
@@ -24,6 +26,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 			MessageType.SUCCESS
 	);
 	private final PaperLuckPermsManager luckPermsManager;
+	private final CarbonChat carbon = CarbonChatProvider.carbonChat();
 
 	public RolePlayCommand(FabiCraftPaperSurvival plugin) {
 		super(plugin, plugin.commandManager());
@@ -39,10 +42,15 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 		super.manager.command(builder);
 	}
 
-	public void handle(CommandContext<PlayerSource> context) {
+	private void handle(CommandContext<PlayerSource> context) {
 		Player player = context.sender().source();
 		if (this.luckPermsManager.hasGroup(player, GROUP_NAME)) {
 			this.luckPermsManager.removeGroup(player, GROUP_NAME);
+
+			this.carbon.userManager().user(player.getUniqueId())
+					.thenAccept(user -> user.selectedChannel(this.carbon.channelRegistry().defaultChannel()));
+
+
 			player.sendMessage(COMPONENT_REMOVE);
 		} else {
 			this.luckPermsManager.addGroup(player, GROUP_NAME);

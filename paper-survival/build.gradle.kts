@@ -9,6 +9,7 @@ version = "1"
 
 dependencies {
 	implementation(project(":paper-common"))
+	compileOnly(libs.plugin.carbon)
 }
 
 paperPluginYaml {
@@ -23,6 +24,10 @@ paperPluginYaml {
 				load = PaperPluginYaml.Load.BEFORE
 			}
 			register("MiniPlaceholders") {
+				required = true
+				load = PaperPluginYaml.Load.BEFORE
+			}
+			register("CarbonChat") {
 				required = true
 				load = PaperPluginYaml.Load.BEFORE
 			}
