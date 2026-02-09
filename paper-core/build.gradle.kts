@@ -9,6 +9,7 @@ description = "Main paper plugin"
 
 dependencies {
 	implementation(project(":paper-common"))
+	compileOnly(libs.plugin.huskhomes)
 }
 
 paperPluginYaml {

@@ -17,6 +17,7 @@ cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud-minecra
 cloud-velocity = { module = "org.incendo:cloud-velocity", version.ref = "cloud-minecraft" }
 cloud-minecraftExtras = { module = "org.incendo:cloud-minecraft-extras", version.ref = "cloud-minecraft" }
 
+plugin-huskhomes = { module = "net.william278.huskhomes:huskhomes-bukkit", version = "4.9.10" }
 plugin-luckperms = { module = "net.luckperms:api", version = "5.5" }
 plugin-miniplaceholders = { module = "io.github.miniplaceholders:miniplaceholders-api", version = "3.1.0" }
 plugin-worldguard = { module = "com.sk89q.worldguard:worldguard-bukkit", version = "7.0.13" }
