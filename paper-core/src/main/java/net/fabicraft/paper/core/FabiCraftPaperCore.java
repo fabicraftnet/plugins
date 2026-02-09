@@ -9,6 +9,7 @@ import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
 import net.fabicraft.paper.core.command.BuilderCommand;
 import net.fabicraft.paper.core.command.CrafterCommand;
 import net.fabicraft.paper.core.command.SignCommand;
+import net.fabicraft.paper.core.listener.HuskHomesListener;
 import net.fabicraft.paper.core.listener.PlayerListener;
 import net.fabicraft.paper.core.locale.CoreTranslationManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -82,5 +83,9 @@ public final class FabiCraftPaperCore extends JavaPlugin {
 		List.of(
 				new PlayerListener(this)
 		).forEach(listener -> manager.registerEvents(listener, this));
+
+		if (manager.isPluginEnabled("HuskHomes")) {
+			manager.registerEvents(new HuskHomesListener(), this);
+		}
 	}
 }
