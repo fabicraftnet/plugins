@@ -57,15 +57,16 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 
 		registerListeners();
 
-		this.afkManager = new AfkManager(this);
-
-		new MiniPlaceholders(this).register();
-
 		try {
 			load();
 		} catch (IOException e) {
 			getSLF4JLogger().error("Couldn't load plugin", e);
 		}
+
+		this.afkManager = new AfkManager(this);
+		this.afkManager.start();
+
+		new MiniPlaceholders(this).register();
 	}
 
 	public PaperCommandManager<Source> commandManager() {

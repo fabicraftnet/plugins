@@ -7,9 +7,9 @@ import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerKickEvent;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public final class AfkManager {
@@ -17,11 +17,14 @@ public final class AfkManager {
 			"fabicraft.paper.survival.afk.kick",
 			MessageType.INFO
 	);
-	private final Map<UUID, Long> afkSinceMap = new HashMap<>();
+	private final Map<UUID, Long> afkSinceMap = new ConcurrentHashMap<>();
 	private final FabiCraftPaperSurvival plugin;
 
 	public AfkManager(FabiCraftPaperSurvival plugin) {
 		this.plugin = plugin;
+	}
+
+	public void start() {
 		plugin.executor().scheduleAtFixedRate(() -> {
 			long timeoutNanos = TimeUnit.SECONDS.toNanos(plugin.config().afkTimeoutSeconds());
 			Long nanoTime = System.nanoTime();
