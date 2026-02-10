@@ -4,6 +4,7 @@ import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.kyori.adventure.text.TranslatableComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerKickEvent;
 
@@ -36,7 +37,7 @@ public final class AfkManager {
 				if (player == null || player.hasPermission("fabicraft.paper.survival.afk.kick.bypass")) {
 					return;
 				}
-				player.kick(COMPONENT_KICK, PlayerKickEvent.Cause.IDLING);
+				Bukkit.getScheduler().runTask(this.plugin, () -> player.kick(COMPONENT_KICK, PlayerKickEvent.Cause.IDLING));
 			});
 		}, 0, 5, TimeUnit.SECONDS);
 	}
