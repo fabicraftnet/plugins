@@ -22,7 +22,7 @@ public final class AfkManager {
 
 	public AfkManager(FabiCraftPaperSurvival plugin) {
 		this.plugin = plugin;
-		plugin.executor().schedule(() -> {
+		plugin.executor().scheduleAtFixedRate(() -> {
 			long timeoutNanos = TimeUnit.SECONDS.toNanos(plugin.config().afkTimeoutSeconds());
 			Long nanoTime = System.nanoTime();
 			this.afkSinceMap.forEach((key, value) -> {
@@ -33,9 +33,9 @@ public final class AfkManager {
 				if (player == null || player.hasPermission("fabicraft.paper.survival.afk.kick.bypass")) {
 					return;
 				}
-				player.kick(null, PlayerKickEvent.Cause.IDLING);
+				player.kick(COMPONENT_KICK, PlayerKickEvent.Cause.IDLING);
 			});
-		}, 5, TimeUnit.SECONDS);
+		}, 0, 5, TimeUnit.SECONDS);
 	}
 
 	public void update(UUID uuid) {
