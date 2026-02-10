@@ -1,5 +1,6 @@
 package net.fabicraft.paper.survival.listener;
 
+import io.papermc.paper.event.player.AsyncChatEvent;
 import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
@@ -76,6 +77,11 @@ public final class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onInput(PlayerInputEvent event) {
+		this.plugin.afkManager().update(event.getPlayer().getUniqueId());
+	}
+
+	@EventHandler
+	public void onChat(AsyncChatEvent event) {
 		this.plugin.afkManager().update(event.getPlayer().getUniqueId());
 	}
 
