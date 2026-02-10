@@ -61,8 +61,8 @@ public final class PlayerListener implements Listener {
 
 		Gathering gathering;
 		switch (to.getName().toLowerCase(Locale.ROOT)) {
-			case "world_nether" -> gathering = this.plugin.gatheringManager().gathering("nether");
-			case "world_the_end" -> gathering = this.plugin.gatheringManager().gathering("end");
+			case "world_nether" -> gathering = this.plugin.gatheringManager().nether();
+			case "world_the_end" -> gathering = this.plugin.gatheringManager().end();
 			default -> gathering = null;
 		}
 

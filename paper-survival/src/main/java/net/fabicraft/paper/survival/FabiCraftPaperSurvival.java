@@ -13,6 +13,7 @@ import net.fabicraft.paper.survival.config.ConfigManager;
 import net.fabicraft.paper.survival.config.SurvivalConfig;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
 import net.fabicraft.paper.survival.items.CustomItemManager;
+import net.fabicraft.paper.survival.listener.EntityListener;
 import net.fabicraft.paper.survival.listener.GatheringListener;
 import net.fabicraft.paper.survival.listener.PlayerListener;
 import net.fabicraft.paper.survival.locale.SurvivalTranslationManager;
@@ -123,6 +124,7 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 	private void registerListeners() {
 		PluginManager manager = getServer().getPluginManager();
 		List.of(
+				new EntityListener(this),
 				new GatheringListener(this),
 				new PlayerListener(this)
 		).forEach(listener -> manager.registerEvents(listener, this));

@@ -84,4 +84,12 @@ public final class GatheringManager {
 			this.plugin.getSLF4JLogger().warn("Failed to write sogaccounts.json", e);
 		}
 	}
+
+	public Gathering nether() {
+		return gathering("nether");
+	}
+
+	public Gathering end() {
+		return gathering("end");
+	}
 }
