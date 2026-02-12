@@ -62,7 +62,8 @@ public final class GatheringListener implements Listener {
 		//Player clicked the top inventory
 		if (topInventory.equals(event.getClickedInventory())) {
 			if (clickedItem == null && cursorItem.getType().equals(gathering.material())) {
-				addToGathering(gathering, event.getWhoClicked(), cursorItem);
+				int amount = Math.min(cursorItem.getAmount(), howManyCanWeAdd(topInventory, cursorItem));
+				addToGathering(gathering, event.getWhoClicked(), amount);
 				return;
 			}
 			event.setCancelled(true);
@@ -88,11 +89,14 @@ public final class GatheringListener implements Listener {
 			return;
 		}
 
-		addToGathering(gathering, event.getWhoClicked(), clickedItem);
+		int amount = Math.min(clickedItem.getAmount(), howManyCanWeAdd(topInventory, clickedItem));
+		addToGathering(gathering, event.getWhoClicked(), amount);
 	}
 
-	private void addToGathering(Gathering gathering, HumanEntity humanEntity, ItemStack itemStack) {
-		int amount = itemStack.getAmount();
+	private void addToGathering(Gathering gathering, HumanEntity humanEntity, int amount) {
+		if (amount == 0) {
+			return;
+		}
 		if (gathering.add(amount)) {
 			closeForEveryone(gathering);
 			Bukkit.broadcast(Components.translatable(
@@ -116,5 +120,19 @@ public final class GatheringListener implements Listener {
 			}
 			topInventory.close();
 		});
+	}
+
+	private int howManyCanWeAdd(Inventory inventory, ItemStack moving) {
+		int howManyCanWeAdd = 0;
+		for (ItemStack stack : inventory.getContents()) {
+			if (stack == null) {
+				howManyCanWeAdd += moving.getMaxStackSize();
+				continue;
+			}
+			if (stack.isSimilar(moving)) {
+				howManyCanWeAdd += stack.getMaxStackSize() - stack.getAmount();
+			}
+		}
+		return howManyCanWeAdd;
 	}
 }
