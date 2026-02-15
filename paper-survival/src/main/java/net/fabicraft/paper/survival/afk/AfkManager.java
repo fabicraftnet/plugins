@@ -89,7 +89,7 @@ public final class AfkManager {
 
 			switch (status.state()) {
 				case NOT_AFK -> {
-					if (status.hasBeenAfkFor() < afkMarkNanos) {
+					if (status.hasBeenAfkFor() < this.afkMarkNanos) {
 						return false;
 					}
 					if (player.hasPermission("fabicraft.paper.survival.afk.kick.bypass")) {
@@ -107,7 +107,7 @@ public final class AfkManager {
 					player.sendMessage(this.warnComponent);
 				}
 				case WARNED -> {
-					if (status.hasBeenAfkFor() < kickNanos) {
+					if (status.hasBeenAfkFor() < this.kickNanos) {
 						return false;
 					}
 					Component rendered = GlobalTranslator.render(COMPONENT_KICK, player.locale());
