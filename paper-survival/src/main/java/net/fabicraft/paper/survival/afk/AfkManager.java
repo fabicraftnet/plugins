@@ -6,6 +6,7 @@ import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.config.SurvivalConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -105,7 +106,8 @@ public final class AfkManager {
 					if (status.hasBeenAfkFor() < kickNanos || player.hasPermission("fabicraft.paper.survival.afk.kick.bypass")) {
 						return false;
 					}
-					player.kick(COMPONENT_KICK, PlayerKickEvent.Cause.IDLING);
+					Component rendered = GlobalTranslator.render(COMPONENT_KICK, player.locale());
+					player.kick(rendered, PlayerKickEvent.Cause.IDLING);
 				}
 			}
 			return false;
