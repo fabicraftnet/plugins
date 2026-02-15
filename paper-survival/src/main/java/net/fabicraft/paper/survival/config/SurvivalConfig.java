@@ -15,7 +15,7 @@ public interface SurvivalConfig {
 
 	@Comments("Seconds before the kick when a warning is sent")
 	default int afkWarnBeforeKickSeconds() {
-		return 60;
+		return 30;
 	}
 
 }
