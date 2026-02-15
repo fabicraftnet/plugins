@@ -25,7 +25,7 @@ public final class AfkStatus {
 		return this.warned;
 	}
 
-	public boolean warned(boolean warned) {
-		return this.warned = warned;
+	public void warned(boolean warned) {
+		this.warned = warned;
 	}
 }
