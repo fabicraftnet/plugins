@@ -34,12 +34,12 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public final class FabiCraftPaperSurvival extends JavaPlugin {
 	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+	private final AfkManager afkManager = new AfkManager(this);
 	private PaperCommandManager<Source> commandManager;
 	private PaperLuckPermsManager luckPermsManager;
 	private GatheringManager gatheringManager;
 	private CustomItemManager customItemManager;
 	private ConfigManager configManager;
-	private AfkManager afkManager;
 
 	@Override
 	public void onEnable() {
@@ -63,9 +63,6 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 			getSLF4JLogger().error("Couldn't load plugin", e);
 		}
 
-		this.afkManager = new AfkManager(this);
-		this.afkManager.start();
-
 		new MiniPlaceholders(this).register();
 	}
 
@@ -85,6 +82,7 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 		this.configManager.load();
 		this.gatheringManager.load();
 		this.customItemManager.load();
+		this.afkManager.load();
 	}
 
 	public CustomItemManager customItemManager() {

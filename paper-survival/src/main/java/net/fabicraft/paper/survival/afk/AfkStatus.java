@@ -2,7 +2,7 @@ package net.fabicraft.paper.survival.afk;
 
 public final class AfkStatus {
 	private long afkSince;
-	private boolean warned = false;
+	private AfkState state = AfkState.NOT_AFK;
 
 	public AfkStatus() {
 		this.afkSince = System.nanoTime();
@@ -10,22 +10,18 @@ public final class AfkStatus {
 
 	public void markAsActive() {
 		this.afkSince = System.nanoTime();
-		this.warned = false;
-	}
-
-	public long afkSince() {
-		return this.afkSince;
+		this.state = AfkState.NOT_AFK;
 	}
 
 	public long hasBeenAfkFor() {
 		return System.nanoTime() - this.afkSince;
 	}
 
-	public boolean warned() {
-		return this.warned;
+	public AfkState state() {
+		return this.state;
 	}
 
-	public void warned(boolean warned) {
-		this.warned = warned;
+	public void state(AfkState state) {
+		this.state = state;
 	}
 }
