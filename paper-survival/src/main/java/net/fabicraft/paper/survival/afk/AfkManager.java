@@ -8,6 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerKickEvent;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,7 +20,7 @@ public final class AfkManager {
 			"fabicraft.paper.survival.afk.kick",
 			MessageType.INFO
 	);
-	private final Map<UUID, Long> afkSinceMap = new ConcurrentHashMap<>();
+	private final Map<UUID, AfkStatus> afkStatusMap = new ConcurrentHashMap<>();
 	private final FabiCraftPaperSurvival plugin;
 
 	public AfkManager(FabiCraftPaperSurvival plugin) {
@@ -26,36 +28,65 @@ public final class AfkManager {
 	}
 
 	public void start() {
-		plugin.executor().scheduleAtFixedRate(() -> {
-			long timeoutNanos = TimeUnit.SECONDS.toNanos(plugin.config().afkTimeoutSeconds());
-			Long nanoTime = System.nanoTime();
-			this.afkSinceMap.forEach((key, value) -> {
-				if (nanoTime - value < timeoutNanos) {
+		this.plugin.executor().scheduleAtFixedRate(() -> {
+			int afkKickSeconds = this.plugin.config().afkKickSeconds();
+			int afkWarnBeforeKickSeconds = this.plugin.config().afkWarnBeforeKickSeconds();
+
+			long kickNanos = TimeUnit.SECONDS.toNanos(afkKickSeconds);
+			long warnNanos = kickNanos - TimeUnit.SECONDS.toNanos(afkWarnBeforeKickSeconds);
+
+			TranslatableComponent warnComponent = Components.translatable(
+					"fabicraft.paper.survival.afk.warn",
+					MessageType.WARNING,
+					TimeUnit.SECONDS.toMinutes(afkKickSeconds - afkWarnBeforeKickSeconds),
+					afkWarnBeforeKickSeconds
+			);
+
+			List<UUID> playersToRemove = new ArrayList<>();
+
+			this.afkStatusMap.forEach((uuid, status) -> {
+				Player player = this.plugin.getServer().getPlayer(uuid);
+				if (player == null) {
+					playersToRemove.add(uuid);
 					return;
 				}
-				Player player = plugin.getServer().getPlayer(key);
-				if (player == null || player.hasPermission("fabicraft.paper.survival.afk.kick.bypass")) {
+
+				if (status.hasBeenAfkFor() >= warnNanos && !status.warned()) {
+					player.sendMessage(warnComponent);
+					status.warned(true);
 					return;
 				}
+
+				if (status.hasBeenAfkFor() < kickNanos || player.hasPermission("fabicraft.paper.survival.afk.kick.bypass")) {
+					return;
+				}
+
 				Bukkit.getScheduler().runTask(this.plugin, () -> player.kick(COMPONENT_KICK, PlayerKickEvent.Cause.IDLING));
 			});
+			playersToRemove.forEach(this.afkStatusMap::remove);
 		}, 0, 5, TimeUnit.SECONDS);
 	}
 
-	public void update(UUID uuid) {
-		this.afkSinceMap.put(uuid, System.nanoTime());
+	public void markAsActive(UUID uuid) {
+		this.afkStatusMap.compute(uuid, (uuid1, status) -> {
+			if (status == null) {
+				return new AfkStatus();
+			}
+			status.markAsActive();
+			return status;
+		});
 	}
 
 	public boolean afk(UUID uuid) {
-		Long afkSince = this.afkSinceMap.get(uuid);
-		if (afkSince == null) {
+		AfkStatus status = this.afkStatusMap.get(uuid);
+		if (status == null) {
 			return false;
 		}
 
-		return System.nanoTime() - afkSince > TimeUnit.SECONDS.toNanos(this.plugin.config().afkTimeoutSeconds());
+		return status.hasBeenAfkFor() > TimeUnit.SECONDS.toNanos(this.plugin.config().afkMarkSeconds());
 	}
 
 	public void remove(UUID uuid) {
-		this.afkSinceMap.remove(uuid);
+		this.afkStatusMap.remove(uuid);
 	}
 }

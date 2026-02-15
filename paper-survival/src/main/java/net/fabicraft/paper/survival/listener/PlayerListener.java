@@ -77,12 +77,12 @@ public final class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onInput(PlayerInputEvent event) {
-		this.plugin.afkManager().update(event.getPlayer().getUniqueId());
+		this.plugin.afkManager().markAsActive(event.getPlayer().getUniqueId());
 	}
 
 	@EventHandler
 	public void onChat(AsyncChatEvent event) {
-		this.plugin.afkManager().update(event.getPlayer().getUniqueId());
+		this.plugin.afkManager().markAsActive(event.getPlayer().getUniqueId());
 	}
 
 	@EventHandler
