@@ -92,7 +92,11 @@ public final class AfkManager {
 					if (status.hasBeenAfkFor() < afkMarkNanos) {
 						return false;
 					}
-					status.state(AfkState.AFK);
+					if (player.hasPermission("fabicraft.paper.survival.afk.kick.bypass")) {
+						status.state(AfkState.AFK_KICK_BYPASS);
+					} else {
+						status.state(AfkState.AFK);
+					}
 					player.sendMessage(COMPONENT_INFO);
 				}
 				case AFK -> {
@@ -103,7 +107,7 @@ public final class AfkManager {
 					player.sendMessage(this.warnComponent);
 				}
 				case WARNED -> {
-					if (status.hasBeenAfkFor() < kickNanos || player.hasPermission("fabicraft.paper.survival.afk.kick.bypass")) {
+					if (status.hasBeenAfkFor() < kickNanos) {
 						return false;
 					}
 					Component rendered = GlobalTranslator.render(COMPONENT_KICK, player.locale());
