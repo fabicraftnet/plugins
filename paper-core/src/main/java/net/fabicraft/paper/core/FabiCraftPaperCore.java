@@ -6,6 +6,7 @@ import net.fabicraft.common.command.exception.ExceptionHandlers;
 import net.fabicraft.common.locale.BrandColor;
 import net.fabicraft.paper.common.command.PaperCommand;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
+import net.fabicraft.paper.core.command.BonkCommand;
 import net.fabicraft.paper.core.command.BuilderCommand;
 import net.fabicraft.paper.core.command.CrafterCommand;
 import net.fabicraft.paper.core.command.SignCommand;
@@ -72,6 +73,7 @@ public final class FabiCraftPaperCore extends JavaPlugin {
 
 	private void registerCommands() {
 		List.of(
+				new BonkCommand(this),
 				new BuilderCommand(this),
 				new CrafterCommand(this),
 				new SignCommand(this)

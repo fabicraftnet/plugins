@@ -36,11 +36,11 @@ public final class Components {
 	public static Component player(Pointered pointered) {
 		Component component = pointered.get(Identity.NAME)
 				.<Component>map(Component::text)
-				.orElse(Component.translatable("sog.common.component.unknown"));
+				.orElse(Component.translatable("fabicraft.common.unknown"));
 
 		return pointered.get(Identity.UUID)
 				.map(uuid -> component
-						.hoverEvent(HoverEvent.showText(Component.text(uuid.toString())))
+						.hoverEvent(Component.text(uuid.toString()).asHoverEvent())
 						.clickEvent(ClickEvent.copyToClipboard(uuid.toString()))
 				)
 				.orElse(component);
@@ -57,12 +57,9 @@ public final class Components {
 
 	public static <P extends Pointered> Component playerList(Collection<P> players) {
 		Component separator = Component.text(", ");
-		Component unknown = Component.translatable("sog.common.component.unknown");
 
 		return players.stream()
-				.map(audience -> audience.get(Identity.NAME)
-						.<Component>map(Component::text)
-						.orElse(unknown))
+				.map(Components::player)
 				.collect(Component.toComponent(separator));
 	}
 }
