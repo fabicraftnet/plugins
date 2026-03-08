@@ -1,6 +1,5 @@
 package net.fabicraft.paper.survival.listener;
 
-import io.papermc.paper.event.player.AsyncChatEvent;
 import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
@@ -11,9 +10,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInputEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -73,20 +70,5 @@ public final class PlayerListener implements Listener {
 		event.setCancelled(true);
 		TranslatableComponent component = Components.translatable("fabicraft.paper.survival.gathering.world-teleport-disallowed", MessageType.ERROR, gathering.displayName());
 		event.getPlayer().sendMessage(component);
-	}
-
-	@EventHandler
-	public void onInput(PlayerInputEvent event) {
-		this.plugin.afkManager().markAsActive(event.getPlayer().getUniqueId());
-	}
-
-	@EventHandler
-	public void onChat(AsyncChatEvent event) {
-		this.plugin.afkManager().markAsActive(event.getPlayer().getUniqueId());
-	}
-
-	@EventHandler
-	public void onQuit(PlayerQuitEvent event) {
-		this.plugin.afkManager().remove(event.getPlayer().getUniqueId());
 	}
 }

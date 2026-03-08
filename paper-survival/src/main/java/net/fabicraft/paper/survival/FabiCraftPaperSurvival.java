@@ -4,7 +4,6 @@ import net.fabicraft.common.command.TranslatableCaptionProvider;
 import net.fabicraft.common.command.exception.ExceptionHandlers;
 import net.fabicraft.paper.common.command.PaperCommand;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
-import net.fabicraft.paper.survival.afk.AfkManager;
 import net.fabicraft.paper.survival.command.SurvivalCommandPreProcessor;
 import net.fabicraft.paper.survival.command.commands.FabiCraftSurvivalCommand;
 import net.fabicraft.paper.survival.command.commands.GatheringCommand;
@@ -34,7 +33,6 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public final class FabiCraftPaperSurvival extends JavaPlugin {
 	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-	private final AfkManager afkManager = new AfkManager(this);
 	private PaperCommandManager<Source> commandManager;
 	private PaperLuckPermsManager luckPermsManager;
 	private GatheringManager gatheringManager;
@@ -82,7 +80,6 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 		this.configManager.load();
 		this.gatheringManager.load();
 		this.customItemManager.load();
-		this.afkManager.load();
 	}
 
 	public CustomItemManager customItemManager() {
@@ -114,10 +111,6 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 
 	public SurvivalConfig config() {
 		return this.configManager.config();
-	}
-
-	public AfkManager afkManager() {
-		return this.afkManager;
 	}
 
 	private void registerListeners() {
