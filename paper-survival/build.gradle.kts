@@ -10,6 +10,8 @@ version = "1"
 dependencies {
 	implementation(project(":paper-common"))
 	compileOnly(libs.plugin.carbon)
+	implementation(libs.flyway.core)
+	implementation(libs.storage.sqlite)
 }
 
 paperPluginYaml {
