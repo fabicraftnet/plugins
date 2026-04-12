@@ -40,6 +40,9 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 				.senderType(PlayerSource.class)
 				.handler(this::handle);
 		super.manager.command(builder);
+
+		super.manager.command(builder.literal("name").handler(this::handleName));
+		super.manager.command(builder.literal("scale").handler(this::handleScale));
 	}
 
 	private void handle(CommandContext<PlayerSource> context) {
@@ -56,5 +59,14 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 			this.luckPermsManager.addGroup(player, GROUP_NAME);
 			player.sendMessage(COMPONENT_ADD);
 		}
+	}
+
+	private void handleName(CommandContext<PlayerSource> context) {
+		Player player = context.sender().source();
+
+	}
+
+	private void handleScale(CommandContext<PlayerSource> context) {
+		Player player = context.sender().source();
 	}
 }

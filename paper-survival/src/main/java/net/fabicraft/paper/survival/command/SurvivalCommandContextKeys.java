@@ -1,7 +1,7 @@
 package net.fabicraft.paper.survival.command;
 
+import net.fabicraft.paper.survival.CustomItemManager;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
-import net.fabicraft.paper.survival.items.CustomItemManager;
 import org.incendo.cloud.key.CloudKey;
 
 public final class SurvivalCommandContextKeys {

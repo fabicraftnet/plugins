@@ -11,7 +11,6 @@ import net.fabicraft.paper.survival.command.commands.RolePlayCommand;
 import net.fabicraft.paper.survival.config.ConfigManager;
 import net.fabicraft.paper.survival.config.SurvivalConfig;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
-import net.fabicraft.paper.survival.items.CustomItemManager;
 import net.fabicraft.paper.survival.listener.EntityListener;
 import net.fabicraft.paper.survival.listener.GatheringListener;
 import net.fabicraft.paper.survival.listener.PlayerListener;
