@@ -32,33 +32,32 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public final class FabiCraftPaperSurvival extends JavaPlugin {
 	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+	private final ConfigManager configManager;
+	private final GatheringManager gatheringManager;
+	private final PaperLuckPermsManager luckPermsManager;
+	private final CustomItemManager customItemManager;
 	private PaperCommandManager<Source> commandManager;
-	private PaperLuckPermsManager luckPermsManager;
-	private GatheringManager gatheringManager;
-	private CustomItemManager customItemManager;
-	private ConfigManager configManager;
+
+	public FabiCraftPaperSurvival() {
+		new SurvivalTranslationManager(getSLF4JLogger());
+		this.configManager = new ConfigManager(this);
+		this.gatheringManager = new GatheringManager(this);
+		this.customItemManager = new CustomItemManager(this);
+		this.luckPermsManager = new PaperLuckPermsManager(getSLF4JLogger());
+	}
 
 	@Override
 	public void onEnable() {
-		new SurvivalTranslationManager(getSLF4JLogger());
-
-		this.configManager = new ConfigManager(this);
-
-		this.gatheringManager = new GatheringManager(this);
-		this.customItemManager = new CustomItemManager(this);
-
-		this.luckPermsManager = new PaperLuckPermsManager(getSLF4JLogger());
-
 		setupCommandManager();
-		registerCommands();
-
-		registerListeners();
 
 		try {
 			load();
 		} catch (IOException e) {
 			getSLF4JLogger().error("Couldn't load plugin", e);
 		}
+
+		registerCommands();
+		registerListeners();
 
 		new MiniPlaceholders(this).register();
 	}
