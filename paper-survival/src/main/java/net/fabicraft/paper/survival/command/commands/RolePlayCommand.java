@@ -7,10 +7,14 @@ import net.fabicraft.common.locale.MessageType;
 import net.fabicraft.paper.common.command.PaperCommand;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
+import net.fabicraft.paper.survival.player.PlayerData;
+import net.fabicraft.paper.survival.player.PlayerDataManager;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
+import org.incendo.cloud.parser.standard.StringParser;
 
 public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> {
 	private static final String PERMISSION = "fabicraft.paper.survival.command.roleplay";
@@ -25,12 +29,26 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 			"fabicraft.paper.survival.command.roleplay.remove",
 			MessageType.SUCCESS
 	);
+	private static final TranslatableComponent COMPONENT_NAME_UNSET = Components.translatable(
+			"fabicraft.paper.survival.command.roleplay.name.unset",
+			MessageType.INFO
+	);
+	private static final TranslatableComponent COMPONENT_NAME_CLEAR = Components.translatable(
+			"fabicraft.paper.survival.command.roleplay.name.clear",
+			MessageType.SUCCESS
+	);
+	private static final TranslatableComponent COMPONENT_NAME_CLEAR_UNSET = Components.translatable(
+			"fabicraft.paper.survival.command.roleplay.name.unset",
+			MessageType.ERROR
+	);
 	private final PaperLuckPermsManager luckPermsManager;
 	private final CarbonChat carbon = CarbonChatProvider.carbonChat();
+	private final PlayerDataManager playerDataManager;
 
 	public RolePlayCommand(FabiCraftPaperSurvival plugin) {
 		super(plugin, plugin.commandManager());
 		this.luckPermsManager = plugin.luckPermsManager();
+		this.playerDataManager = plugin.playerDataManager();
 	}
 
 	@Override
@@ -41,7 +59,10 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 				.handler(this::handle);
 		super.manager.command(builder);
 
-		super.manager.command(builder.literal("name").handler(this::handleName));
+		var nameBuilder = builder.literal("name");
+		super.manager.command(nameBuilder.handler(this::handleName));
+		super.manager.command(nameBuilder.literal("clear").handler(this::handleNameClear));
+		super.manager.command(nameBuilder.literal("set").required("name", StringParser.greedyStringParser()).handler(this::handleNameSet));
 		super.manager.command(builder.literal("scale").handler(this::handleScale));
 	}
 
@@ -63,7 +84,42 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 
 	private void handleName(CommandContext<PlayerSource> context) {
 		Player player = context.sender().source();
+		PlayerData data = this.playerDataManager.data(player.getUniqueId());
+		if (data == null) {
+			throw new IllegalStateException("Player data is null");
+		}
+		Component component = data.nickname() == null ? COMPONENT_NAME_UNSET : Components.translatable(
+				"fabicraft.paper.survival.command.roleplay.name",
+				MessageType.INFO,
+				data.nickname()
+		);
+		player.sendMessage(component);
+	}
 
+	private void handleNameClear(CommandContext<PlayerSource> context) {
+		Player player = context.sender().source();
+		PlayerData data = this.playerDataManager.data(player.getUniqueId());
+		if (data == null) {
+			throw new IllegalStateException("Player data is null");
+		}
+		Component component = data.nickname() == null ? COMPONENT_NAME_CLEAR_UNSET : COMPONENT_NAME_CLEAR;
+		player.sendMessage(component);
+	}
+
+	private void handleNameSet(CommandContext<PlayerSource> context) {
+		Player player = context.sender().source();
+		PlayerData data = this.playerDataManager.data(player.getUniqueId());
+		if (data == null) {
+			throw new IllegalStateException("Player data is null");
+		}
+		String nickname = context.get("nickname");
+		data.nickname(nickname);
+		this.playerDataManager.save(player.getUniqueId());
+		player.sendMessage(Components.translatable(
+				"fabicraft.paper.survival.command.roleplay.name.set",
+				MessageType.SUCCESS,
+				nickname
+		));
 	}
 
 	private void handleScale(CommandContext<PlayerSource> context) {

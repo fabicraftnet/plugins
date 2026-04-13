@@ -16,6 +16,7 @@ import net.fabicraft.paper.survival.listener.GatheringListener;
 import net.fabicraft.paper.survival.listener.PlayerListener;
 import net.fabicraft.paper.survival.locale.SurvivalTranslationManager;
 import net.fabicraft.paper.survival.placeholder.MiniPlaceholders;
+import net.fabicraft.paper.survival.player.PlayerDataManager;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.execution.ExecutionCoordinator;
@@ -36,6 +37,8 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 	private final GatheringManager gatheringManager;
 	private final PaperLuckPermsManager luckPermsManager;
 	private final CustomItemManager customItemManager;
+	private final StorageManager storageManager;
+	private final PlayerDataManager playerDataManager;
 	private PaperCommandManager<Source> commandManager;
 
 	public FabiCraftPaperSurvival() {
@@ -44,6 +47,8 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 		this.gatheringManager = new GatheringManager(this);
 		this.customItemManager = new CustomItemManager(this);
 		this.luckPermsManager = new PaperLuckPermsManager(getSLF4JLogger());
+		this.storageManager = new StorageManager(getDataPath());
+		this.playerDataManager = new PlayerDataManager(this);
 	}
 
 	@Override
@@ -76,12 +81,17 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 
 	public void load() throws IOException {
 		this.configManager.load();
+		this.storageManager.migrate();
 		this.gatheringManager.load();
 		this.customItemManager.load();
 	}
 
 	public CustomItemManager customItemManager() {
 		return this.customItemManager;
+	}
+
+	public PlayerDataManager playerDataManager() {
+		return this.playerDataManager;
 	}
 
 	private void setupCommandManager() {
@@ -109,6 +119,10 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 
 	public SurvivalConfig config() {
 		return this.configManager.config();
+	}
+
+	public StorageManager storageManager() {
+		return this.storageManager;
 	}
 
 	private void registerListeners() {

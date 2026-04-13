@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -41,6 +42,18 @@ public final class PlayerListener implements Listener {
 		}
 		inventory.addItem(ItemStack.of(Material.BREAD, 16));
 		inventory.addItem(ItemStack.of(Material.BAMBOO_RAFT));
+	}
+
+	@EventHandler
+	public void onJoin(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+		this.plugin.playerDataManager().load(player.getUniqueId());
+	}
+
+	@EventHandler
+	public void onQuit(PlayerQuitEvent event) {
+		Player player = event.getPlayer();
+		this.plugin.playerDataManager().unload(player.getUniqueId());
 	}
 
 	@EventHandler

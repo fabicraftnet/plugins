@@ -4,6 +4,10 @@ import io.github.miniplaceholders.api.Expansion;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
 import net.fabicraft.paper.survival.placeholder.gathering.*;
+import net.fabicraft.paper.survival.player.PlayerData;
+import net.fabicraft.paper.survival.player.PlayerDataManager;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import org.bukkit.entity.Player;
 
 public final class MiniPlaceholders {
 	private final Expansion expansion;
@@ -17,6 +21,13 @@ public final class MiniPlaceholders {
 		builder.globalPlaceholder("gathering_goal", new GatheringGoalPlaceholder(gatheringManager));
 		builder.globalPlaceholder("gathering_identifier", new GatheringIdentifierPlaceholder(gatheringManager));
 		builder.globalPlaceholder("gathering_item", new GatheringItemPlaceholder(gatheringManager));
+
+		PlayerDataManager playerDataManager = plugin.playerDataManager();
+		builder.audiencePlaceholder(Player.class, "nickname", (player, queue, context) -> {
+			PlayerData data = playerDataManager.data(player.getUniqueId());
+			String nickname = data == null || data.nickname() == null ? player.getName() : data.nickname();
+			return Tag.preProcessParsed(nickname);
+		});
 
 		this.expansion = builder.build();
 	}
