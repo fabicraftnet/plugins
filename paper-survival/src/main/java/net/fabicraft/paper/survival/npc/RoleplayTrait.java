@@ -13,6 +13,7 @@ import net.citizensnpcs.api.trait.TraitName;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.player.PlayerData;
 import net.fabicraft.paper.survival.player.PlayerDataManager;
+import net.fabicraft.paper.survival.player.PlayerHeightController;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickCallback;
@@ -21,11 +22,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
 
 @TraitName("fabicraftroleplay")
 public final class RoleplayTrait extends Trait {
 	private final PlayerDataManager playerDataManager;
+	private final PlayerHeightController playerHeightController = new PlayerHeightController();
 
 	public RoleplayTrait() {
 		super("fabicraftroleplay");
@@ -43,24 +45,24 @@ public final class RoleplayTrait extends Trait {
 			throw new IllegalArgumentException("Player data is null");
 		}
 
-		Dialog.create(builder -> builder.empty()
-				.base(DialogBase.builder(Component.translatable("fabicraftpapersurvival.dialog.roleplay.title"))
+		Dialog dialog = Dialog.create(builder -> builder.empty()
+				.base(DialogBase.builder(Component.text("Roolipeliasetukset"))
 						.inputs(List.of(
-										DialogInput.text("name", Component.translatable("fabicraftpapersurvival.dialog.roleplay.label.name"))
-												.initial(data.rolePlayName())
+										DialogInput.text("name", Component.text("Hahmon nimi"))
+												.initial(Objects.requireNonNullElse(data.rolePlayName(), event.getClicker().getName()))
 												.maxLength(20)
 												.labelVisible(true)
 												.build(),
-										DialogInput.numberRange("height", Component.translatable("fabicraftpapersurvival.dialog.roleplay.label.height"), 150, 200)
-												.initial(180f)
+										DialogInput.numberRange("height", Component.text("Hahmon pituus"), 150, 200)
+												.initial((float) Objects.requireNonNullElse(data.rolePlayHeight(), 180))
 												.step(1f)
 												.labelFormat("%s: %scm")
 												.build()
 								)
 						).build())
 				.type(DialogType.notice(ActionButton.create(
-						Component.translatable("fabicraftpapersurvival.dialog.general.button.save"),
-						Component.translatable("fabicraftpapersurvival.dialog.general.button.save.description"),
+						Component.text("Tallenna"),
+						Component.text("Tallenna asetukset"),
 						100,
 						DialogAction.customClick(this::handleSave, ClickCallback.Options.builder()
 								.uses(1)
@@ -68,6 +70,7 @@ public final class RoleplayTrait extends Trait {
 								.build())
 				)))
 		);
+		event.getClicker().showDialog(dialog);
 	}
 
 	private void handleSave(DialogResponseView view, Audience audience) {
@@ -80,13 +83,14 @@ public final class RoleplayTrait extends Trait {
 			throw new IllegalArgumentException("name is null");
 		}
 
-		UUID uuid = ((Player) audience).getUniqueId();
-		PlayerData data = this.playerDataManager.data(uuid);
+		Player player = (Player) audience;
+		PlayerData data = this.playerDataManager.data(player.getUniqueId());
 		if (data == null) {
 			throw new IllegalArgumentException("Player data is null");
 		}
 		data.rolePlayHeight(height.intValue());
 		data.rolePlayName(name);
-		this.playerDataManager.save(uuid);
+		this.playerDataManager.save(player.getUniqueId());
+		this.playerHeightController.set(player, data.rolePlayHeight());
 	}
 }
