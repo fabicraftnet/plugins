@@ -10,7 +10,9 @@ import io.papermc.paper.registry.data.dialog.type.DialogType;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
+import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
+import net.fabicraft.paper.survival.command.commands.RolePlayCommand;
 import net.fabicraft.paper.survival.player.PlayerData;
 import net.fabicraft.paper.survival.player.PlayerDataManager;
 import net.fabicraft.paper.survival.player.PlayerHeightController;
@@ -28,10 +30,13 @@ import java.util.Objects;
 public final class RoleplayTrait extends Trait {
 	private final PlayerDataManager playerDataManager;
 	private final PlayerHeightController playerHeightController = new PlayerHeightController();
+	private final PaperLuckPermsManager luckPermsManager;
 
 	public RoleplayTrait() {
 		super("fabicraftroleplay");
-		this.playerDataManager = JavaPlugin.getPlugin(FabiCraftPaperSurvival.class).playerDataManager();
+		FabiCraftPaperSurvival plugin = JavaPlugin.getPlugin(FabiCraftPaperSurvival.class);
+		this.playerDataManager = plugin.playerDataManager();
+		this.luckPermsManager = plugin.luckPermsManager();
 	}
 
 	@EventHandler
@@ -48,6 +53,11 @@ public final class RoleplayTrait extends Trait {
 		Dialog dialog = Dialog.create(builder -> builder.empty()
 				.base(DialogBase.builder(Component.text("Roolipeliasetukset"))
 						.inputs(List.of(
+										DialogInput.bool("enabled", Component.text("Roolipeliominaisuudet"))
+												.initial(this.luckPermsManager.hasGroup(event.getClicker(), "roleplay"))
+												.onFalse("Poissa käytöstä")
+												.onTrue("Käytössä")
+												.build(),
 										DialogInput.text("name", Component.text("Hahmon nimi"))
 												.initial(Objects.requireNonNullElse(data.rolePlayName(), event.getClicker().getName()))
 												.maxLength(20)
@@ -74,6 +84,10 @@ public final class RoleplayTrait extends Trait {
 	}
 
 	private void handleSave(DialogResponseView view, Audience audience) {
+		Boolean enabled = view.getBoolean("enabled");
+		if (enabled == null) {
+			throw new IllegalArgumentException("enabled is null");
+		}
 		Float height = view.getFloat("height");
 		if (height == null) {
 			throw new IllegalArgumentException("height is null");
@@ -91,6 +105,19 @@ public final class RoleplayTrait extends Trait {
 		data.rolePlayHeight(height.intValue());
 		data.rolePlayName(name);
 		this.playerDataManager.save(player.getUniqueId());
-		this.playerHeightController.set(player, data.rolePlayHeight());
+
+		if (enabled) {
+			this.playerHeightController.set(player, data.rolePlayHeight());
+			if (!this.luckPermsManager.hasGroup(player, "roleplay")) {
+				this.luckPermsManager.addGroup(player, "roleplay");
+				player.sendMessage(RolePlayCommand.COMPONENT_ADD);
+			}
+		} else {
+			this.playerHeightController.reset(player);
+			if (this.luckPermsManager.hasGroup(player, "roleplay")) {
+				this.luckPermsManager.removeGroup(player, "roleplay");
+				player.sendMessage(RolePlayCommand.COMPONENT_REMOVE);
+			}
+		}
 	}
 }

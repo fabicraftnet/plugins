@@ -19,20 +19,19 @@ import org.incendo.cloud.parser.standard.IntegerParser;
 import org.incendo.cloud.parser.standard.StringParser;
 
 public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> {
+	public static final TranslatableComponent COMPONENT_ADD = Components.translatable(
+			"fabicraft.paper.survival.command.roleplay.add",
+			MessageType.SUCCESS,
+			"/rpchat"
+	);
+	public static final TranslatableComponent COMPONENT_REMOVE = Components.translatable(
+			"fabicraft.paper.survival.command.roleplay.remove",
+			MessageType.SUCCESS
+	);
 	private static final String PERMISSION_BASE = "fabicraft.paper.survival.command.roleplay";
 	private static final String PERMISSION_NAME = "fabicraft.paper.survival.command.roleplay.name";
 	private static final String PERMISSION_HEIGHT = "fabicraft.paper.survival.command.roleplay.height";
 	private static final String GROUP_NAME = "roleplay";
-	private static final TranslatableComponent COMPONENT_ADD = Components.translatable(
-			"fabicraft.paper.survival.command.roleplay.add",
-			MessageType.SUCCESS,
-			"/rpchat",
-			"/nickname"
-	);
-	private static final TranslatableComponent COMPONENT_REMOVE = Components.translatable(
-			"fabicraft.paper.survival.command.roleplay.remove",
-			MessageType.SUCCESS
-	);
 	private static final TranslatableComponent COMPONENT_NAME_UNSET = Components.translatable(
 			"fabicraft.paper.survival.command.roleplay.name.unset",
 			MessageType.INFO
