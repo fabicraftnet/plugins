@@ -85,6 +85,7 @@ public final class PlayerDataManager {
 				statement.setBytes(1, UUIDUtils.uuidToBytes(uuid));
 				statement.setString(2, data.rolePlayName());
 				statement.setObject(3, data.rolePlayHeight());
+				statement.executeUpdate();
 			} catch (SQLException exception) {
 				this.logger.error("Couldn't save data for UUID {}", uuid, exception);
 			}
