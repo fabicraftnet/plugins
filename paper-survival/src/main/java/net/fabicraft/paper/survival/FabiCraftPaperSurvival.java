@@ -1,7 +1,5 @@
 package net.fabicraft.paper.survival;
 
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.trait.TraitInfo;
 import net.fabicraft.common.command.TranslatableCaptionProvider;
 import net.fabicraft.common.command.exception.ExceptionHandlers;
 import net.fabicraft.paper.common.command.PaperCommand;
@@ -13,14 +11,12 @@ import net.fabicraft.paper.survival.command.commands.RolePlayCommand;
 import net.fabicraft.paper.survival.config.ConfigManager;
 import net.fabicraft.paper.survival.config.SurvivalConfig;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
+import net.fabicraft.paper.survival.hook.HookManager;
 import net.fabicraft.paper.survival.listener.EntityListener;
 import net.fabicraft.paper.survival.listener.GatheringListener;
 import net.fabicraft.paper.survival.listener.PlayerListener;
 import net.fabicraft.paper.survival.locale.SurvivalTranslationManager;
-import net.fabicraft.paper.survival.npc.RoleplayTrait;
-import net.fabicraft.paper.survival.placeholder.MiniPlaceholders;
 import net.fabicraft.paper.survival.player.PlayerDataManager;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.execution.ExecutionCoordinator;
@@ -43,11 +39,13 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 	private final CustomItemManager customItemManager;
 	private final StorageManager storageManager;
 	private final PlayerDataManager playerDataManager;
+	private final HookManager hookManager;
 	private PaperCommandManager<Source> commandManager;
 
 	public FabiCraftPaperSurvival() {
 		new SurvivalTranslationManager(getSLF4JLogger());
 		this.configManager = new ConfigManager(this);
+		this.hookManager = new HookManager(this);
 		this.gatheringManager = new GatheringManager(this);
 		this.customItemManager = new CustomItemManager(this);
 		this.luckPermsManager = new PaperLuckPermsManager(getSLF4JLogger());
@@ -67,9 +65,7 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 
 		registerCommands();
 		registerListeners();
-		registerTraits();
-
-		new MiniPlaceholders(this).register();
+		this.hookManager.register();
 	}
 
 	public PaperCommandManager<Source> commandManager() {
@@ -111,16 +107,6 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 		new ExceptionHandlers<Source>(getSLF4JLogger()).register(commandManager, Source::source);
 
 		this.commandManager = commandManager;
-	}
-
-	private void registerTraits() {
-		PluginManager manager = getServer().getPluginManager();
-		Plugin citizensPlugin = manager.getPlugin("citizens");
-		if (citizensPlugin != null && citizensPlugin.isEnabled()) {
-			CitizensAPI.getTraitFactory().registerTrait(
-					TraitInfo.create(RoleplayTrait.class)
-			);
-		}
 	}
 
 	@Override

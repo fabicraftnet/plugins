@@ -1,4 +1,4 @@
-package net.fabicraft.paper.survival.placeholder.gathering;
+package net.fabicraft.paper.survival.hook.miniplaceholders.gathering;
 
 import io.github.miniplaceholders.api.resolver.GlobalTagResolver;
 import net.fabicraft.paper.survival.gathering.Gathering;
@@ -6,6 +6,7 @@ import net.fabicraft.paper.survival.gathering.GatheringManager;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public abstract class GatheringPlaceholder implements GlobalTagResolver {
@@ -16,7 +17,7 @@ public abstract class GatheringPlaceholder implements GlobalTagResolver {
 	}
 
 	@Override
-	public @Nullable Tag tag(ArgumentQueue queue, Context context) {
+	public @Nullable Tag tag(ArgumentQueue queue, @NonNull Context context) {
 		if (!queue.hasNext()) {
 			return Tag.preProcessParsed("You need to provide a name");
 		}

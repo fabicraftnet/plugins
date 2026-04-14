@@ -37,7 +37,7 @@ paperPluginYaml {
 				load = PaperPluginYaml.Load.BEFORE
 			}
 			register("Citizens") {
-				required = true
+				required = false
 				load = PaperPluginYaml.Load.BEFORE
 			}
 		}

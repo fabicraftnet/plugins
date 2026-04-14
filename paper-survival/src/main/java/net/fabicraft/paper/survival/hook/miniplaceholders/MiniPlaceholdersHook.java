@@ -1,18 +1,19 @@
-package net.fabicraft.paper.survival.placeholder;
+package net.fabicraft.paper.survival.hook.miniplaceholders;
 
 import io.github.miniplaceholders.api.Expansion;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
-import net.fabicraft.paper.survival.placeholder.gathering.*;
+import net.fabicraft.paper.survival.hook.Hook;
+import net.fabicraft.paper.survival.hook.miniplaceholders.gathering.*;
 import net.fabicraft.paper.survival.player.PlayerData;
 import net.fabicraft.paper.survival.player.PlayerDataManager;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.bukkit.entity.Player;
 
-public final class MiniPlaceholders {
+public final class MiniPlaceholdersHook implements Hook {
 	private final Expansion expansion;
 
-	public MiniPlaceholders(FabiCraftPaperSurvival plugin) {
+	public MiniPlaceholdersHook(FabiCraftPaperSurvival plugin) {
 		Expansion.Builder builder = Expansion.builder("fabicraftpapersurvival");
 
 		GatheringManager gatheringManager = plugin.gatheringManager();
@@ -32,6 +33,7 @@ public final class MiniPlaceholders {
 		this.expansion = builder.build();
 	}
 
+	@Override
 	public void register() {
 		this.expansion.register();
 	}

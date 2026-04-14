@@ -1,4 +1,4 @@
-package net.fabicraft.paper.survival.placeholder.gathering;
+package net.fabicraft.paper.survival.hook.miniplaceholders.gathering;
 
 import net.fabicraft.paper.survival.gathering.Gathering;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
