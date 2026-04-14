@@ -1,5 +1,7 @@
 package net.fabicraft.paper.survival;
 
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.trait.TraitInfo;
 import net.fabicraft.common.command.TranslatableCaptionProvider;
 import net.fabicraft.common.command.exception.ExceptionHandlers;
 import net.fabicraft.paper.common.command.PaperCommand;
@@ -15,8 +17,10 @@ import net.fabicraft.paper.survival.listener.EntityListener;
 import net.fabicraft.paper.survival.listener.GatheringListener;
 import net.fabicraft.paper.survival.listener.PlayerListener;
 import net.fabicraft.paper.survival.locale.SurvivalTranslationManager;
+import net.fabicraft.paper.survival.npc.RoleplayTrait;
 import net.fabicraft.paper.survival.placeholder.MiniPlaceholders;
 import net.fabicraft.paper.survival.player.PlayerDataManager;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.execution.ExecutionCoordinator;
@@ -63,6 +67,7 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 
 		registerCommands();
 		registerListeners();
+		registerTraits();
 
 		new MiniPlaceholders(this).register();
 	}
@@ -106,6 +111,16 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 		new ExceptionHandlers<Source>(getSLF4JLogger()).register(commandManager, Source::source);
 
 		this.commandManager = commandManager;
+	}
+
+	private void registerTraits() {
+		PluginManager manager = getServer().getPluginManager();
+		Plugin citizensPlugin = manager.getPlugin("citizens");
+		if (citizensPlugin != null && citizensPlugin.isEnabled()) {
+			CitizensAPI.getTraitFactory().registerTrait(
+					TraitInfo.create(RoleplayTrait.class)
+			);
+		}
 	}
 
 	@Override

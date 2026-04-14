@@ -10,6 +10,9 @@ version = "1"
 dependencies {
 	implementation(project(":paper-common"))
 	compileOnly(libs.plugin.carbon)
+	compileOnly(libs.plugin.citizens) {
+		exclude(group = "*", module = "*")
+	}
 	implementation(libs.flyway.core)
 	implementation(libs.storage.sqlite)
 }
@@ -30,6 +33,10 @@ paperPluginYaml {
 				load = PaperPluginYaml.Load.BEFORE
 			}
 			register("CarbonChat") {
+				required = true
+				load = PaperPluginYaml.Load.BEFORE
+			}
+			register("Citizens") {
 				required = true
 				load = PaperPluginYaml.Load.BEFORE
 			}

@@ -15,5 +15,6 @@ dependencyResolutionManagement {
 		maven("https://repo.papermc.io/repository/maven-public/") // Paper, Velocity
 		maven("https://maven.enginehub.org/repo/") // WorldGuard
 		maven("https://repo.william278.net/releases") // HuskHomes, HuskClaims
+		maven("https://maven.citizensnpcs.co/repo") // Citizens
 	}
 }
