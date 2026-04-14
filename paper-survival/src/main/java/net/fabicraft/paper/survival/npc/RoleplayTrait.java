@@ -18,6 +18,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickCallback;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,9 +27,9 @@ import java.util.UUID;
 public final class RoleplayTrait extends Trait {
 	private final PlayerDataManager playerDataManager;
 
-	public RoleplayTrait(FabiCraftPaperSurvival plugin) {
+	public RoleplayTrait() {
 		super("fabicraftroleplay");
-		this.playerDataManager = plugin.playerDataManager();
+		this.playerDataManager = JavaPlugin.getPlugin(FabiCraftPaperSurvival.class).playerDataManager();
 	}
 
 	@EventHandler

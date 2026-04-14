@@ -35,11 +35,11 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 	private final ConfigManager configManager;
 	private final GatheringManager gatheringManager;
-	private final PaperLuckPermsManager luckPermsManager;
 	private final CustomItemManager customItemManager;
 	private final StorageManager storageManager;
 	private final PlayerDataManager playerDataManager;
 	private final HookManager hookManager;
+	private PaperLuckPermsManager luckPermsManager;
 	private PaperCommandManager<Source> commandManager;
 
 	public FabiCraftPaperSurvival() {
@@ -48,13 +48,13 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 		this.hookManager = new HookManager(this);
 		this.gatheringManager = new GatheringManager(this);
 		this.customItemManager = new CustomItemManager(this);
-		this.luckPermsManager = new PaperLuckPermsManager(getSLF4JLogger());
 		this.storageManager = new StorageManager(getDataPath());
 		this.playerDataManager = new PlayerDataManager(this);
 	}
 
 	@Override
 	public void onEnable() {
+		this.luckPermsManager = new PaperLuckPermsManager(getSLF4JLogger());
 		setupCommandManager();
 
 		try {
