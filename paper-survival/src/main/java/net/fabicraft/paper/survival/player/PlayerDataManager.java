@@ -18,17 +18,17 @@ import java.util.concurrent.Executor;
 public final class PlayerDataManager {
 	@Language("SQLite")
 	private static final String STATEMENT_SELECT = """
-			SELECT nickname, scale
+			SELECT roleplay_name, roleplay_height
 			FROM fcps_playerdata
 			WHERE uuid = ?
 			""";
 	@Language("SQLite")
 	private static final String STATEMENT_UPSERT = """
-			INSERT INTO fcps_playerdata (uuid, nickname, scale)
+			INSERT INTO fcps_playerdata (uuid, roleplay_name, roleplay_height)
 			VALUES (?, ?, ?)
-			ON DUPLICATE KEY UPDATE
-				nickname = VALUES(nickname),
-				scale = VALUES(scale)
+			ON CONFLICT(uuid) DO UPDATE SET
+				roleplay_name = excluded.roleplay_name,
+				roleplay_height = excluded.roleplay_height
 			""";
 	private final Map<UUID, PlayerData> data = new ConcurrentHashMap<>();
 	private final Executor executor;
@@ -58,14 +58,8 @@ public final class PlayerDataManager {
 						this.data.put(uuid, data);
 						return;
 					}
-					String nickname = set.getString("nickname");
-					if (nickname != null) {
-						data.nickname(nickname);
-					}
-					float scale = set.getFloat("scale");
-					if (scale != 0) {
-						data.scale(scale);
-					}
+					data.rolePlayName(set.getString("roleplay_name"));
+					data.rolePlayHeight(set.getObject("roleplay_height", Integer.class));
 					this.data.put(uuid, data);
 				}
 			} catch (SQLException exception) {
@@ -89,8 +83,8 @@ public final class PlayerDataManager {
 					PreparedStatement statement = connection.prepareStatement(STATEMENT_UPSERT)
 			) {
 				statement.setBytes(1, UUIDUtils.uuidToBytes(uuid));
-				statement.setString(2, data.nickname());
-				statement.setFloat(3, data.scale());
+				statement.setString(2, data.rolePlayName());
+				statement.setObject(3, data.rolePlayHeight());
 			} catch (SQLException exception) {
 				this.logger.error("Couldn't save data for UUID {}", uuid, exception);
 			}

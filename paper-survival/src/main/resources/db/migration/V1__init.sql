@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS fcps_playerdata
 (
     uuid     BLOB PRIMARY KEY,
-    nickname TEXT,
-    scale REAL
+    roleplay_name TEXT,
+    roleplay_height INTEGER
 );
