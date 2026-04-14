@@ -21,15 +21,15 @@ import static org.incendo.cloud.bukkit.parser.selector.MultiplePlayerSelectorPar
 
 public final class FabiCraftSurvivalCommand extends PaperCommand<FabiCraftPaperSurvival> {
 	private static final TranslatableComponent COMPONENT_SUCCESS = Components.translatable(
-			"fabicraft.paper.core.command.fabicraftsurvival.reload.success",
+			"fabicraft.paper.survival.command.fabicraftsurvival.reload.success",
 			MessageType.SUCCESS
 	);
 	private static final TranslatableComponent COMPONENT_FAILURE = Components.translatable(
-			"fabicraft.paper.core.command.fabicraftsurvival.reload.failure",
+			"fabicraft.paper.survival.command.fabicraftsurvival.reload.failure",
 			MessageType.ERROR
 	);
 	private static final String PERMISSION_ITEM = "fabicraft.paper.survival.command.fabicraftsurvival.item";
-	private static final String PERMISSION_RELOAD = "fabicraft.paper.core.command.fabicraftsurvival.reload";
+	private static final String PERMISSION_RELOAD = "fabicraft.paper.survival.command.fabicraftsurvival.reload";
 
 	public FabiCraftSurvivalCommand(FabiCraftPaperSurvival plugin) {
 		super(plugin, plugin.commandManager());
