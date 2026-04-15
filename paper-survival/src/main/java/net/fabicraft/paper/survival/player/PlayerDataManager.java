@@ -3,6 +3,7 @@ package net.fabicraft.paper.survival.player;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.StorageManager;
 import net.fabicraft.paper.survival.util.UUIDUtils;
+import org.bukkit.entity.Player;
 import org.intellij.lang.annotations.Language;
 import org.slf4j.Logger;
 
@@ -41,8 +42,8 @@ public final class PlayerDataManager {
 		this.logger = plugin.getSLF4JLogger();
 	}
 
-	public PlayerData data(UUID uuid) {
-		return data.get(uuid);
+	public PlayerData data(Player player) {
+		return this.data.get(player.getUniqueId());
 	}
 
 	public void load(UUID uuid) {

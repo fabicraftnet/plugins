@@ -91,7 +91,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 			player.sendMessage(COMPONENT_REMOVE);
 		} else {
 			this.luckPermsManager.addGroup(player, GROUP_NAME);
-			PlayerData data = this.playerDataManager.data(player.getUniqueId());
+			PlayerData data = this.playerDataManager.data(player);
 			if (data == null) {
 				throw new IllegalStateException("Player data is null");
 			}
@@ -102,7 +102,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 
 	private void handleName(CommandContext<PlayerSource> context) {
 		Player player = context.sender().source();
-		PlayerData data = this.playerDataManager.data(player.getUniqueId());
+		PlayerData data = this.playerDataManager.data(player);
 		if (data == null) {
 			throw new IllegalStateException("Player data is null");
 		}
@@ -116,7 +116,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 
 	private void handleNameReset(CommandContext<PlayerSource> context) {
 		Player player = context.sender().source();
-		PlayerData data = this.playerDataManager.data(player.getUniqueId());
+		PlayerData data = this.playerDataManager.data(player);
 		if (data == null) {
 			throw new IllegalStateException("Player data is null");
 		}
@@ -133,7 +133,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 
 	private void handleNameSet(CommandContext<PlayerSource> context) {
 		Player player = context.sender().source();
-		PlayerData data = this.playerDataManager.data(player.getUniqueId());
+		PlayerData data = this.playerDataManager.data(player);
 		if (data == null) {
 			throw new IllegalStateException("Player data is null");
 		}
@@ -149,7 +149,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 
 	private void handleHeight(CommandContext<PlayerSource> context) {
 		Player player = context.sender().source();
-		PlayerData data = this.playerDataManager.data(player.getUniqueId());
+		PlayerData data = this.playerDataManager.data(player);
 		if (data == null) {
 			throw new IllegalStateException("Player data is null");
 		}
@@ -162,7 +162,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 
 	private void handleHeightSet(CommandContext<PlayerSource> context) {
 		Player player = context.sender().source();
-		PlayerData data = this.playerDataManager.data(player.getUniqueId());
+		PlayerData data = this.playerDataManager.data(player);
 		if (data == null) {
 			throw new IllegalStateException("Player data is null");
 		}
@@ -179,7 +179,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 
 	private void handleHeightReset(CommandContext<PlayerSource> context) {
 		Player player = context.sender().source();
-		PlayerData data = this.playerDataManager.data(player.getUniqueId());
+		PlayerData data = this.playerDataManager.data(player);
 		if (data == null) {
 			throw new IllegalStateException("Player data is null");
 		}
