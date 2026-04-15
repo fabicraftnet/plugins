@@ -13,10 +13,13 @@ import net.fabicraft.paper.survival.player.PlayerHeightController;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.bukkit.parser.PlayerParser;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.incendo.cloud.parser.standard.IntegerParser;
 import org.incendo.cloud.parser.standard.StringParser;
+
+import java.util.Objects;
 
 public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> {
 	public static final TranslatableComponent COMPONENT_ADD = Components.translatable(
@@ -32,22 +35,6 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 	private static final String PERMISSION_NAME = "fabicraft.paper.survival.command.roleplay.name";
 	private static final String PERMISSION_HEIGHT = "fabicraft.paper.survival.command.roleplay.height";
 	private static final String GROUP_NAME = "roleplay";
-	private static final TranslatableComponent COMPONENT_NAME_UNSET = Components.translatable(
-			"fabicraft.paper.survival.command.roleplay.name.unset",
-			MessageType.INFO
-	);
-	private static final TranslatableComponent COMPONENT_NAME_RESET = Components.translatable(
-			"fabicraft.paper.survival.command.roleplay.name.reset",
-			MessageType.SUCCESS
-	);
-	private static final TranslatableComponent COMPONENT_NAME_RESET_UNSET = Components.translatable(
-			"fabicraft.paper.survival.command.roleplay.name.unset",
-			MessageType.ERROR
-	);
-	private static final TranslatableComponent COMPONENT_HEIGHT_RESET = Components.translatable(
-			"fabicraft.paper.survival.command.roleplay.height.reset",
-			MessageType.SUCCESS
-	);
 	private final PaperLuckPermsManager luckPermsManager;
 	private final CarbonChat carbon = CarbonChatProvider.carbonChat();
 	private final PlayerDataManager playerDataManager;
@@ -67,14 +54,14 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 				.handler(this::handle);
 		super.manager.command(builder);
 
-		var nameBuilder = builder.literal("name").permission(PERMISSION_NAME);
+		var nameBuilder = builder.literal("name").permission(PERMISSION_NAME).required("player", PlayerParser.playerParser());
 		super.manager.command(nameBuilder.handler(this::handleName));
 		super.manager.command(nameBuilder.literal("reset").handler(this::handleNameReset));
 		super.manager.command(nameBuilder.literal("set").required("name", StringParser.greedyStringParser()).handler(this::handleNameSet));
 
-		var heightBuilder = builder.literal("height").permission(PERMISSION_HEIGHT);
+		var heightBuilder = builder.literal("height").permission(PERMISSION_HEIGHT).required("player", PlayerParser.playerParser());
 		super.manager.command(heightBuilder.handler(this::handleHeight));
-		super.manager.command(heightBuilder.literal("set").required("height", IntegerParser.integerParser(150, 200)).handler(this::handleHeightSet));
+		super.manager.command(heightBuilder.literal("set").required("height", IntegerParser.integerParser()).handler(this::handleHeightSet));
 		super.manager.command(heightBuilder.literal("reset").handler(this::handleHeightReset));
 	}
 
@@ -101,90 +88,130 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 	}
 
 	private void handleName(CommandContext<PlayerSource> context) {
-		Player player = context.sender().source();
-		PlayerData data = this.playerDataManager.data(player);
-		if (data == null) {
-			throw new IllegalStateException("Player data is null");
+		Player player = context.get("player");
+
+		PlayerData data = Objects.requireNonNull(this.playerDataManager.data(player), "playerdata can not be null");
+
+		Component component;
+		if (data.rolePlayName() == null) {
+			component = Components.translatable(
+					"fabicraft.paper.survival.command.roleplay.name.unset",
+					MessageType.INFO,
+					player
+			);
+		} else {
+			component = Components.translatable(
+					"fabicraft.paper.survival.command.roleplay.name",
+					MessageType.INFO,
+					player,
+					data.rolePlayName()
+			);
 		}
-		Component component = data.rolePlayName() == null ? COMPONENT_NAME_UNSET : Components.translatable(
-				"fabicraft.paper.survival.command.roleplay.name",
-				MessageType.INFO,
-				data.rolePlayName()
-		);
-		player.sendMessage(component);
+		context.sender().source().sendMessage(component);
 	}
 
 	private void handleNameReset(CommandContext<PlayerSource> context) {
-		Player player = context.sender().source();
-		PlayerData data = this.playerDataManager.data(player);
-		if (data == null) {
-			throw new IllegalStateException("Player data is null");
-		}
+		Player player = context.get("player");
+
+		PlayerData data = Objects.requireNonNull(this.playerDataManager.data(player), "playerdata can not be null");
+
 		Component component;
 		if (data.rolePlayName() != null) {
-			component = COMPONENT_NAME_RESET;
+			component = Components.translatable(
+					"fabicraft.paper.survival.command.roleplay.name.reset",
+					MessageType.SUCCESS,
+					player
+			);
 			data.rolePlayName(null);
 			this.playerDataManager.save(player.getUniqueId());
 		} else {
-			component = COMPONENT_NAME_RESET_UNSET;
+			component = Components.translatable(
+					"fabicraft.paper.survival.command.roleplay.name.unset",
+					MessageType.ERROR,
+					player
+			);
 		}
-		player.sendMessage(component);
+		context.sender().source().sendMessage(component);
 	}
 
 	private void handleNameSet(CommandContext<PlayerSource> context) {
-		Player player = context.sender().source();
-		PlayerData data = this.playerDataManager.data(player);
-		if (data == null) {
-			throw new IllegalStateException("Player data is null");
-		}
-		String nickname = context.get("nickname");
-		data.rolePlayName(nickname);
+		Player player = context.get("player");
+		String name = context.get("name");
+
+		PlayerData data = Objects.requireNonNull(this.playerDataManager.data(player), "playerdata can not be null");
+		data.rolePlayName(name);
 		this.playerDataManager.save(player.getUniqueId());
-		player.sendMessage(Components.translatable(
+
+		context.sender().source().sendMessage(Components.translatable(
 				"fabicraft.paper.survival.command.roleplay.name.set",
 				MessageType.SUCCESS,
-				nickname
+				player,
+				name
 		));
 	}
 
 	private void handleHeight(CommandContext<PlayerSource> context) {
-		Player player = context.sender().source();
-		PlayerData data = this.playerDataManager.data(player);
-		if (data == null) {
-			throw new IllegalStateException("Player data is null");
+		Player player = context.get("player");
+
+		PlayerData data = Objects.requireNonNull(this.playerDataManager.data(player), "playerdata can not be null");
+
+		Component component;
+		if (data.rolePlayHeight() == null) {
+			component = Components.translatable(
+					"fabicraft.paper.survival.command.roleplay.height.unset",
+					MessageType.INFO,
+					player
+			);
+		} else {
+			component = Components.translatable(
+					"fabicraft.paper.survival.command.roleplay.height",
+					MessageType.INFO,
+					player,
+					data.rolePlayHeight()
+			);
 		}
-		player.sendMessage(Components.translatable(
-				"fabicraft.paper.survival.command.roleplay.height",
-				MessageType.INFO,
-				data.rolePlayHeight()
-		));
+		context.sender().source().sendMessage(component);
 	}
 
 	private void handleHeightSet(CommandContext<PlayerSource> context) {
-		Player player = context.sender().source();
-		PlayerData data = this.playerDataManager.data(player);
-		if (data == null) {
-			throw new IllegalStateException("Player data is null");
-		}
+		Player player = context.get("player");
 		int height = context.get("height");
+
+		PlayerData data = Objects.requireNonNull(this.playerDataManager.data(player), "playerdata can not be null");
+
 		data.rolePlayHeight(height);
 		this.playerDataManager.save(player.getUniqueId());
 		this.playerHeightController.set(player, height);
-		player.sendMessage(Components.translatable(
+
+		context.sender().source().sendMessage(Components.translatable(
 				"fabicraft.paper.survival.command.roleplay.height.set",
 				MessageType.SUCCESS,
+				player,
 				height
 		));
 	}
 
 	private void handleHeightReset(CommandContext<PlayerSource> context) {
-		Player player = context.sender().source();
-		PlayerData data = this.playerDataManager.data(player);
-		if (data == null) {
-			throw new IllegalStateException("Player data is null");
+		Player player = context.get("player");
+
+		PlayerData data = Objects.requireNonNull(this.playerDataManager.data(player), "playerdata can not be null");
+
+		Component component;
+		if (data.rolePlayHeight() != null) {
+			component = Components.translatable(
+					"fabicraft.paper.survival.command.roleplay.height.reset",
+					MessageType.SUCCESS,
+					player
+			);
+			data.rolePlayHeight(null);
+			this.playerDataManager.save(player.getUniqueId());
+		} else {
+			component = Components.translatable(
+					"fabicraft.paper.survival.command.roleplay.height.unset",
+					MessageType.ERROR,
+					player
+			);
 		}
-		data.rolePlayHeight(null);
-		this.playerDataManager.save(player.getUniqueId());
-		player.sendMessage(COMPONENT_HEIGHT_RESET);
+		context.sender().source().sendMessage(component);
 	}
 }
