@@ -16,12 +16,9 @@ public final class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onJoinFullServer(PlayerServerFullCheckEvent event) {
-		boolean hasPermission = this.plugin.luckPermsManager().hasPermission(event.getPlayerProfile().getId(), "fabicraft.paper.core.join.bypass").join();
-		if (!hasPermission) {
-			return;
+		if (this.plugin.luckPermsManager().hasPermission(event.getPlayerProfile().getId(), "fabicraft.paper.core.join.bypass").join()) {
+			event.allow(true);
 		}
-
-		event.allow(true);
 	}
 
 	@EventHandler
