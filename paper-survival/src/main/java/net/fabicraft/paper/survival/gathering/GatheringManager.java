@@ -148,7 +148,7 @@ public final class GatheringManager {
 				statement.setInt(6, gathering.goal());
 				statement.setInt(7, gathering.collected());
 				statement.setString(8, this.plugin.miniMessage().serialize(gathering.displayName()));
-				int result = statement.executeUpdate();
+				statement.executeUpdate();
 			} catch (SQLException exception) {
 				this.plugin.getSLF4JLogger().error("Could not save gathering to the database {}", gathering.identifier(), exception);
 			}
