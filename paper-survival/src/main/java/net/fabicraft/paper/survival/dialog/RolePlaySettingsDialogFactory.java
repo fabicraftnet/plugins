@@ -10,6 +10,7 @@ import io.papermc.paper.registry.data.dialog.type.DialogType;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.command.commands.RolePlayCommand;
+import net.fabicraft.paper.survival.config.section.RolePlaySection;
 import net.fabicraft.paper.survival.player.PlayerData;
 import net.fabicraft.paper.survival.player.PlayerDataManager;
 import net.fabicraft.paper.survival.player.PlayerHeightController;
@@ -25,8 +26,10 @@ public final class RolePlaySettingsDialogFactory {
 	private final PaperLuckPermsManager luckPermsManager;
 	private final PlayerDataManager playerDataManager;
 	private final PlayerHeightController playerHeightController = new PlayerHeightController();
+	private final FabiCraftPaperSurvival plugin;
 
 	public RolePlaySettingsDialogFactory(FabiCraftPaperSurvival plugin) {
+		this.plugin = plugin;
 		this.luckPermsManager = plugin.luckPermsManager();
 		this.playerDataManager = plugin.playerDataManager();
 	}
@@ -36,6 +39,8 @@ public final class RolePlaySettingsDialogFactory {
 		if (data == null) {
 			return PlayerDataNotLoadedDialog.dialog();
 		}
+
+		RolePlaySection config = this.plugin.config().rolePlay();
 
 		return Dialog.create(builder -> builder.empty()
 				.base(DialogBase.builder(Component.text("Roolipeliasetukset"))
@@ -47,11 +52,11 @@ public final class RolePlaySettingsDialogFactory {
 												.build(),
 										DialogInput.text("name", Component.text("Hahmon nimi"))
 												.initial(Objects.requireNonNullElse(data.rolePlayName(), player.getName()))
-												.maxLength(20)
+												.maxLength(config.maxNameLength())
 												.labelVisible(true)
 												.build(),
-										DialogInput.numberRange("height", Component.text("Hahmon pituus"), 150, 200)
-												.initial((float) Objects.requireNonNullElse(data.rolePlayHeight(), 180))
+										DialogInput.numberRange("height", Component.text("Hahmon pituus"), config.minHeight(), config.maxHeight())
+												.initial((float) Objects.requireNonNullElse(data.rolePlayHeight(), PlayerHeightController.DEFAULT_HEIGHT))
 												.step(1f)
 												.labelFormat("%s: %scm")
 												.build()
@@ -61,10 +66,13 @@ public final class RolePlaySettingsDialogFactory {
 						Component.text("Tallenna"),
 						Component.text("Tallenna asetukset"),
 						100,
-						DialogAction.customClick((view, audience) -> handleSave(view, player, data), ClickCallback.Options.builder()
-								.uses(1)
-								.lifetime(ClickCallback.DEFAULT_LIFETIME)
-								.build())
+						DialogAction.customClick(
+								(view, audience) -> handleSave(view, player, data),
+								ClickCallback.Options.builder()
+										.uses(1)
+										.lifetime(ClickCallback.DEFAULT_LIFETIME)
+										.build()
+						)
 				)))
 		);
 	}
@@ -75,7 +83,8 @@ public final class RolePlaySettingsDialogFactory {
 		String name = Objects.requireNonNull(view.getText("name"), "name must not be null");
 
 		data.rolePlayHeight(height);
-		data.rolePlayName(name);
+		data.rolePlayName(name.isBlank() || name.length() < this.plugin.config().rolePlay().minNameLength() ? null : name);
+
 		this.playerDataManager.save(player.getUniqueId());
 
 		if (enabled) {

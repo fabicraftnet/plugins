@@ -5,6 +5,8 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 
 public final class PlayerHeightController {
+	public static final int DEFAULT_HEIGHT = 180;
+
 	public void reset(Player player) {
 		AttributeInstance attribute = player.getAttribute(Attribute.SCALE);
 		if (attribute == null) {
@@ -18,6 +20,6 @@ public final class PlayerHeightController {
 		if (attribute == null) {
 			throw new IllegalStateException("Player doesn't have SCALE attribute");
 		}
-		attribute.setBaseValue((height / 180.0) * attribute.getDefaultValue());
+		attribute.setBaseValue(((double) height / DEFAULT_HEIGHT) * attribute.getDefaultValue());
 	}
 }
