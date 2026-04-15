@@ -1,22 +1,22 @@
 package net.fabicraft.paper.survival.player;
 
 public final class PlayerData {
-	private String rolePlayName;
-	private Integer rolePlayHeight;
+	private String characterName;
+	private Integer characterHeight;
 
-	public String rolePlayName() {
-		return this.rolePlayName;
+	public String characterName() {
+		return this.characterName;
 	}
 
-	public void rolePlayName(String name) {
-		this.rolePlayName = name;
+	public void characterName(String name) {
+		this.characterName = name;
 	}
 
-	public Integer rolePlayHeight() {
-		return this.rolePlayHeight;
+	public Integer characterHeight() {
+		return this.characterHeight;
 	}
 
-	public void rolePlayHeight(Integer height) {
-		this.rolePlayHeight = height;
+	public void characterHeight(Integer height) {
+		this.characterHeight = height;
 	}
 }

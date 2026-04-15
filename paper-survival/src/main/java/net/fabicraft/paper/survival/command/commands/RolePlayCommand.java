@@ -82,7 +82,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 			if (data == null) {
 				throw new IllegalStateException("Player data is null");
 			}
-			this.playerHeightController.set(player, data.rolePlayHeight());
+			this.playerHeightController.set(player, data.characterHeight());
 			player.sendMessage(COMPONENT_ADD);
 		}
 	}
@@ -93,7 +93,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 		PlayerData data = Objects.requireNonNull(this.playerDataManager.data(player), "playerdata can not be null");
 
 		Component component;
-		if (data.rolePlayName() == null) {
+		if (data.characterName() == null) {
 			component = Components.translatable(
 					"fabicraft.paper.survival.command.roleplay.name.unset",
 					MessageType.INFO,
@@ -104,7 +104,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 					"fabicraft.paper.survival.command.roleplay.name",
 					MessageType.INFO,
 					player,
-					data.rolePlayName()
+					data.characterName()
 			);
 		}
 		context.sender().source().sendMessage(component);
@@ -116,13 +116,13 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 		PlayerData data = Objects.requireNonNull(this.playerDataManager.data(player), "playerdata can not be null");
 
 		Component component;
-		if (data.rolePlayName() != null) {
+		if (data.characterName() != null) {
 			component = Components.translatable(
 					"fabicraft.paper.survival.command.roleplay.name.reset",
 					MessageType.SUCCESS,
 					player
 			);
-			data.rolePlayName(null);
+			data.characterName(null);
 			this.playerDataManager.save(player.getUniqueId());
 		} else {
 			component = Components.translatable(
@@ -139,7 +139,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 		String name = context.get("name");
 
 		PlayerData data = Objects.requireNonNull(this.playerDataManager.data(player), "playerdata can not be null");
-		data.rolePlayName(name);
+		data.characterName(name);
 		this.playerDataManager.save(player.getUniqueId());
 
 		context.sender().source().sendMessage(Components.translatable(
@@ -156,7 +156,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 		PlayerData data = Objects.requireNonNull(this.playerDataManager.data(player), "playerdata can not be null");
 
 		Component component;
-		if (data.rolePlayHeight() == null) {
+		if (data.characterHeight() == null) {
 			component = Components.translatable(
 					"fabicraft.paper.survival.command.roleplay.height.unset",
 					MessageType.INFO,
@@ -167,7 +167,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 					"fabicraft.paper.survival.command.roleplay.height",
 					MessageType.INFO,
 					player,
-					data.rolePlayHeight()
+					data.characterHeight()
 			);
 		}
 		context.sender().source().sendMessage(component);
@@ -179,7 +179,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 
 		PlayerData data = Objects.requireNonNull(this.playerDataManager.data(player), "playerdata can not be null");
 
-		data.rolePlayHeight(height);
+		data.characterHeight(height);
 		this.playerDataManager.save(player.getUniqueId());
 		this.playerHeightController.set(player, height);
 
@@ -197,13 +197,13 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 		PlayerData data = Objects.requireNonNull(this.playerDataManager.data(player), "playerdata can not be null");
 
 		Component component;
-		if (data.rolePlayHeight() != null) {
+		if (data.characterHeight() != null) {
 			component = Components.translatable(
 					"fabicraft.paper.survival.command.roleplay.height.reset",
 					MessageType.SUCCESS,
 					player
 			);
-			data.rolePlayHeight(null);
+			data.characterHeight(null);
 			this.playerDataManager.save(player.getUniqueId());
 		} else {
 			component = Components.translatable(

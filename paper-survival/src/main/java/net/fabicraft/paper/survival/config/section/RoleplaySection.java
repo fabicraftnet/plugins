@@ -2,7 +2,7 @@ package net.fabicraft.paper.survival.config.section;
 
 import space.arim.dazzleconf.engine.Comments;
 
-public interface RolePlaySection {
+public interface RoleplaySection {
 	default int minNameLength() {
 		return 3;
 	}

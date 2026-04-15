@@ -26,7 +26,7 @@ public final class MiniPlaceholdersHook implements Hook {
 		PlayerDataManager playerDataManager = plugin.playerDataManager();
 		builder.audiencePlaceholder(Player.class, "nickname", (player, queue, context) -> {
 			PlayerData data = playerDataManager.data(player);
-			String nickname = data == null || data.rolePlayName() == null ? player.getName() : data.rolePlayName();
+			String nickname = data == null || data.characterName() == null ? player.getName() : data.characterName();
 			return Tag.preProcessParsed(nickname);
 		});
 
