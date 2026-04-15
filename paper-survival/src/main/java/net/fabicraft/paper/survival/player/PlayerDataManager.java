@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
@@ -75,10 +76,7 @@ public final class PlayerDataManager {
 
 	public void save(UUID uuid) {
 		this.executor.execute(() -> {
-			PlayerData data = this.data.get(uuid);
-			if (data == null) {
-				throw new IllegalStateException("Player data is null");
-			}
+			PlayerData data = Objects.requireNonNull(this.data.get(uuid), "playerdata can not be null");
 			try (
 					Connection connection = this.storageManager.connection();
 					PreparedStatement statement = connection.prepareStatement(STATEMENT_UPSERT)

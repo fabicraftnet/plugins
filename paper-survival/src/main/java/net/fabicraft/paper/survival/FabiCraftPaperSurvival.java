@@ -9,7 +9,7 @@ import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
 import net.fabicraft.paper.survival.command.SurvivalCommandPreProcessor;
 import net.fabicraft.paper.survival.command.commands.FabiCraftSurvivalCommand;
 import net.fabicraft.paper.survival.command.commands.GatheringCommand;
-import net.fabicraft.paper.survival.command.commands.RolePlayCommand;
+import net.fabicraft.paper.survival.command.commands.RoleplayCommand;
 import net.fabicraft.paper.survival.config.ConfigManager;
 import net.fabicraft.paper.survival.config.SurvivalConfig;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
@@ -155,7 +155,7 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 		List.of(
 				new FabiCraftSurvivalCommand(this),
 				new GatheringCommand(this),
-				new RolePlayCommand(this)
+				new RoleplayCommand(this)
 		).forEach(PaperCommand::register);
 	}
 }

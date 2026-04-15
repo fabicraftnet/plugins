@@ -11,7 +11,7 @@ import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
-import net.fabicraft.paper.survival.command.commands.RolePlayCommand;
+import net.fabicraft.paper.survival.command.commands.RoleplayCommand;
 import net.fabicraft.paper.survival.config.section.RoleplaySection;
 import net.fabicraft.paper.survival.player.PlayerData;
 import net.fabicraft.paper.survival.player.PlayerDataManager;
@@ -102,13 +102,13 @@ public final class RoleplaySettingsDialogFactory {
 			this.playerHeightController.set(player, data.characterHeight());
 			if (!this.luckPermsManager.hasGroup(player, "roleplay")) {
 				this.luckPermsManager.addGroup(player, "roleplay");
-				player.sendMessage(RolePlayCommand.COMPONENT_ADD);
+				player.sendMessage(RoleplayCommand.COMPONENT_ADD);
 			}
 		} else {
 			this.playerHeightController.reset(player);
 			if (this.luckPermsManager.hasGroup(player, "roleplay")) {
 				this.luckPermsManager.removeGroup(player, "roleplay");
-				player.sendMessage(RolePlayCommand.COMPONENT_REMOVE);
+				player.sendMessage(RoleplayCommand.COMPONENT_REMOVE);
 			}
 		}
 	}

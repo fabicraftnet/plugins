@@ -21,7 +21,7 @@ import org.incendo.cloud.parser.standard.StringParser;
 
 import java.util.Objects;
 
-public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> {
+public final class RoleplayCommand extends PaperCommand<FabiCraftPaperSurvival> {
 	public static final TranslatableComponent COMPONENT_ADD = Components.translatable(
 			"fabicraft.paper.survival.command.roleplay.add",
 			MessageType.SUCCESS,
@@ -40,7 +40,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 	private final PlayerDataManager playerDataManager;
 	private final PlayerHeightController playerHeightController = new PlayerHeightController();
 
-	public RolePlayCommand(FabiCraftPaperSurvival plugin) {
+	public RoleplayCommand(FabiCraftPaperSurvival plugin) {
 		super(plugin, plugin.commandManager());
 		this.luckPermsManager = plugin.luckPermsManager();
 		this.playerDataManager = plugin.playerDataManager();
@@ -78,10 +78,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 			player.sendMessage(COMPONENT_REMOVE);
 		} else {
 			this.luckPermsManager.addGroup(player, GROUP_NAME);
-			PlayerData data = this.playerDataManager.data(player);
-			if (data == null) {
-				throw new IllegalStateException("Player data is null");
-			}
+			PlayerData data = Objects.requireNonNull(this.playerDataManager.data(player), "playerdata can not be null");
 			this.playerHeightController.set(player, data.characterHeight());
 			player.sendMessage(COMPONENT_ADD);
 		}
@@ -97,13 +94,13 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 			component = Components.translatable(
 					"fabicraft.paper.survival.command.roleplay.name.unset",
 					MessageType.INFO,
-					player
+					Components.player(player)
 			);
 		} else {
 			component = Components.translatable(
 					"fabicraft.paper.survival.command.roleplay.name",
 					MessageType.INFO,
-					player,
+					Components.player(player),
 					data.characterName()
 			);
 		}
@@ -120,7 +117,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 			component = Components.translatable(
 					"fabicraft.paper.survival.command.roleplay.name.reset",
 					MessageType.SUCCESS,
-					player
+					Components.player(player)
 			);
 			data.characterName(null);
 			this.playerDataManager.save(player.getUniqueId());
@@ -128,7 +125,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 			component = Components.translatable(
 					"fabicraft.paper.survival.command.roleplay.name.unset",
 					MessageType.ERROR,
-					player
+					Components.player(player)
 			);
 		}
 		context.sender().source().sendMessage(component);
@@ -145,7 +142,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 		context.sender().source().sendMessage(Components.translatable(
 				"fabicraft.paper.survival.command.roleplay.name.set",
 				MessageType.SUCCESS,
-				player,
+				Components.player(player),
 				name
 		));
 	}
@@ -160,13 +157,13 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 			component = Components.translatable(
 					"fabicraft.paper.survival.command.roleplay.height.unset",
 					MessageType.INFO,
-					player
+					Components.player(player)
 			);
 		} else {
 			component = Components.translatable(
 					"fabicraft.paper.survival.command.roleplay.height",
 					MessageType.INFO,
-					player,
+					Components.player(player),
 					data.characterHeight()
 			);
 		}
@@ -186,7 +183,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 		context.sender().source().sendMessage(Components.translatable(
 				"fabicraft.paper.survival.command.roleplay.height.set",
 				MessageType.SUCCESS,
-				player,
+				Components.player(player),
 				height
 		));
 	}
@@ -201,7 +198,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 			component = Components.translatable(
 					"fabicraft.paper.survival.command.roleplay.height.reset",
 					MessageType.SUCCESS,
-					player
+					Components.player(player)
 			);
 			data.characterHeight(null);
 			this.playerDataManager.save(player.getUniqueId());
@@ -209,7 +206,7 @@ public final class RolePlayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 			component = Components.translatable(
 					"fabicraft.paper.survival.command.roleplay.height.unset",
 					MessageType.ERROR,
-					player
+					Components.player(player)
 			);
 		}
 		context.sender().source().sendMessage(component);
