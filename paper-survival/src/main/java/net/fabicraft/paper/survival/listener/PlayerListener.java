@@ -5,7 +5,6 @@ import net.fabicraft.common.locale.MessageType;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.gathering.Gathering;
 import net.kyori.adventure.text.TranslatableComponent;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,7 +13,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
 
@@ -33,15 +31,7 @@ public final class PlayerListener implements Listener {
 		}
 
 		Inventory inventory = player.getInventory();
-		ItemStack claimShovel = this.plugin.customItemManager().itemStack("tonttilapio");
-		if (claimShovel != null) {
-			inventory.addItem(claimShovel);
-		} else {
-			this.plugin.getSLF4JLogger().warn("Couldn't find custom item named tonttilapio. Giving normal golden shovel instead. Please check items.json!");
-			inventory.addItem(ItemStack.of(Material.GOLDEN_SHOVEL));
-		}
-		inventory.addItem(ItemStack.of(Material.BREAD, 16));
-		inventory.addItem(ItemStack.of(Material.BAMBOO_RAFT));
+		this.plugin.itemManager().firstJoinItems().forEach(inventory::addItem);
 	}
 
 	@EventHandler

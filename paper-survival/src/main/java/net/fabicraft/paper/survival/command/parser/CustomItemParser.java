@@ -1,6 +1,6 @@
 package net.fabicraft.paper.survival.command.parser;
 
-import net.fabicraft.paper.survival.CustomItemManager;
+import net.fabicraft.paper.survival.ItemManager;
 import net.fabicraft.paper.survival.command.SurvivalCommandContextKeys;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -21,9 +21,9 @@ public final class CustomItemParser<C> implements ArgumentParser<C, ItemStack>, 
 
 	@Override
 	public @NonNull ArgumentParseResult<@NonNull ItemStack> parse(@NonNull CommandContext<@NonNull C> context, @NonNull CommandInput input) {
-		final CustomItemManager itemManager = context.get(SurvivalCommandContextKeys.CUSTOM_ITEM_MANAGER_KEY);
+		final ItemManager itemManager = context.get(SurvivalCommandContextKeys.CUSTOM_ITEM_MANAGER_KEY);
 		final String inputString = input.peekString();
-		final ItemStack itemStack = itemManager.itemStack(inputString);
+		final ItemStack itemStack = itemManager.customItem(inputString);
 
 		if (itemStack == null) {
 			throw new CustomItemParseException(inputString, context);
@@ -35,8 +35,8 @@ public final class CustomItemParser<C> implements ArgumentParser<C, ItemStack>, 
 
 	@Override
 	public @NonNull Iterable<@NonNull String> stringSuggestions(@NonNull CommandContext<C> context, @NonNull CommandInput input) {
-		final CustomItemManager itemManager = context.get(SurvivalCommandContextKeys.CUSTOM_ITEM_MANAGER_KEY);
-		return itemManager.itemKeys();
+		final ItemManager itemManager = context.get(SurvivalCommandContextKeys.CUSTOM_ITEM_MANAGER_KEY);
+		return itemManager.customItemKeys();
 	}
 
 	public static final class CustomItemParseException extends ParserException {

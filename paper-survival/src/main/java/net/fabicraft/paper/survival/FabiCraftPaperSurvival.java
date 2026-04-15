@@ -35,7 +35,7 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 	private final ConfigManager configManager;
 	private final GatheringManager gatheringManager;
-	private final CustomItemManager customItemManager;
+	private final ItemManager itemManager;
 	private final StorageManager storageManager;
 	private final PlayerDataManager playerDataManager;
 	private final HookManager hookManager;
@@ -47,7 +47,7 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 		this.configManager = new ConfigManager(this);
 		this.hookManager = new HookManager(this);
 		this.gatheringManager = new GatheringManager(this);
-		this.customItemManager = new CustomItemManager(this);
+		this.itemManager = new ItemManager(this);
 		this.storageManager = new StorageManager(getDataPath());
 		this.playerDataManager = new PlayerDataManager(this);
 	}
@@ -84,11 +84,11 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 		this.configManager.load();
 		this.storageManager.migrate();
 		this.gatheringManager.load();
-		this.customItemManager.load();
+		this.itemManager.load();
 	}
 
-	public CustomItemManager customItemManager() {
-		return this.customItemManager;
+	public ItemManager itemManager() {
+		return this.itemManager;
 	}
 
 	public PlayerDataManager playerDataManager() {
