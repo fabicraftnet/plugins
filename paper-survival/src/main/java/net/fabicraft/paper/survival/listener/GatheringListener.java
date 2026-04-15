@@ -106,7 +106,7 @@ public final class GatheringListener implements Listener {
 					gathering.displayName()
 			));
 		}
-		this.plugin.gatheringManager().save();
+		this.plugin.gatheringManager().save(gathering);
 	}
 
 	private void closeForEveryone(Gathering gathering) {

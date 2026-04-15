@@ -1,7 +1,9 @@
 package net.fabicraft.paper.survival;
 
+import io.github.miniplaceholders.api.MiniPlaceholders;
 import net.fabicraft.common.command.TranslatableCaptionProvider;
 import net.fabicraft.common.command.exception.ExceptionHandlers;
+import net.fabicraft.common.locale.BrandColor;
 import net.fabicraft.paper.common.command.PaperCommand;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
 import net.fabicraft.paper.survival.command.SurvivalCommandPreProcessor;
@@ -17,6 +19,9 @@ import net.fabicraft.paper.survival.listener.GatheringListener;
 import net.fabicraft.paper.survival.listener.PlayerListener;
 import net.fabicraft.paper.survival.locale.SurvivalTranslationManager;
 import net.fabicraft.paper.survival.player.PlayerDataManager;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.execution.ExecutionCoordinator;
@@ -39,6 +44,13 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 	private final StorageManager storageManager;
 	private final PlayerDataManager playerDataManager;
 	private final HookManager hookManager;
+	private final MiniMessage miniMessage = MiniMessage.builder()
+			.tags(TagResolver.resolver(
+					StandardTags.defaults(),
+					BrandColor.resolver(),
+					MiniPlaceholders.globalPlaceholders()
+			))
+			.build();
 	private PaperLuckPermsManager luckPermsManager;
 	private PaperCommandManager<Source> commandManager;
 
@@ -46,9 +58,9 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 		new SurvivalTranslationManager(getSLF4JLogger());
 		this.configManager = new ConfigManager(this);
 		this.hookManager = new HookManager(this);
-		this.gatheringManager = new GatheringManager(this);
 		this.itemManager = new ItemManager(this);
 		this.storageManager = new StorageManager(getDataPath());
+		this.gatheringManager = new GatheringManager(this);
 		this.playerDataManager = new PlayerDataManager(this);
 	}
 
@@ -93,6 +105,10 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 
 	public PlayerDataManager playerDataManager() {
 		return this.playerDataManager;
+	}
+
+	public MiniMessage miniMessage() {
+		return this.miniMessage;
 	}
 
 	private void setupCommandManager() {

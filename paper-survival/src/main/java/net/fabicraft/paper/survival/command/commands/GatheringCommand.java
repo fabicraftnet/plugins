@@ -91,9 +91,18 @@ public final class GatheringCommand extends PaperCommand<FabiCraftPaperSurvival>
 		Material material = context.get("material");
 		int goal = context.get("goal");
 
+		if (this.gatheringManager.gathering(block.getLocation()) != null) {
+			//TODO MESSAGE
+			return;
+		}
+
+		if (this.gatheringManager.gathering(name) != null) {
+			//TODO MESSAGE
+			return;
+		}
+
 		Gathering gathering = new Gathering(name.toLowerCase(Locale.ROOT), block.getLocation().toBlock(), material, 0, goal);
 		this.gatheringManager.add(gathering);
-		this.gatheringManager.save();
 
 		TranslatableComponent component = Components.translatable(
 				"fabicraft.paper.survival.command.gathering.add",
@@ -116,7 +125,6 @@ public final class GatheringCommand extends PaperCommand<FabiCraftPaperSurvival>
 			return;
 		}
 		this.gatheringManager.remove(gathering);
-		this.gatheringManager.save();
 
 		TranslatableComponent component = Components.translatable(
 				"fabicraft.paper.survival.command.gathering.remove",
@@ -136,7 +144,7 @@ public final class GatheringCommand extends PaperCommand<FabiCraftPaperSurvival>
 		Gathering gathering = context.get("gathering");
 		Component displayName = context.get("displayName");
 		gathering.displayName(displayName);
-		this.gatheringManager.save();
+		this.gatheringManager.save(gathering);
 		TranslatableComponent component = Components.translatable(
 				"fabicraft.paper.survival.command.gathering.edit.displayname",
 				MessageType.INFO,
@@ -149,7 +157,7 @@ public final class GatheringCommand extends PaperCommand<FabiCraftPaperSurvival>
 		Gathering gathering = context.get("gathering");
 		int goal = context.get("goal");
 		gathering.goal(goal);
-		this.gatheringManager.save();
+		this.gatheringManager.save(gathering);
 
 		TranslatableComponent component = Components.translatable(
 				"fabicraft.paper.survival.command.gathering.edit.goal",
