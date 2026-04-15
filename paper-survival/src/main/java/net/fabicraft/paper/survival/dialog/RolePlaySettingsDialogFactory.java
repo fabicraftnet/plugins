@@ -7,6 +7,8 @@ import io.papermc.paper.registry.data.dialog.DialogBase;
 import io.papermc.paper.registry.data.dialog.action.DialogAction;
 import io.papermc.paper.registry.data.dialog.input.DialogInput;
 import io.papermc.paper.registry.data.dialog.type.DialogType;
+import net.fabicraft.common.locale.Components;
+import net.fabicraft.common.locale.MessageType;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.command.commands.RolePlayCommand;
@@ -83,7 +85,16 @@ public final class RolePlaySettingsDialogFactory {
 		String name = Objects.requireNonNull(view.getText("name"), "name must not be null");
 
 		data.rolePlayHeight(height);
-		data.rolePlayName(name.isBlank() || name.length() < this.plugin.config().rolePlay().minNameLength() ? null : name);
+		int minNameLength = this.plugin.config().rolePlay().minNameLength();
+		if (name.isBlank() || name.length() < minNameLength) {
+			player.sendMessage(Components.translatable(
+					"fabicraft.paper.survival.dialog.roleplaysettings.name-too-short",
+					MessageType.ERROR,
+					minNameLength
+			));
+		} else {
+			data.rolePlayName(name);
+		}
 
 		this.playerDataManager.save(player.getUniqueId());
 
