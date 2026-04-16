@@ -12,9 +12,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import java.util.Map;
 
 public final class GatheringListener implements Listener {
 	private final FabiCraftPaperSurvival plugin;
@@ -92,13 +94,34 @@ public final class GatheringListener implements Listener {
 		int amount = Math.min(clickedItem.getAmount(), howManyCanWeAdd(topInventory, clickedItem));
 		addToGathering(gathering, event.getWhoClicked(), amount);
 	}
+	@EventHandler
+	public void onContainerDrag(InventoryDragEvent event) {
+		Inventory topInventory = event.getView().getTopInventory();
+		if (!(topInventory.getHolder() instanceof GatheringInventoryHolder gatheringInventoryHolder)) {
+			return;
+		}
+		Map<Integer, ItemStack> draggedItems = event.getNewItems();
+		boolean inTopInventory = false;
+		// assumes that gathering has chest inventory
+		for (int i = 0; i <= 26; i++) {
+			if (draggedItems.containsKey(i))
+			{
+				inTopInventory = true;
+			}
+		}
+		if (inTopInventory){
+			event.setCancelled(true);
+		}
+	}
 
 	private void addToGathering(Gathering gathering, HumanEntity humanEntity, int amount) {
 		if (amount == 0) {
 			return;
 		}
+		int neededAmount = gathering.goal() - gathering.collected();
 		if (gathering.add(amount)) {
 			closeForEveryone(gathering);
+			humanEntity.getInventory().removeItemAnySlot(new ItemStack(gathering.material(),neededAmount));
 			Bukkit.broadcast(Components.translatable(
 					"fabicraft.paper.survival.gathering.completed.broadcast",
 					MessageType.SUCCESS,
