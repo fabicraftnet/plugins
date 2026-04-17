@@ -26,10 +26,10 @@ public final class MiniPlaceholdersHook implements Hook {
 		builder.globalPlaceholder("gathering_identifier", new GatheringIdentifierPlaceholder(gatheringManager));
 
 		PlayerDataManager playerDataManager = plugin.playerDataManager();
-		builder.audiencePlaceholder(Player.class, "nickname", (player, queue, context) -> {
+		builder.audiencePlaceholder(Player.class, "character_name", (player, queue, context) -> {
 			PlayerData data = playerDataManager.data(player);
-			String nickname = data == null || data.characterName() == null ? player.getName() : data.characterName();
-			return Tag.preProcessParsed(nickname);
+			String characterName = data == null || data.characterName() == null ? player.getName() : data.characterName();
+			return Tag.preProcessParsed(characterName);
 		});
 
 		this.expansion = builder.build();
