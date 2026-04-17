@@ -26,7 +26,7 @@ import org.incendo.cloud.paper.util.sender.Source;
 import java.util.List;
 
 public final class FabiCraftPaperCore extends JavaPlugin {
-	public static final MiniMessage MINI_MESSAGE = MiniMessage.builder()
+	private final MiniMessage miniMessage = MiniMessage.builder()
 			.tags(TagResolver.resolver(
 					StandardTags.defaults(),
 					BrandColor.resolver(),
@@ -36,10 +36,12 @@ public final class FabiCraftPaperCore extends JavaPlugin {
 	private PaperCommandManager<Source> commandManager;
 	private PaperLuckPermsManager luckPermsManager;
 
+	public FabiCraftPaperCore() {
+		new CoreTranslationManager(getSLF4JLogger());
+	}
+
 	@Override
 	public void onEnable() {
-		new CoreTranslationManager(getSLF4JLogger());
-
 		this.luckPermsManager = new PaperLuckPermsManager(getSLF4JLogger());
 
 		setupCommandManager();
@@ -57,6 +59,10 @@ public final class FabiCraftPaperCore extends JavaPlugin {
 
 	public PaperLuckPermsManager luckPermsManager() {
 		return this.luckPermsManager;
+	}
+
+	public MiniMessage miniMessage() {
+		return this.miniMessage;
 	}
 
 	private void setupCommandManager() {

@@ -2,9 +2,9 @@ package net.fabicraft.paper.core.command;
 
 import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
-import net.fabicraft.paper.core.FabiCraftPaperCore;
 import net.fabicraft.paper.common.command.PaperCommand;
 import net.fabicraft.paper.common.command.parser.DyeColorParser;
+import net.fabicraft.paper.core.FabiCraftPaperCore;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.TextColor;
@@ -78,7 +78,7 @@ public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 		super.manager.command(builder
 				.literal("line")
 				.required("line", IntegerParser.integerParser(1, 4))
-				.required("text", ComponentParser.miniMessageParser(StringParser.StringMode.GREEDY))
+				.required("text", ComponentParser.componentParser(super.plugin.miniMessage(), StringParser.StringMode.GREEDY))
 				.handler(this::executeLine)
 		);
 	}
