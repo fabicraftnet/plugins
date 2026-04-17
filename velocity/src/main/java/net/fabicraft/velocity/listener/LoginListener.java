@@ -22,7 +22,10 @@ public final class LoginListener {
 		}
 
 		player.setServerLinks(List.of(
-				ServerLink.serverLink(ServerLink.Type.WEBSITE, "https://fabicraft.net")
+				ServerLink.serverLink(ServerLink.Type.WEBSITE, "https://fabicraft.net"),
+				ServerLink.serverLink(ServerLink.Type.SUPPORT, "https://discord.gg/TJyAWjztUD"),
+				ServerLink.serverLink(ServerLink.Type.BUG_REPORT, "https://discord.gg/TJyAWjztUD"),
+				ServerLink.serverLink(ServerLink.Type.COMMUNITY_GUIDELINES, "https://fabicraft.net/rules/")
 		));
 	}
 }
