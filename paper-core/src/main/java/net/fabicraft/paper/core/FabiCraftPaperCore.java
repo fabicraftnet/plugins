@@ -1,8 +1,8 @@
 package net.fabicraft.paper.core;
 
 import io.github.miniplaceholders.api.MiniPlaceholders;
-import net.fabicraft.common.command.TranslatableCaptionProvider;
-import net.fabicraft.common.command.exception.ExceptionHandlers;
+import net.fabicraft.common.command.ExceptionHandler;
+import net.fabicraft.common.command.MinecraftCaptionProvider;
 import net.fabicraft.common.locale.BrandColor;
 import net.fabicraft.paper.common.command.PaperCommand;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
@@ -70,9 +70,8 @@ public final class FabiCraftPaperCore extends JavaPlugin {
 				.executionCoordinator(ExecutionCoordinator.simpleCoordinator())
 				.buildOnEnable(this);
 
-		commandManager.captionRegistry().registerProvider(new TranslatableCaptionProvider<>());
-		commandManager.exceptionController().clearHandlers();
-		new ExceptionHandlers<Source>(getSLF4JLogger()).register(commandManager, Source::source);
+		commandManager.captionRegistry().registerProvider(new MinecraftCaptionProvider<>());
+		new ExceptionHandler<>(getSLF4JLogger(), Source::source).register(commandManager);
 
 		this.commandManager = commandManager;
 	}

@@ -5,9 +5,9 @@ import org.incendo.cloud.caption.Caption;
 import org.incendo.cloud.caption.CaptionProvider;
 import org.jetbrains.annotations.NotNull;
 
-public final class TranslatableCaptionProvider<C> implements CaptionProvider<C> {
+public final class MinecraftCaptionProvider<C> implements CaptionProvider<C> {
 	@Override
 	public @NotNull String provide(@NonNull Caption caption, @NotNull C recipient) {
-		return caption.key();
+		return "fabicraft.common.command." + caption.key();
 	}
 }

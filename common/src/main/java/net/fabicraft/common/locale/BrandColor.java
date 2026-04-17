@@ -10,9 +10,9 @@ public enum BrandColor {
 	ACCENT(0xa78bfa),
 	GRAY(0x94a3b8),
 
-	SUCCESS(0x4ade80),
-	WARNING(0xfacc15),
-	ERROR(0xef4444);
+	GREEN(0x4ade80),
+	YELLOW(0xfacc15),
+	RED(0xef4444);
 
 	public final TextColor textColor;
 

@@ -5,9 +5,9 @@ import net.kyori.adventure.text.format.TextColor;
 
 public enum MessageType {
 	INFO(NamedTextColor.WHITE, BrandColor.ACCENT.textColor),
-	SUCCESS(BrandColor.SUCCESS.textColor, NamedTextColor.WHITE),
-	WARNING(BrandColor.WARNING.textColor, BrandColor.ERROR.textColor),
-	ERROR(BrandColor.ERROR.textColor, BrandColor.WARNING.textColor);
+	SUCCESS(BrandColor.GREEN.textColor, NamedTextColor.WHITE),
+	WARNING(BrandColor.YELLOW.textColor, BrandColor.RED.textColor),
+	ERROR(BrandColor.RED.textColor, BrandColor.YELLOW.textColor);
 
 	public final TextColor baseColor;
 	public final TextColor highlightColor;
