@@ -5,19 +5,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
-public final class GatheringInventoryHolder implements InventoryHolder {
-	private final Gathering gathering;
-
-	public GatheringInventoryHolder(Gathering gathering) {
-		this.gathering = gathering;
-	}
-
+public record GatheringInventoryHolder(Gathering gathering) implements InventoryHolder {
 	@Override
 	public @NotNull Inventory getInventory() {
 		return Bukkit.createInventory(this, 27, this.gathering.displayName());
-	}
-
-	public Gathering gathering() {
-		return this.gathering;
 	}
 }

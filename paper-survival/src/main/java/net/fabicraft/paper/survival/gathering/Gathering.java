@@ -12,7 +12,7 @@ public final class Gathering {
 	private int goal;
 	private int collected;
 	private Component displayName;
-	private transient InventoryHolder inventoryHolder;
+	private final transient InventoryHolder inventoryHolder = new GatheringInventoryHolder(this);
 
 	public Gathering(String identifier, BlockPosition containerPosition, Material material, int collected, int goal) {
 		this.identifier = identifier;
@@ -22,9 +22,8 @@ public final class Gathering {
 		this.goal = goal;
 	}
 
-	public boolean add(int amount) {
+	public void add(int amount) {
 		this.collected = Math.min(this.collected + amount, this.goal);
-		return isCompleted();
 	}
 
 	public String identifier() {
@@ -60,9 +59,6 @@ public final class Gathering {
 	}
 
 	public InventoryHolder inventoryHolder() {
-		if (this.inventoryHolder == null) {
-			this.inventoryHolder = new GatheringInventoryHolder(this);
-		}
 		return this.inventoryHolder;
 	}
 
