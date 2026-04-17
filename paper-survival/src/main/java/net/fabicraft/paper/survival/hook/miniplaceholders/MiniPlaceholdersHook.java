@@ -4,7 +4,10 @@ import io.github.miniplaceholders.api.Expansion;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
 import net.fabicraft.paper.survival.hook.Hook;
-import net.fabicraft.paper.survival.hook.miniplaceholders.gathering.*;
+import net.fabicraft.paper.survival.hook.miniplaceholders.gathering.GatheringCollectedPlaceholder;
+import net.fabicraft.paper.survival.hook.miniplaceholders.gathering.GatheringDisplayNamePlaceholder;
+import net.fabicraft.paper.survival.hook.miniplaceholders.gathering.GatheringGoalPlaceholder;
+import net.fabicraft.paper.survival.hook.miniplaceholders.gathering.GatheringIdentifierPlaceholder;
 import net.fabicraft.paper.survival.player.PlayerData;
 import net.fabicraft.paper.survival.player.PlayerDataManager;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -21,7 +24,6 @@ public final class MiniPlaceholdersHook implements Hook {
 		builder.globalPlaceholder("gathering_displayname", new GatheringDisplayNamePlaceholder(gatheringManager));
 		builder.globalPlaceholder("gathering_goal", new GatheringGoalPlaceholder(gatheringManager));
 		builder.globalPlaceholder("gathering_identifier", new GatheringIdentifierPlaceholder(gatheringManager));
-		builder.globalPlaceholder("gathering_item", new GatheringItemPlaceholder(gatheringManager));
 
 		PlayerDataManager playerDataManager = plugin.playerDataManager();
 		builder.audiencePlaceholder(Player.class, "nickname", (player, queue, context) -> {
