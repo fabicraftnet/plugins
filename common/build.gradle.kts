@@ -11,5 +11,6 @@ dependencies {
 	compileOnlyApi(libs.plugin.luckperms)
 	compileOnlyApi(libs.plugin.miniplaceholders)
 	api(libs.dazzleconf)
+	api(libs.cloud.minecraft.extras)
 	compileOnlyApi(libs.jspecify)
 }
