@@ -2,17 +2,19 @@ package net.fabicraft.paper.survival.gathering;
 
 import io.papermc.paper.math.BlockPosition;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.jetbrains.annotations.NotNull;
 
-public final class Gathering {
+public final class Gathering implements InventoryHolder {
 	private final String identifier;
 	private final BlockPosition containerPosition;
 	private final Material material;
 	private int goal;
 	private int collected;
 	private Component displayName;
-	private final transient InventoryHolder inventoryHolder = new GatheringInventoryHolder(this);
 
 	public Gathering(String identifier, BlockPosition containerPosition, Material material, int collected, int goal) {
 		this.identifier = identifier;
@@ -58,11 +60,12 @@ public final class Gathering {
 		return this.displayName == null ? Component.text(this.identifier) : this.displayName;
 	}
 
-	public InventoryHolder inventoryHolder() {
-		return this.inventoryHolder;
-	}
-
 	public void goal(int goal) {
 		this.goal = goal;
+	}
+
+	@Override
+	public @NotNull Inventory getInventory() {
+		return Bukkit.createInventory(this, 27, displayName());
 	}
 }

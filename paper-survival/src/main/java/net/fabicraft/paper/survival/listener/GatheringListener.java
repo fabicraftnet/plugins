@@ -4,7 +4,6 @@ import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.gathering.Gathering;
-import net.fabicraft.paper.survival.gathering.GatheringInventoryHolder;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -45,14 +44,14 @@ public final class GatheringListener implements Listener {
 			return;
 		}
 
-		event.getPlayer().openInventory(gathering.inventoryHolder().getInventory());
+		event.getPlayer().openInventory(gathering.getInventory());
 	}
 
 	@EventHandler
 	public void onClose(InventoryCloseEvent event) {
 		HumanEntity player = event.getPlayer();
 		Inventory gatheringInventory = event.getView().getTopInventory();
-		if (!(gatheringInventory.getHolder() instanceof GatheringInventoryHolder(Gathering gathering))) {
+		if (!(gatheringInventory.getHolder() instanceof Gathering gathering)) {
 			return;
 		}
 		int added = 0;
@@ -94,7 +93,7 @@ public final class GatheringListener implements Listener {
 	@EventHandler
 	public void onContainerAdd(InventoryClickEvent event) {
 		Inventory topInventory = event.getView().getTopInventory();
-		if (!(topInventory.getHolder() instanceof GatheringInventoryHolder(Gathering gathering))) {
+		if (!(topInventory.getHolder() instanceof Gathering gathering)) {
 			return;
 		}
 
@@ -119,7 +118,7 @@ public final class GatheringListener implements Listener {
 	@EventHandler
 	public void onDrag(InventoryDragEvent event) {
 		Inventory topInventory = event.getView().getTopInventory();
-		if (topInventory.getHolder() instanceof GatheringInventoryHolder) {
+		if (topInventory.getHolder() instanceof Gathering) {
 			event.setCancelled(true);
 		}
 	}
