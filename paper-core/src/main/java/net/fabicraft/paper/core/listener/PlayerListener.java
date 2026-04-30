@@ -1,5 +1,6 @@
 package net.fabicraft.paper.core.listener;
 
+import io.papermc.paper.event.player.AsyncPlayerSpawnLocationEvent;
 import io.papermc.paper.event.player.PlayerServerFullCheckEvent;
 import net.fabicraft.paper.core.FabiCraftPaperCore;
 import org.bukkit.event.EventHandler;
@@ -18,6 +19,13 @@ public final class PlayerListener implements Listener {
 	public void onJoinFullServer(PlayerServerFullCheckEvent event) {
 		if (this.plugin.luckPermsManager().hasPermission(event.getPlayerProfile().getId(), "fabicraft.paper.core.join.bypass").join()) {
 			event.allow(true);
+		}
+	}
+
+	@EventHandler
+	public void onSpawn(AsyncPlayerSpawnLocationEvent event) {
+		if (this.plugin.config().spawnOnJoin() && this.plugin.huskHomesHook() != null && this.plugin.huskHomesHook().spawnLocation() != null) {
+			event.setSpawnLocation(this.plugin.huskHomesHook().spawnLocation());
 		}
 	}
 

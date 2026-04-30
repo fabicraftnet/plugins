@@ -10,7 +10,9 @@ import net.fabicraft.paper.core.command.BonkCommand;
 import net.fabicraft.paper.core.command.BuilderCommand;
 import net.fabicraft.paper.core.command.CrafterCommand;
 import net.fabicraft.paper.core.command.SignCommand;
-import net.fabicraft.paper.core.listener.HuskHomesListener;
+import net.fabicraft.paper.core.config.ConfigManager;
+import net.fabicraft.paper.core.config.CoreConfig;
+import net.fabicraft.paper.core.hook.HuskHomesHook;
 import net.fabicraft.paper.core.listener.PlayerListener;
 import net.fabicraft.paper.core.locale.CoreTranslationManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -22,7 +24,9 @@ import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.paper.util.sender.PaperSimpleSenderMapper;
 import org.incendo.cloud.paper.util.sender.Source;
+import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.Path;
 import java.util.List;
 
 public final class FabiCraftPaperCore extends JavaPlugin {
@@ -33,11 +37,14 @@ public final class FabiCraftPaperCore extends JavaPlugin {
 					MiniPlaceholders.globalPlaceholders()
 			))
 			.build();
+	private final ConfigManager configManager;
 	private PaperCommandManager<Source> commandManager;
 	private PaperLuckPermsManager luckPermsManager;
+	private HuskHomesHook huskHomesHook;
 
 	public FabiCraftPaperCore() {
 		new CoreTranslationManager(getSLF4JLogger());
+		this.configManager = new ConfigManager(this);
 	}
 
 	@Override
@@ -45,6 +52,14 @@ public final class FabiCraftPaperCore extends JavaPlugin {
 		this.luckPermsManager = new PaperLuckPermsManager(getSLF4JLogger());
 
 		setupCommandManager();
+
+		PluginManager pluginManager = getServer().getPluginManager();
+		if (pluginManager.isPluginEnabled("HuskHomes")) {
+			this.huskHomesHook = new HuskHomesHook(this);
+		}
+
+		load();
+
 		registerCommands();
 		registerListeners();
 	}
@@ -53,8 +68,9 @@ public final class FabiCraftPaperCore extends JavaPlugin {
 		return this.commandManager;
 	}
 
-	public void reload() {
-
+	public void load() {
+		this.configManager.load();
+		this.huskHomesHook.load();
 	}
 
 	public PaperLuckPermsManager luckPermsManager() {
@@ -63,6 +79,19 @@ public final class FabiCraftPaperCore extends JavaPlugin {
 
 	public MiniMessage miniMessage() {
 		return this.miniMessage;
+	}
+
+	@Override
+	public @NotNull Path getDataPath() {
+		return getServer().getPluginsFolder().toPath().resolve("FabiCraft/core");
+	}
+
+	public CoreConfig config() {
+		return this.configManager.config();
+	}
+
+	public HuskHomesHook huskHomesHook() {
+		return this.huskHomesHook;
 	}
 
 	private void setupCommandManager() {
@@ -90,9 +119,8 @@ public final class FabiCraftPaperCore extends JavaPlugin {
 		List.of(
 				new PlayerListener(this)
 		).forEach(listener -> manager.registerEvents(listener, this));
-
-		if (manager.isPluginEnabled("HuskHomes")) {
-			manager.registerEvents(new HuskHomesListener(), this);
+		if (this.huskHomesHook != null) {
+			this.huskHomesHook.registerListeners();
 		}
 	}
 }
