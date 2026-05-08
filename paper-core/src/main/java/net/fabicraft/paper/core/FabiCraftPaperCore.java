@@ -70,7 +70,9 @@ public final class FabiCraftPaperCore extends JavaPlugin {
 
 	public void load() {
 		this.configManager.load();
-		this.huskHomesHook.load();
+		if (this.huskHomesHook != null) {
+			this.huskHomesHook.load();
+		}
 	}
 
 	public PaperLuckPermsManager luckPermsManager() {
