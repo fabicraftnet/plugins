@@ -5,7 +5,7 @@ plugins {
 
 group = rootProject.group
 
-java.toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 
 tasks {
 	compileJava {

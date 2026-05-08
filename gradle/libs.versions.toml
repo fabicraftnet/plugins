@@ -1,10 +1,10 @@
 [versions]
 cloud-minecraft = "2.0.0-beta.15"
-adventure = "4.25.0"
+adventure = "4.26.1"
 
 [libraries]
-platform-paper = { module = "io.papermc.paper:paper-api", version = "1.21.11-R0.1-SNAPSHOT" }
-platform-velocity = { module = "com.velocitypowered:velocity-api", version = "3.4.0-SNAPSHOT" }
+platform-paper = { module = "io.papermc.paper:paper-api", version = "26.1.2.build.+" }
+platform-velocity = { module = "com.velocitypowered:velocity-api", version = "3.5.0-SNAPSHOT" }
 
 # Common
 adventure = { module = "net.kyori:adventure-api", version.ref = "adventure" }
@@ -26,5 +26,5 @@ plugin-carbon = { module = "de.hexaoxi:carbonchat-api", version = "3.0.0-beta.26
 plugin-citizens = { module = "net.citizensnpcs:citizens-main", version = "2.0.42-SNAPSHOT" }
 plugin-huskhomes = { module = "net.william278.huskhomes:huskhomes-bukkit", version = "4.10" }
 plugin-luckperms = { module = "net.luckperms:api", version = "5.5" }
-plugin-miniplaceholders = { module = "io.github.miniplaceholders:miniplaceholders-api", version = "3.1.0" }
+plugin-miniplaceholders = { module = "io.github.miniplaceholders:miniplaceholders-api", version = "3.2.0" }
 plugin-worldguard = { module = "com.sk89q.worldguard:worldguard-bukkit", version = "7.0.13" }
