@@ -3,7 +3,6 @@ package net.fabicraft.common.locale;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationStore;
-import net.kyori.adventure.util.UTF8ResourceBundleControl;
 import org.slf4j.Logger;
 
 import java.text.MessageFormat;
@@ -32,7 +31,7 @@ public abstract class TranslationManager {
 	private void loadFromResourceBundle() {
 		try {
 			bundledLocales().forEach(locale -> {
-				ResourceBundle bundle = ResourceBundle.getBundle("messages", locale, UTF8ResourceBundleControl.utf8ResourceBundleControl());
+				ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
 				this.translationStore.registerAll(locale, bundle, false);
 			});
 		} catch (IllegalArgumentException e) {
