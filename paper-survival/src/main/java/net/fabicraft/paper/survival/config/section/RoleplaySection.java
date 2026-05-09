@@ -22,16 +22,4 @@ public interface RoleplaySection {
 	default int maxHeight() {
 		return 200;
 	}
-
-	@Comments("/me command radius in blocks")
-	@Comments("Needs to be manually synced with the radius configured in Carbon")
-	default int meRadius() {
-		return 100;
-	}
-
-	@Comments("/me command format")
-	@Comments("Available placeholders: <name> <action>")
-	default String meFormat() {
-		return "<italic><#94a3b8>* <name> <action>";
-	}
 }
