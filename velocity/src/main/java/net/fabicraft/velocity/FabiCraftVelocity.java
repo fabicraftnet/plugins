@@ -14,6 +14,7 @@ import net.fabicraft.common.command.MinecraftCaptionProvider;
 import net.fabicraft.common.locale.BrandColor;
 import net.fabicraft.velocity.command.VelocityCommand;
 import net.fabicraft.velocity.command.commands.FabiCraftVelocityCommand;
+import net.fabicraft.velocity.command.commands.HubCommand;
 import net.fabicraft.velocity.config.VelocityConfig;
 import net.fabicraft.velocity.config.VelocityConfigManager;
 import net.fabicraft.velocity.listener.LoginListener;
@@ -132,14 +133,15 @@ public final class FabiCraftVelocity {
 
 	private void registerCommands() {
 		Stream.of(
-				new FabiCraftVelocityCommand(this)
+				new FabiCraftVelocityCommand(this),
+				new HubCommand(this)
 		).forEach(VelocityCommand::register);
 	}
 
 	private void registerListeners() {
 		EventManager manager = this.server.getEventManager();
 		Stream.of(
-				new LoginListener(),
+				new LoginListener(this),
 				new PingListener(this)
 		).forEach(listener -> manager.register(this, listener));
 	}
