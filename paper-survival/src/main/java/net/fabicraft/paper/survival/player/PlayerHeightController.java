@@ -8,13 +8,14 @@ import java.util.Objects;
 
 public final class PlayerHeightController {
 	public static final int DEFAULT_HEIGHT = 180;
+	private static final double DEFAULT_SCALE = Attribute.SCALE.getDefaultValue();
 
 	public void reset(Player player) {
 		AttributeInstance attribute = Objects.requireNonNull(
 				player.getAttribute(Attribute.SCALE),
 				"player is missing the scale attribute"
 		);
-		attribute.setBaseValue(attribute.getDefaultValue());
+		attribute.setBaseValue(DEFAULT_SCALE);
 	}
 
 	public void set(Player player, int height) {
@@ -22,6 +23,6 @@ public final class PlayerHeightController {
 				player.getAttribute(Attribute.SCALE),
 				"player is missing the scale attribute"
 		);
-		attribute.setBaseValue(((double) height / DEFAULT_HEIGHT) * attribute.getDefaultValue());
+		attribute.setBaseValue(((double) height / DEFAULT_HEIGHT) * DEFAULT_SCALE);
 	}
 }

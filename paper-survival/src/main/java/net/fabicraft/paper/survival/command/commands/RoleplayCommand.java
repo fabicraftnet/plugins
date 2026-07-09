@@ -202,6 +202,7 @@ public final class RoleplayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 			);
 			data.characterHeight(null);
 			this.playerDataManager.save(player.getUniqueId());
+			this.playerHeightController.reset(player);
 		} else {
 			component = Components.translatable(
 					"fabicraft.paper.survival.command.roleplay.height.unset",
