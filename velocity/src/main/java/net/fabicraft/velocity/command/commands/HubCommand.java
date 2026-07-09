@@ -1,6 +1,7 @@
 package net.fabicraft.velocity.command.commands;
 
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
@@ -12,12 +13,14 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.incendo.cloud.context.CommandContext;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 public final class HubCommand extends VelocityCommand {
 	private static final TranslatableComponent COMPONENT_FAILED = Components.translatable("fabicraft.velocity.command.hub.failed", MessageType.ERROR);
 	private static final TranslatableComponent COMPONENT_CONNECTION_FAILED = Components.translatable("fabicraft.velocity.command.hub.connection-failed", MessageType.ERROR);
 	private static final TranslatableComponent COMPONENT_REASON_UNKNOWN = Component.translatable("fabicraft.velocity.command.hub.reason.unknown");
+	private static final TranslatableComponent COMPONENT_ALREADY_CONNECTED = Components.translatable("fabicraft.velocity.command.hub.already-connected", MessageType.ERROR);
 
 	public HubCommand(FabiCraftVelocity plugin) {
 		super(plugin);
@@ -31,6 +34,14 @@ public final class HubCommand extends VelocityCommand {
 
 	private void handle(CommandContext<Player> context) {
 		Player player = context.sender();
+		List<String> attemptConnectionOrder = super.plugin.server().getConfiguration().getAttemptConnectionOrder();
+
+		Optional<ServerConnection> currentServerOptional = player.getCurrentServer();
+		if (currentServerOptional.isPresent() && currentServerOptional.get().getServerInfo().getName().equalsIgnoreCase(attemptConnectionOrder.getFirst())) {
+			player.sendMessage(COMPONENT_ALREADY_CONNECTED);
+			return;
+		}
+
 		connectToNext(player, super.plugin.server().getConfiguration().getAttemptConnectionOrder().iterator());
 	}
 
