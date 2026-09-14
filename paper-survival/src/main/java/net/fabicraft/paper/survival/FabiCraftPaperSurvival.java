@@ -5,6 +5,7 @@ import net.fabicraft.common.locale.BrandColor;
 import net.fabicraft.paper.common.command.CommandManagerProvider;
 import net.fabicraft.paper.common.command.PaperCommand;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
+import net.fabicraft.paper.survival.arena.ArenaManager;
 import net.fabicraft.paper.survival.command.SurvivalCommandPreProcessor;
 import net.fabicraft.paper.survival.command.commands.FabiCraftSurvivalCommand;
 import net.fabicraft.paper.survival.command.commands.GatheringCommand;
@@ -128,6 +129,10 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 
 	public StorageManager storageManager() {
 		return this.storageManager;
+	}
+
+	public ArenaManager arenaManager() {
+
 	}
 
 	private void registerListeners() {

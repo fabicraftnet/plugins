@@ -15,6 +15,7 @@ dependencies {
 	}
 	implementation(libs.flyway.core)
 	implementation(libs.storage.sqlite)
+	implementation(libs.inventoryframework)
 }
 
 paperPluginYaml {
