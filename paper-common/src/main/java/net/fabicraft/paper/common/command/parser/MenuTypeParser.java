@@ -30,7 +30,6 @@ public final class MenuTypeParser<C> implements ArgumentParser<C, MenuType>, Blo
 				Map.entry("brewing_stand", MenuType.BREWING_STAND),
 				Map.entry("cartography_table", MenuType.CARTOGRAPHY_TABLE),
 				Map.entry("crafting", MenuType.CRAFTING),
-				Map.entry("crafter_3x3", MenuType.CRAFTER_3X3),
 				Map.entry("enchantment", MenuType.ENCHANTMENT),
 				Map.entry("furnace", MenuType.FURNACE),
 				Map.entry("grindstone", MenuType.GRINDSTONE),
