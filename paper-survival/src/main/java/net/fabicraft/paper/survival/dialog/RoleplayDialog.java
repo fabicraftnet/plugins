@@ -40,45 +40,45 @@ public final class RoleplayDialog extends DialogFactory {
 
 	public void show() {
 		PlayerData data = this.playerDataManager.data(super.player);
-		Dialog dialog;
 		if (data == null) {
-			dialog = PlayerDataNotLoadedDialog.dialog();
-		} else {
-			RoleplaySection config = this.plugin.config().roleplay();
-			dialog = Dialog.create(builder -> builder.empty()
-					.base(DialogBase.builder(render(Component.translatable("fabicraft.paper.survival.dialog.roleplay.title")))
-							.inputs(List.of(
-											DialogInput.bool("enabled", render(Component.translatable("fabicraft.paper.survival.dialog.roleplay.features")))
-													.initial(this.luckPermsManager.hasGroup(player, "roleplay"))
-													.onFalse(renderPlainText(Component.translatable("fabicraft.paper.survival.dialog.roleplay.features.disabled")))
-													.onTrue(renderPlainText(Component.translatable("fabicraft.paper.survival.dialog.roleplay.features.enabled")))
-													.build(),
-											DialogInput.text("name", render(Component.translatable("fabicraft.paper.survival.dialog.roleplay.name")))
-													.initial(Objects.requireNonNullElse(data.characterName(), player.getName()))
-													.maxLength(config.maxNameLength())
-													.labelVisible(true)
-													.build(),
-											DialogInput.numberRange("height", render(Component.translatable("fabicraft.paper.survival.dialog.roleplay.height")), config.minHeight(), config.maxHeight())
-													.initial((float) Objects.requireNonNullElse(data.characterHeight(), PlayerHeightController.DEFAULT_HEIGHT))
-													.step(1f)
-													.labelFormat("%s: %scm")
-													.build()
-									)
-							).build())
-					.type(DialogType.notice(ActionButton.create(
-							render(Component.translatable("fabicraft.paper.survival.dialog.roleplay.save")),
-							null,
-							100,
-							DialogAction.customClick(
-									(view, _) -> save(view, player, data),
-									ClickCallback.Options.builder()
-											.uses(1)
-											.lifetime(ClickCallback.DEFAULT_LIFETIME)
-											.build()
-							)
-					)))
-			);
+			new PlayerDataNotLoadedDialog(super.player).show();
+			return;
 		}
+
+		RoleplaySection config = this.plugin.config().roleplay();
+		Dialog dialog = Dialog.create(builder -> builder.empty()
+				.base(DialogBase.builder(render(Component.translatable("fabicraft.paper.survival.dialog.roleplay.title")))
+						.inputs(List.of(
+										DialogInput.bool("enabled", render(Component.translatable("fabicraft.paper.survival.dialog.roleplay.features")))
+												.initial(this.luckPermsManager.hasGroup(player, "roleplay"))
+												.onFalse(renderPlainText(Component.translatable("fabicraft.paper.survival.dialog.roleplay.features.disabled")))
+												.onTrue(renderPlainText(Component.translatable("fabicraft.paper.survival.dialog.roleplay.features.enabled")))
+												.build(),
+										DialogInput.text("name", render(Component.translatable("fabicraft.paper.survival.dialog.roleplay.name")))
+												.initial(Objects.requireNonNullElse(data.characterName(), player.getName()))
+												.maxLength(config.maxNameLength())
+												.labelVisible(true)
+												.build(),
+										DialogInput.numberRange("height", render(Component.translatable("fabicraft.paper.survival.dialog.roleplay.height")), config.minHeight(), config.maxHeight())
+												.initial((float) Objects.requireNonNullElse(data.characterHeight(), PlayerHeightController.DEFAULT_HEIGHT))
+												.step(1f)
+												.labelFormat("%s: %scm")
+												.build()
+								)
+						).build())
+				.type(DialogType.notice(ActionButton.create(
+						render(Component.translatable("fabicraft.paper.survival.dialog.roleplay.save")),
+						null,
+						100,
+						DialogAction.customClick(
+								(view, _) -> save(view, player, data),
+								ClickCallback.Options.builder()
+										.uses(1)
+										.lifetime(ClickCallback.DEFAULT_LIFETIME)
+										.build()
+						)
+				)))
+		);
 		super.player.showDialog(dialog);
 	}
 
