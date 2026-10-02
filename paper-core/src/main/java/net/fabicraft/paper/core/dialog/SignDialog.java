@@ -15,10 +15,14 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickCallback;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,16 +30,43 @@ import java.util.Objects;
 public final class SignDialog extends DialogFactory {
 	private final Sign sign;
 	private final MiniMessage miniMessage;
+	private final NamespacedKey frontKey;
+	private final NamespacedKey backKey;
 
 	public SignDialog(FabiCraftPaperCore plugin, Player player, Sign sign) {
 		super(player);
 		this.miniMessage = plugin.miniMessage();
 		this.sign = sign;
+		this.frontKey = new NamespacedKey(plugin, "sign_lines_front");
+		this.backKey = new NamespacedKey(plugin, "sign_lines_back");
 	}
 
 	@Override
 	public void show() {
 		SignSide side = this.sign.getTargetSide(super.player);
+		List<String> raw = sign.getPersistentDataContainer().get(
+				keyFor(sign, side),
+				PersistentDataType.LIST.listTypeFrom(PersistentDataType.STRING)
+		);
+
+		if (raw == null) {
+			List<String> fallback = new ArrayList<>(4);
+			for (int i = 0; i < 4; i++) {
+				fallback.add(super.plainTextComponentSerializer.serialize(side.line(i)));
+			}
+			raw = fallback;
+		}
+
+		List<DialogInput> inputs = new ArrayList<>(4);
+		for (int i = 0; i < 4; i++) {
+			inputs.add(DialogInput
+					.text(String.valueOf(i), Component.empty())
+					.initial(raw.get(i))
+					.maxLength(99)
+					.labelVisible(false)
+					.build());
+		}
+
 		Dialog dialog = Dialog.create(builder -> builder.empty()
 				.base(DialogBase.builder(render(Component.translatable("fabicraft.paper.core.dialog.sign.title")))
 						.body(List.of(
@@ -49,29 +80,7 @@ public final class SignDialog extends DialogFactory {
 										)
 								)
 						))
-						.inputs(List.of(
-										DialogInput
-												.text("0", Component.empty())
-												.initial(this.miniMessage.serialize(side.line(0)))
-												.labelVisible(false)
-												.build(),
-										DialogInput
-												.text("1", Component.empty())
-												.initial(this.miniMessage.serialize(side.line(1)))
-												.labelVisible(false)
-												.build(),
-										DialogInput
-												.text("2", Component.empty())
-												.initial(this.miniMessage.serialize(side.line(2)))
-												.labelVisible(false)
-												.build(),
-										DialogInput
-												.text("3", Component.empty())
-												.initial(this.miniMessage.serialize(side.line(3)))
-												.labelVisible(false)
-												.build()
-								)
-						).build())
+						.inputs(inputs).build())
 				.type(DialogType.notice(ActionButton.create(
 						render(Component.translatable("fabicraft.paper.core.dialog.sign.save")),
 						null,
@@ -89,9 +98,21 @@ public final class SignDialog extends DialogFactory {
 	}
 
 	private void save(DialogResponseView view, Sign sign, SignSide side) {
+		List<String> raw = new ArrayList<>(4);
 		for (int i = 0; i < 4; i++) {
-			side.line(i, this.miniMessage.deserialize(Objects.requireNonNullElse(view.getText(String.valueOf(i)), "")));
+			String text = Objects.requireNonNullElse(view.getText(String.valueOf(i)), "");
+			raw.add(text);
+			side.line(i, this.miniMessage.deserialize(text));
 		}
+		sign.getPersistentDataContainer().set(
+				keyFor(sign, side),
+				PersistentDataType.LIST.listTypeFrom(PersistentDataType.STRING),
+				raw
+		);
 		sign.update();
+	}
+
+	private NamespacedKey keyFor(Sign sign, SignSide side) {
+		return sign.getSide(Side.FRONT).equals(side) ? frontKey : backKey;
 	}
 }

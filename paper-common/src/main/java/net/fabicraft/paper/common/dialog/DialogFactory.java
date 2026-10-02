@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 public abstract class DialogFactory {
 	protected final Player player;
-	private final PlainTextComponentSerializer plainTextComponentSerializer = PlainTextComponentSerializer.plainText();
+	protected final PlainTextComponentSerializer plainTextComponentSerializer = PlainTextComponentSerializer.plainText();
 
 	public DialogFactory(Player player) {
 		this.player = player;
