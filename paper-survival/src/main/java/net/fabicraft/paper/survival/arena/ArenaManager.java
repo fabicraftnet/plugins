@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ArenaManager {
-	private final List<PlayerArena> playerArenas = new ArrayList<>();
+	private final List<Arena> arenas = new ArrayList<>();
 
 	public void load() {
 
 	}
 
-	public List<PlayerArena> playerArenas() {
-		return this.playerArenas;
+	public List<Arena> playerArenas() {
+		return this.arenas;
 	}
 }

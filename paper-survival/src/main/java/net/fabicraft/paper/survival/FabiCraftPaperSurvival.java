@@ -49,6 +49,7 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 					MiniPlaceholders.globalPlaceholders()
 			))
 			.build();
+	private final ArenaManager arenaManager;
 	private PaperLuckPermsManager luckPermsManager;
 	private PaperCommandManager<Source> commandManager;
 
@@ -60,6 +61,7 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 		this.storageManager = new StorageManager(getDataPath());
 		this.gatheringManager = new GatheringManager(this);
 		this.playerDataManager = new PlayerDataManager(this);
+		this.arenaManager = new ArenaManager();
 	}
 
 	@Override
@@ -132,7 +134,7 @@ public final class FabiCraftPaperSurvival extends JavaPlugin {
 	}
 
 	public ArenaManager arenaManager() {
-
+		return this.arenaManager;
 	}
 
 	private void registerListeners() {

@@ -4,16 +4,16 @@ import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
-import net.fabicraft.paper.survival.gui.PlayerArenaListGui;
+import net.fabicraft.paper.survival.gui.ArenaTeleportGui;
 import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
-@TraitName("fabicraftplayerarenalist")
-public final class PlayerArenaListTrait extends Trait {
+@TraitName("fabicraftarenateleport")
+public final class ArenaTeleportTrait extends Trait {
 	private final FabiCraftPaperSurvival plugin;
 
-	public PlayerArenaListTrait() {
-		super("fabicraftplayerarenalist");
+	public ArenaTeleportTrait() {
+		super("fabicraftarenateleport");
 		this.plugin = JavaPlugin.getPlugin(FabiCraftPaperSurvival.class);
 	}
 
@@ -23,6 +23,6 @@ public final class PlayerArenaListTrait extends Trait {
 			return;
 		}
 
-		new PlayerArenaListGui(this.plugin).open(event.getClicker());
+		new ArenaTeleportGui(this.plugin).open(event.getClicker());
 	}
 }
