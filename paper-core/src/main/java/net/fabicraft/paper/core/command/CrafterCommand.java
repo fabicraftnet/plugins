@@ -2,7 +2,7 @@ package net.fabicraft.paper.core.command;
 
 import net.fabicraft.paper.core.FabiCraftPaperCore;
 import net.fabicraft.paper.common.command.PaperCommand;
-import net.fabicraft.paper.common.command.parser.MenuTypeParser;
+import net.fabicraft.paper.core.command.parser.MenuTypeParser;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.MenuType;
 import org.incendo.cloud.context.CommandContext;

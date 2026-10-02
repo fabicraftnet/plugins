@@ -1,4 +1,4 @@
-package net.fabicraft.paper.common.command.parser;
+package net.fabicraft.paper.core.command.parser;
 
 import org.bukkit.DyeColor;
 import org.checkerframework.checker.nullness.qual.NonNull;

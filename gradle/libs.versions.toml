@@ -18,6 +18,7 @@ inventoryframework = { module = "com.github.stefvanschie.inventoryframework:IF",
 cloud-minecraft-extras = { module = "org.incendo:cloud-minecraft-extras", version.ref = "cloud-minecraft" }
 cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud-minecraft" }
 cloud-velocity = { module = "org.incendo:cloud-velocity", version.ref = "cloud-minecraft" }
+cloud-requirements = { module = "org.incendo:cloud-processors-requirements", version = "1.0.0-rc.1" }
 
 # Storage
 flyway-core = { module = "org.flywaydb:flyway-core", version = "12.10.0" }
