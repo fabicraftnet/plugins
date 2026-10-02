@@ -9,6 +9,7 @@ import io.papermc.paper.registry.data.dialog.input.DialogInput;
 import io.papermc.paper.registry.data.dialog.type.DialogType;
 import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
+import net.fabicraft.paper.common.dialog.DialogFactory;
 import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.command.commands.RoleplayCommand;
@@ -24,62 +25,64 @@ import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("UnstableApiUsage")
-public final class RoleplaySettingsDialogFactory {
+public final class RoleplayDialog extends DialogFactory {
 	private final PaperLuckPermsManager luckPermsManager;
 	private final PlayerDataManager playerDataManager;
 	private final PlayerHeightController playerHeightController = new PlayerHeightController();
 	private final FabiCraftPaperSurvival plugin;
 
-	public RoleplaySettingsDialogFactory(FabiCraftPaperSurvival plugin) {
+	public RoleplayDialog(FabiCraftPaperSurvival plugin, Player player) {
+		super(player);
 		this.plugin = plugin;
 		this.luckPermsManager = plugin.luckPermsManager();
 		this.playerDataManager = plugin.playerDataManager();
 	}
 
-	public Dialog dialog(Player player) {
-		PlayerData data = this.playerDataManager.data(player);
+	public void show() {
+		PlayerData data = this.playerDataManager.data(super.player);
+		Dialog dialog;
 		if (data == null) {
-			return PlayerDataNotLoadedDialog.dialog();
+			dialog = PlayerDataNotLoadedDialog.dialog();
+		} else {
+			RoleplaySection config = this.plugin.config().roleplay();
+			dialog = Dialog.create(builder -> builder.empty()
+					.base(DialogBase.builder(render(Component.translatable("fabicraft.paper.survival.dialog.roleplay.title")))
+							.inputs(List.of(
+											DialogInput.bool("enabled", render(Component.translatable("fabicraft.paper.survival.dialog.roleplay.features")))
+													.initial(this.luckPermsManager.hasGroup(player, "roleplay"))
+													.onFalse(renderPlainText(Component.translatable("fabicraft.paper.survival.dialog.roleplay.features.disabled")))
+													.onTrue(renderPlainText(Component.translatable("fabicraft.paper.survival.dialog.roleplay.features.enabled")))
+													.build(),
+											DialogInput.text("name", render(Component.translatable("fabicraft.paper.survival.dialog.roleplay.name")))
+													.initial(Objects.requireNonNullElse(data.characterName(), player.getName()))
+													.maxLength(config.maxNameLength())
+													.labelVisible(true)
+													.build(),
+											DialogInput.numberRange("height", render(Component.translatable("fabicraft.paper.survival.dialog.roleplay.height")), config.minHeight(), config.maxHeight())
+													.initial((float) Objects.requireNonNullElse(data.characterHeight(), PlayerHeightController.DEFAULT_HEIGHT))
+													.step(1f)
+													.labelFormat("%s: %scm")
+													.build()
+									)
+							).build())
+					.type(DialogType.notice(ActionButton.create(
+							render(Component.translatable("fabicraft.paper.survival.dialog.roleplay.save")),
+							null,
+							100,
+							DialogAction.customClick(
+									(view, _) -> save(view, player, data),
+									ClickCallback.Options.builder()
+											.uses(1)
+											.lifetime(ClickCallback.DEFAULT_LIFETIME)
+											.build()
+							)
+					)))
+			);
 		}
-
-		RoleplaySection config = this.plugin.config().roleplay();
-
-		return Dialog.create(builder -> builder.empty()
-				.base(DialogBase.builder(Component.text("Roolipeliasetukset"))
-						.inputs(List.of(
-										DialogInput.bool("enabled", Component.text("Roolipeliominaisuudet"))
-												.initial(this.luckPermsManager.hasGroup(player, "roleplay"))
-												.onFalse("Poissa käytöstä")
-												.onTrue("Käytössä")
-												.build(),
-										DialogInput.text("name", Component.text("Hahmon nimi"))
-												.initial(Objects.requireNonNullElse(data.characterName(), player.getName()))
-												.maxLength(config.maxNameLength())
-												.labelVisible(true)
-												.build(),
-										DialogInput.numberRange("height", Component.text("Hahmon pituus"), config.minHeight(), config.maxHeight())
-												.initial((float) Objects.requireNonNullElse(data.characterHeight(), PlayerHeightController.DEFAULT_HEIGHT))
-												.step(1f)
-												.labelFormat("%s: %scm")
-												.build()
-								)
-						).build())
-				.type(DialogType.notice(ActionButton.create(
-						Component.text("Tallenna"),
-						Component.text("Tallenna asetukset"),
-						100,
-						DialogAction.customClick(
-								(view, audience) -> handleSave(view, player, data),
-								ClickCallback.Options.builder()
-										.uses(1)
-										.lifetime(ClickCallback.DEFAULT_LIFETIME)
-										.build()
-						)
-				)))
-		);
+		super.player.showDialog(dialog);
 	}
 
-	private void handleSave(DialogResponseView view, Player player, PlayerData data) {
+	private void save(DialogResponseView view, Player player, PlayerData data) {
 		Boolean enabled = Objects.requireNonNull(view.getBoolean("enabled"), "enabled must not be null");
 		int height = Objects.requireNonNull(view.getFloat("height"), "height must not be null").intValue();
 		String name = Objects.requireNonNull(view.getText("name"), "name must not be null");
@@ -88,7 +91,7 @@ public final class RoleplaySettingsDialogFactory {
 		int minNameLength = this.plugin.config().roleplay().minNameLength();
 		if (name.isBlank() || name.length() < minNameLength) {
 			player.sendMessage(Components.translatable(
-					"fabicraft.paper.survival.dialog.roleplaysettings.name-too-short",
+					"fabicraft.paper.survival.dialog.roleplay.save.name-too-short",
 					MessageType.ERROR,
 					minNameLength
 			));

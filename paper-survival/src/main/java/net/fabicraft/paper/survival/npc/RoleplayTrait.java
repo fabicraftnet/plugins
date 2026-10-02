@@ -4,19 +4,17 @@ import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
-import net.fabicraft.paper.survival.dialog.RoleplaySettingsDialogFactory;
-import org.bukkit.entity.Player;
+import net.fabicraft.paper.survival.dialog.RoleplayDialog;
 import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @TraitName("fabicraftroleplay")
 public final class RoleplayTrait extends Trait {
-	private final RoleplaySettingsDialogFactory dialogFactory;
+	private final FabiCraftPaperSurvival plugin;
 
 	public RoleplayTrait() {
 		super("fabicraftroleplay");
-		FabiCraftPaperSurvival plugin = JavaPlugin.getPlugin(FabiCraftPaperSurvival.class);
-		this.dialogFactory = new RoleplaySettingsDialogFactory(plugin);
+		this.plugin = JavaPlugin.getPlugin(FabiCraftPaperSurvival.class);
 	}
 
 	@EventHandler
@@ -25,7 +23,6 @@ public final class RoleplayTrait extends Trait {
 			return;
 		}
 
-		Player player = event.getClicker();
-		player.showDialog(this.dialogFactory.dialog(player));
+		new RoleplayDialog(this.plugin, event.getClicker()).show();
 	}
 }
