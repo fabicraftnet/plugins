@@ -1,5 +1,6 @@
 package net.fabicraft.paper.core.command.parser;
 
+import io.leangen.geantyref.TypeToken;
 import org.bukkit.DyeColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.caption.Caption;
@@ -14,19 +15,29 @@ import org.incendo.cloud.parser.ParserDescriptor;
 import org.incendo.cloud.suggestion.BlockingSuggestionProvider;
 
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Stream;
 
-public final class DyeColorParser<C> implements ArgumentParser<C, DyeColor>, BlockingSuggestionProvider.Strings<C> {
-	public static <C> @NonNull ParserDescriptor<C, DyeColor> dyeColorParser() {
-		return ParserDescriptor.of(new DyeColorParser<>(), DyeColor.class);
+public final class DyeColorParser<C> implements ArgumentParser<C, Optional<DyeColor>>, BlockingSuggestionProvider.Strings<C> {
+	private static final String NONE = "none";
+
+	public static <C> @NonNull ParserDescriptor<C, Optional<DyeColor>> dyeColorParser() {
+		return ParserDescriptor.of(new DyeColorParser<>(), new TypeToken<>() {
+		});
 	}
 
-	public static <C> CommandComponent.@NonNull Builder<C, DyeColor> dyeColorComponent() {
-		return CommandComponent.<C, DyeColor>builder().parser(dyeColorParser());
+	public static <C> CommandComponent.@NonNull Builder<C, Optional<DyeColor>> dyeColorComponent() {
+		return CommandComponent.<C, Optional<DyeColor>>builder().parser(dyeColorParser());
 	}
 
 	@Override
-	public @NonNull ArgumentParseResult<@NonNull DyeColor> parse(@NonNull CommandContext<@NonNull C> context, @NonNull CommandInput input) {
+	public @NonNull ArgumentParseResult<@NonNull Optional<DyeColor>> parse(@NonNull CommandContext<@NonNull C> context, @NonNull CommandInput input) {
 		final String inputString = input.peekString();
+
+		if (NONE.equalsIgnoreCase(inputString)) {
+			return ArgumentParseResult.success(Optional.empty());
+		}
+
 		DyeColor color;
 		try {
 			color = DyeColor.valueOf(inputString.toUpperCase());
@@ -35,12 +46,15 @@ public final class DyeColorParser<C> implements ArgumentParser<C, DyeColor>, Blo
 		}
 
 		input.readString();
-		return ArgumentParseResult.success(color);
+		return ArgumentParseResult.success(Optional.of(color));
 	}
 
 	@Override
 	public @NonNull Iterable<@NonNull String> stringSuggestions(@NonNull CommandContext<C> context, @NonNull CommandInput input) {
-		return Arrays.stream(DyeColor.values()).map(Enum::toString).toList();
+		return Stream.concat(
+				Arrays.stream(DyeColor.values()).map(Enum::toString),
+				Stream.of(NONE)
+		).toList();
 	}
 
 	public static final class DyeColorParseException extends ParserException {

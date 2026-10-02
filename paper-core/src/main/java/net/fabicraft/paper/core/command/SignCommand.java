@@ -19,6 +19,8 @@ import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.incendo.cloud.parser.standard.BooleanParser;
 
+import java.util.Optional;
+
 
 public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 	private static final String PERMISSION = "fabicraft.paper.core.command.sign";
@@ -37,8 +39,8 @@ public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 			"fabicraft.paper.core.command.sign.glowing.false",
 			MessageType.SUCCESS
 	);
-	private static final TranslatableComponent COMPONENT_COLOR_SET = Components.translatable(
-			"fabicraft.paper.core.command.sign.color.set",
+	private static final TranslatableComponent COMPONENT_COLOR = Components.translatable(
+			"fabicraft.paper.core.command.sign.color",
 			MessageType.SUCCESS
 	);
 
@@ -68,15 +70,10 @@ public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 				.handler(this::executeGlowing)
 		);
 
-		var colorBuilder = builder.literal("color").permission(PERMISSION_COLOR);
-		super.manager.command(colorBuilder
-				.literal("set")
+		super.manager.command(builder.literal("color")
+				.permission(PERMISSION_COLOR)
 				.required("color", DyeColorParser.dyeColorParser())
-				.handler(this::executeColorSet)
-		);
-		super.manager.command(colorBuilder
-				.literal("clear")
-				.handler(this::executeColorClear)
+				.handler(this::executeColor)
 		);
 	}
 
@@ -105,29 +102,21 @@ public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 		player.sendMessage(glowing ? COMPONENT_GLOWING_TRUE : COMPONENT_GLOWING_FALSE);
 	}
 
-	private void executeColorSet(CommandContext<PlayerSource> context) {
+	private void executeColor(CommandContext<PlayerSource> context) {
 		Player player = context.sender().source();
 		Sign sign = targetedSign(player);
 		if (sign == null) {
 			player.sendMessage(COMPONENT_ERROR);
 			return;
 		}
-		DyeColor color = context.getOrDefault("color", null);
-		sign.getTargetSide(player).setColor(color);
+		Optional<DyeColor> color = context.get("color");
+		sign.getTargetSide(player).setColor(color.orElse(null));
 		sign.update();
-		player.sendMessage(COMPONENT_COLOR_SET.arguments(Component.text(color.toString(), TextColor.color(color.getColor().asRGB()))));
-	}
-
-	private void executeColorClear(CommandContext<PlayerSource> context) {
-		Player player = context.sender().source();
-		Sign sign = targetedSign(player);
-		if (sign == null) {
-			player.sendMessage(COMPONENT_ERROR);
-			return;
+		if (color.isPresent()) {
+			player.sendMessage(COMPONENT_COLOR.arguments(Component.text(color.toString(), TextColor.color(color.get().getColor().asRGB()))));
+		} else {
+			player.sendMessage(COMPONENT_COLOR_CLEAR);
 		}
-		sign.getTargetSide(player).setColor(null);
-		sign.update();
-		player.sendMessage(COMPONENT_COLOR_CLEAR);
 	}
 
 	private Sign targetedSign(Player player) {
