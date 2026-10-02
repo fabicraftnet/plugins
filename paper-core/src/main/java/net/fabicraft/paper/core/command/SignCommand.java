@@ -3,8 +3,9 @@ package net.fabicraft.paper.core.command;
 import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
 import net.fabicraft.paper.common.command.PaperCommand;
-import net.fabicraft.paper.core.command.parser.DyeColorParser;
 import net.fabicraft.paper.core.FabiCraftPaperCore;
+import net.fabicraft.paper.core.command.parser.DyeColorParser;
+import net.fabicraft.paper.core.dialog.SignDialog;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.TextColor;
@@ -15,15 +16,15 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.sign.SignSide;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.minecraft.extras.parser.ComponentParser;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.incendo.cloud.parser.standard.BooleanParser;
-import org.incendo.cloud.parser.standard.IntegerParser;
-import org.incendo.cloud.parser.standard.StringParser;
 
 
 public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 	private static final String PERMISSION = "fabicraft.paper.core.command.sign";
+	private static final String PERMISSION_GLOWING = PERMISSION + ".glowing";
+	private static final String PERMISSION_COLOR = PERMISSION + ".color";
+
 	private static final Component COMPONENT_ERROR = Components.translatable(
 			"fabicraft.paper.core.command.sign.error",
 			MessageType.ERROR
@@ -58,13 +59,16 @@ public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 	public void register() {
 		var builder = super.manager.commandBuilder("sign").senderType(PlayerSource.class).permission(PERMISSION);
 
+		super.manager.command(builder.handler(this::executeShowDialog));
+
 		super.manager.command(builder
 				.literal("glowing")
+				.permission(PERMISSION_GLOWING)
 				.optional("glowing", BooleanParser.booleanParser())
 				.handler(this::executeGlowing)
 		);
 
-		var colorBuilder = builder.literal("color");
+		var colorBuilder = builder.literal("color").permission(PERMISSION_COLOR);
 		super.manager.command(colorBuilder
 				.literal("set")
 				.required("color", DyeColorParser.dyeColorParser())
@@ -74,13 +78,16 @@ public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 				.literal("clear")
 				.handler(this::executeColorClear)
 		);
+	}
 
-		super.manager.command(builder
-				.literal("line")
-				.required("line", IntegerParser.integerParser(1, 4))
-				.required("text", ComponentParser.componentParser(super.plugin.miniMessage(), StringParser.StringMode.GREEDY))
-				.handler(this::executeLine)
-		);
+	private void executeShowDialog(CommandContext<PlayerSource> context) {
+		Player player = context.sender().source();
+		Sign sign = targetedSign(player);
+		if (sign == null) {
+			player.sendMessage(COMPONENT_ERROR);
+			return;
+		}
+		new SignDialog(super.plugin, player, sign).show();
 	}
 
 	private void executeGlowing(CommandContext<PlayerSource> context) {
@@ -123,30 +130,11 @@ public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 		player.sendMessage(COMPONENT_COLOR_CLEAR);
 	}
 
-	private void executeLine(CommandContext<PlayerSource> context) {
-		Player player = context.sender().source();
-
-		Sign sign = targetedSign(player);
-		if (sign == null) {
-			player.sendMessage(COMPONENT_ERROR);
-			return;
-		}
-
-		int lineNumber = context.get("line");
-		Component text = context.get("text");
-
-		sign.getTargetSide(player).line(--lineNumber, text);
-		sign.update();
-
-		player.sendMessage(COMPONENT_LINE.arguments(text));
-	}
-
 	private Sign targetedSign(Player player) {
 		Block targetBlock = player.getTargetBlockExact(10, FluidCollisionMode.NEVER);
 		if (targetBlock == null) {
 			return null;
 		}
 		return targetBlock.getState() instanceof Sign sign ? sign : null;
-
 	}
 }
