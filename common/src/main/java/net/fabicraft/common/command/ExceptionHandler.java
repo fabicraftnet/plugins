@@ -33,11 +33,11 @@ public class ExceptionHandler<C> {
 
 	private void registerDefaultHandlers(ExceptionController<C> controller) {
 		controller.registerHandler(Throwable.class, context -> {
-			send(context, "fabicraft.common.command.exception.unexpected");
+			send(context, "fabicraft.common.command.exception.throwable");
 			this.logger.error("An unhandled exception was thrown during command execution", context.exception());
 		});
 		controller.registerHandler(CommandExecutionException.class, context -> {
-			send(context, "fabicraft.common.command.exception.unexpected");
+			send(context, "fabicraft.common.command.exception.execution");
 			this.logger.error("Exception executing command handler", context.exception().getCause());
 		});
 		controller.registerHandler(ArgumentParseException.class, context -> {

@@ -1,7 +1,7 @@
 package net.fabicraft.common.command;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
+import net.fabicraft.common.locale.Components;
+import net.fabicraft.common.locale.MessageType;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.incendo.cloud.caption.Caption;
 import org.incendo.cloud.caption.CaptionFormatter;
@@ -13,7 +13,6 @@ import java.util.List;
 public final class MinecraftCaptionFormatter<C> implements CaptionFormatter<C, TranslatableComponent> {
 	@Override
 	public @NonNull TranslatableComponent formatCaption(@NonNull Caption key, @NonNull C recipient, @NonNull String caption, @NonNull List<@NonNull CaptionVariable> variables) {
-		List<TextComponent> arguments = variables.stream().map(variable -> Component.text(variable.value())).toList();
-		return Component.translatable(key.key()).arguments(arguments);
+		return Components.translatable(key.key(), MessageType.ERROR, variables.stream().map(CaptionVariable::value).toArray());
 	}
 }

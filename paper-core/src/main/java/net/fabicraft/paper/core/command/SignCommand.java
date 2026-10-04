@@ -19,8 +19,6 @@ import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.incendo.cloud.parser.standard.BooleanParser;
 
-import java.util.Optional;
-
 
 public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 	private static final String PERMISSION = "fabicraft.paper.core.command.sign";
@@ -41,11 +39,6 @@ public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 	);
 	private static final TranslatableComponent COMPONENT_COLOR = Components.translatable(
 			"fabicraft.paper.core.command.sign.color",
-			MessageType.SUCCESS
-	);
-
-	private static final Component COMPONENT_COLOR_CLEAR = Components.translatable(
-			"fabicraft.paper.core.command.sign.color.clear",
 			MessageType.SUCCESS
 	);
 
@@ -104,15 +97,10 @@ public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 			player.sendMessage(COMPONENT_ERROR);
 			return;
 		}
-		Optional<DyeColor> colorOptional = context.get("color");
-		if (colorOptional.isPresent()) {
-			DyeColor color = colorOptional.get();
-			sign.getTargetSide(player).setColor(color);
-			player.sendMessage(COMPONENT_COLOR.arguments(Component.text(color.toString(), TextColor.color(color.getColor().asRGB()))));
-		} else {
-			sign.getTargetSide(player).setColor(null);
-			player.sendMessage(COMPONENT_COLOR_CLEAR);
-		}
+		DyeColor color = context.get("color");
+		sign.getTargetSide(player).setColor(color);
+		player.sendMessage(COMPONENT_COLOR.arguments(Component.text(color.toString(), TextColor.color(color.getColor().asRGB()))));
+
 		sign.update();
 	}
 
