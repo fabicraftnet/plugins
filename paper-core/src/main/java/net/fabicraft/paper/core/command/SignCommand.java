@@ -48,10 +48,6 @@ public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 			"fabicraft.paper.core.command.sign.color.clear",
 			MessageType.SUCCESS
 	);
-	private static final TranslatableComponent COMPONENT_LINE = Components.translatable(
-			"fabicraft.paper.core.command.sign.line",
-			MessageType.SUCCESS
-	);
 
 	public SignCommand(FabiCraftPaperCore plugin) {
 		super(plugin, plugin.commandManager());
@@ -62,7 +58,6 @@ public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 		var builder = super.manager.commandBuilder("sign").senderType(PlayerSource.class).permission(PERMISSION);
 
 		super.manager.command(builder.handler(this::executeShowDialog));
-
 		super.manager.command(builder
 				.literal("glowing")
 				.permission(PERMISSION_GLOWING)
@@ -109,14 +104,16 @@ public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 			player.sendMessage(COMPONENT_ERROR);
 			return;
 		}
-		Optional<DyeColor> color = context.get("color");
-		sign.getTargetSide(player).setColor(color.orElse(null));
-		sign.update();
-		if (color.isPresent()) {
-			player.sendMessage(COMPONENT_COLOR.arguments(Component.text(color.toString(), TextColor.color(color.get().getColor().asRGB()))));
+		Optional<DyeColor> colorOptional = context.get("color");
+		if (colorOptional.isPresent()) {
+			DyeColor color = colorOptional.get();
+			sign.getTargetSide(player).setColor(color);
+			player.sendMessage(COMPONENT_COLOR.arguments(Component.text(color.toString(), TextColor.color(color.getColor().asRGB()))));
 		} else {
+			sign.getTargetSide(player).setColor(null);
 			player.sendMessage(COMPONENT_COLOR_CLEAR);
 		}
+		sign.update();
 	}
 
 	private Sign targetedSign(Player player) {

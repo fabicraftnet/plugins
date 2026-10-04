@@ -13,7 +13,6 @@ public final class CommandManagerProvider {
 		PaperCommandManager<Source> commandManager = PaperCommandManager.builder(PaperSimpleSenderMapper.simpleSenderMapper())
 				.executionCoordinator(ExecutionCoordinator.simpleCoordinator())
 				.buildOnEnable(plugin);
-
 		commandManager.captionRegistry().registerProvider(new MinecraftCaptionProvider<>());
 		new ExceptionHandler<>(plugin.getSLF4JLogger(), Source::source).register(commandManager);
 

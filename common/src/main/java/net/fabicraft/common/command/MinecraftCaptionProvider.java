@@ -8,6 +8,6 @@ import org.jetbrains.annotations.NotNull;
 public final class MinecraftCaptionProvider<C> implements CaptionProvider<C> {
 	@Override
 	public @NotNull String provide(@NonNull Caption caption, @NotNull C recipient) {
-		return "fabicraft.common.command." + caption.key();
+		return caption.key();
 	}
 }

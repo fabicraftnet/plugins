@@ -65,7 +65,7 @@ public final class MenuTypeParser<C> implements ArgumentParser<C, MenuType>, Blo
 			super(
 					MenuTypeParser.class,
 					context,
-					Caption.of("fabicraft.paper.common.command.exception.menutype"),
+					Caption.of("fabicraft.paper.core.command.exception.menutype"),
 					CaptionVariable.of("input", input)
 			);
 		}

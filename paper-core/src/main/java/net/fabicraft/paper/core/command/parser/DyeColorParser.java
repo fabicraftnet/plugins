@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public final class DyeColorParser<C> implements ArgumentParser<C, Optional<DyeColor>>, BlockingSuggestionProvider.Strings<C> {
-	private static final String NONE = "none";
+	private static final String NONE = "NONE";
 
 	public static <C> @NonNull ParserDescriptor<C, Optional<DyeColor>> dyeColorParser() {
 		return ParserDescriptor.of(new DyeColorParser<>(), new TypeToken<>() {
@@ -35,6 +35,7 @@ public final class DyeColorParser<C> implements ArgumentParser<C, Optional<DyeCo
 		final String inputString = input.peekString();
 
 		if (NONE.equalsIgnoreCase(inputString)) {
+			input.readString();
 			return ArgumentParseResult.success(Optional.empty());
 		}
 
@@ -62,7 +63,7 @@ public final class DyeColorParser<C> implements ArgumentParser<C, Optional<DyeCo
 			super(
 					DyeColorParser.class,
 					context,
-					Caption.of("fabicraft.paper.common.command.exception.dyecolor"),
+					Caption.of("fabicraft.paper.core.command.exception.dyecolor"),
 					CaptionVariable.of("input", input)
 			);
 		}
