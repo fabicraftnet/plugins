@@ -9,14 +9,11 @@ import net.fabicraft.paper.core.FabiCraftPaperCore;
 import net.fabicraft.paper.core.FabiCraftPaperPlugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.incendo.cloud.paper.PaperCommandManager;
-import org.incendo.cloud.paper.util.sender.Source;
 
 import java.util.List;
 
 public final class FabiCraftPaperBedwars extends JavaPlugin implements FabiCraftPaperPlugin {
 	private GameAPI api;
-	private PaperCommandManager<Source> commandManager;
 	private FabiCraftPaperCore core;
 
 	public FabiCraftPaperBedwars() {
@@ -26,6 +23,7 @@ public final class FabiCraftPaperBedwars extends JavaPlugin implements FabiCraft
 	@Override
 	public void onEnable() {
 		this.core = getPlugin(FabiCraftPaperCore.class);
+		this.core.register(this);
 
 		this.api = GameAPI.get();
 		this.api.registerShopLayout(new FabiCraftShopLayout(this));

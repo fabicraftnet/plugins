@@ -51,6 +51,8 @@ public final class FabiCraftPaperSurvival extends JavaPlugin implements FabiCraf
 	@Override
 	public void onEnable() {
 		this.core = getPlugin(FabiCraftPaperCore.class);
+		this.core.register(this);
+
 		setupCommandManager();
 
 		try {
