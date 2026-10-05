@@ -19,17 +19,19 @@ public abstract class HookManager<P extends JavaPlugin> {
 
 	public abstract void register();
 
-	protected void register(String pluginName, Supplier<? extends Hook> supplier) {
+	protected <H extends Hook> H register(String pluginName, Supplier<H> supplier) {
 		if (!this.pluginManager.isPluginEnabled(pluginName)) {
-			return;
+			return null;
 		}
 		try {
 			this.plugin.getSLF4JLogger().info("Enabling {} hook", pluginName);
-			Hook hook = supplier.get();
+			H hook = supplier.get();
 			hook.register();
 			this.hooks.add(hook);
+			return hook;
 		} catch (Exception | LinkageError e) { // NoClassDefFoundError is a LinkageError
 			this.plugin.getSLF4JLogger().warn("Failed to enable {} hook", pluginName, e);
+			return null;
 		}
 	}
 

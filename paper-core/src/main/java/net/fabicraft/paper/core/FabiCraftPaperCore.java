@@ -7,7 +7,7 @@ import net.fabicraft.common.config.ConfigManager;
 import net.fabicraft.common.locale.BrandColor;
 import net.fabicraft.paper.core.command.*;
 import net.fabicraft.paper.core.config.CoreConfig;
-import net.fabicraft.paper.core.hook.HuskHomesHook;
+import net.fabicraft.paper.core.hook.CoreHookManager;
 import net.fabicraft.paper.core.hook.PaperLuckPermsManager;
 import net.fabicraft.paper.core.listener.PlayerListener;
 import net.fabicraft.paper.core.locale.CoreTranslationManager;
@@ -35,12 +35,13 @@ public final class FabiCraftPaperCore extends JavaPlugin implements FabiCraftPap
 			)).build();
 	private final ConfigManager<CoreConfig> configManager;
 	private final List<FabiCraftPaperPlugin> registered = new ArrayList<>();
+	private final CoreHookManager hookManager;
 	private PaperCommandManager<Source> commandManager;
 	private PaperLuckPermsManager luckPermsManager;
-	private HuskHomesHook huskHomesHook;
 
 	public FabiCraftPaperCore() {
 		this.registered.add(this);
+		this.hookManager = new CoreHookManager(this);
 		new CoreTranslationManager(getSLF4JLogger());
 		this.configManager = new ConfigManager<>(CoreConfig.class, getDataPath(), "config.toml", getSLF4JLogger());
 	}
@@ -49,11 +50,7 @@ public final class FabiCraftPaperCore extends JavaPlugin implements FabiCraftPap
 	public void onEnable() {
 		this.luckPermsManager = new PaperLuckPermsManager(getSLF4JLogger());
 		this.commandManager = createCommandManager();
-
-		PluginManager pluginManager = getServer().getPluginManager();
-		if (pluginManager.isPluginEnabled("HuskHomes")) {
-			this.huskHomesHook = new HuskHomesHook(this);
-		}
+		this.hookManager.register();
 
 		load();
 
@@ -76,8 +73,8 @@ public final class FabiCraftPaperCore extends JavaPlugin implements FabiCraftPap
 	@Override
 	public void load() {
 		this.configManager.load();
-		if (this.huskHomesHook != null) {
-			this.huskHomesHook.load();
+		if (this.hookManager.huskHomesHook() != null) {
+			this.hookManager.huskHomesHook().load();
 		}
 	}
 
@@ -101,10 +98,6 @@ public final class FabiCraftPaperCore extends JavaPlugin implements FabiCraftPap
 
 	public CoreConfig config() {
 		return this.configManager.config();
-	}
-
-	public HuskHomesHook huskHomesHook() {
-		return this.huskHomesHook;
 	}
 
 	private PaperCommandManager<Source> createCommandManager() {
@@ -131,8 +124,5 @@ public final class FabiCraftPaperCore extends JavaPlugin implements FabiCraftPap
 		List.of(
 				new PlayerListener(this)
 		).forEach(listener -> manager.registerEvents(listener, this));
-		if (this.huskHomesHook != null) {
-			this.huskHomesHook.registerListeners();
-		}
 	}
 }
