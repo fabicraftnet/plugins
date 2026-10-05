@@ -31,7 +31,7 @@ public abstract class TranslationManager {
 	private void loadFromResourceBundle() {
 		try {
 			bundledLocales().forEach(locale -> {
-				ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+				ResourceBundle bundle = ResourceBundle.getBundle("messages", locale, getClass().getClassLoader());
 				this.translationStore.registerAll(locale, bundle, false);
 			});
 		} catch (IllegalArgumentException e) {
