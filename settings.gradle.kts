@@ -3,7 +3,6 @@ rootProject.name = "FabiCraft"
 includeBuild("build-logic")
 
 listOf(
-	"paper-common",
 	"paper-core",
 	"paper-bedwars",
 	"paper-survival",

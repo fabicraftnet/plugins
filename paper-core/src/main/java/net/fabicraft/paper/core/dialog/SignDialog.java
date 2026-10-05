@@ -9,7 +9,6 @@ import io.papermc.paper.registry.data.dialog.body.DialogBody;
 import io.papermc.paper.registry.data.dialog.input.DialogInput;
 import io.papermc.paper.registry.data.dialog.type.DialogType;
 import net.fabicraft.common.locale.BrandColor;
-import net.fabicraft.paper.common.dialog.DialogFactory;
 import net.fabicraft.paper.core.FabiCraftPaperCore;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickCallback;

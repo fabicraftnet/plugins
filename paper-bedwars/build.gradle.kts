@@ -8,7 +8,7 @@ description = "Bedwars plugin"
 version = "1"
 
 dependencies {
-	implementation(project(":paper-common"))
+	compileOnly(project(":paper-core"))
 	compileOnly(libs.plugin.mbedwars)
 	compileOnly(libs.plugin.carbon)
 }
@@ -20,6 +20,10 @@ paperPluginYaml {
 	apiVersion = "26.1.2"
 	dependencies {
 		server {
+			register("FabiCraft-Paper-Core") {
+				required = true
+				load = PaperPluginYaml.Load.BEFORE
+			}
 			register("CarbonChat") {
 				required = true
 				load = PaperPluginYaml.Load.BEFORE

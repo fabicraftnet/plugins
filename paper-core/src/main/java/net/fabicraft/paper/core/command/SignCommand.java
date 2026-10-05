@@ -2,7 +2,6 @@ package net.fabicraft.paper.core.command;
 
 import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
-import net.fabicraft.paper.common.command.PaperCommand;
 import net.fabicraft.paper.core.FabiCraftPaperCore;
 import net.fabicraft.paper.core.command.parser.DyeColorParser;
 import net.fabicraft.paper.core.dialog.SignDialog;
@@ -16,7 +15,9 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.sign.SignSide;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
+import org.incendo.cloud.paper.util.sender.Source;
 import org.incendo.cloud.parser.standard.BooleanParser;
 
 
@@ -43,22 +44,22 @@ public final class SignCommand extends PaperCommand<FabiCraftPaperCore> {
 	);
 
 	public SignCommand(FabiCraftPaperCore plugin) {
-		super(plugin, plugin.commandManager());
+		super(plugin);
 	}
 
 	@Override
-	public void register() {
-		var builder = super.manager.commandBuilder("sign").senderType(PlayerSource.class).permission(PERMISSION);
+	public void register(PaperCommandManager<Source> manager) {
+		var builder = manager.commandBuilder("sign").senderType(PlayerSource.class).permission(PERMISSION);
 
-		super.manager.command(builder.handler(this::executeShowDialog));
-		super.manager.command(builder
+		manager.command(builder.handler(this::executeShowDialog));
+		manager.command(builder
 				.literal("glowing")
 				.permission(PERMISSION_GLOWING)
 				.optional("glowing", BooleanParser.booleanParser())
 				.handler(this::executeGlowing)
 		);
 
-		super.manager.command(builder.literal("color")
+		manager.command(builder.literal("color")
 				.permission(PERMISSION_COLOR)
 				.required("color", DyeColorParser.dyeColorParser())
 				.handler(this::executeColor)

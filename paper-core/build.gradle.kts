@@ -8,8 +8,11 @@ version = "1"
 description = "Main paper plugin"
 
 dependencies {
-	implementation(project(":paper-common"))
+	api(project(":common"))
+	api(libs.cloud.paper)
 	compileOnly(libs.plugin.huskhomes)
+	compileOnlyApi(libs.platform.paper)
+	compileOnlyApi(libs.plugin.miniplaceholders)
 }
 
 paperPluginYaml {

@@ -1,4 +1,4 @@
-package net.fabicraft.paper.common.luckperms;
+package net.fabicraft.paper.core.hook;
 
 import net.fabicraft.common.luckperms.LuckPermsManager;
 import net.luckperms.api.model.user.User;

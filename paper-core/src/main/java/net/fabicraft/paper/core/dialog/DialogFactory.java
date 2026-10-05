@@ -1,4 +1,4 @@
-package net.fabicraft.paper.common.dialog;
+package net.fabicraft.paper.core.dialog;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;

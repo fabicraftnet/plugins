@@ -1,9 +1,9 @@
 package net.fabicraft.paper.survival.hook.miniplaceholders;
 
 import io.github.miniplaceholders.api.Expansion;
+import net.fabicraft.paper.core.hook.Hook;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
-import net.fabicraft.paper.survival.hook.Hook;
 import net.fabicraft.paper.survival.hook.miniplaceholders.gathering.GatheringCollectedPlaceholder;
 import net.fabicraft.paper.survival.hook.miniplaceholders.gathering.GatheringDisplayNamePlaceholder;
 import net.fabicraft.paper.survival.hook.miniplaceholders.gathering.GatheringGoalPlaceholder;

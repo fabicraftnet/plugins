@@ -8,7 +8,7 @@ description = "Survival plugin"
 version = "1"
 
 dependencies {
-	implementation(project(":paper-common"))
+	compileOnly(project(":paper-core"))
 	compileOnly(libs.plugin.carbon)
 	compileOnly(libs.plugin.citizens) {
 		exclude(group = "*", module = "*")
@@ -25,6 +25,10 @@ paperPluginYaml {
 	apiVersion = "1.21.11"
 	dependencies {
 		server {
+			register("FabiCraft-Paper-Core") {
+				required = true
+				load = PaperPluginYaml.Load.BEFORE
+			}
 			register("LuckPerms") {
 				required = true
 				load = PaperPluginYaml.Load.BEFORE

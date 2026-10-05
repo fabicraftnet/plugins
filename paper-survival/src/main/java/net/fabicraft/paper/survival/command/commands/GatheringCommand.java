@@ -2,7 +2,7 @@ package net.fabicraft.paper.survival.command.commands;
 
 import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
-import net.fabicraft.paper.common.command.PaperCommand;
+import net.fabicraft.paper.core.command.PaperCommand;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.command.parser.GatheringParser;
 import net.fabicraft.paper.survival.gathering.Gathering;
@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.bukkit.parser.MaterialParser;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.minecraft.extras.parser.ComponentParser;
+import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.incendo.cloud.paper.util.sender.Source;
 import org.incendo.cloud.parser.standard.IntegerParser;
@@ -36,14 +37,14 @@ public final class GatheringCommand extends PaperCommand<FabiCraftPaperSurvival>
 	private final GatheringManager gatheringManager;
 
 	public GatheringCommand(FabiCraftPaperSurvival plugin) {
-		super(plugin, plugin.commandManager());
+		super(plugin);
 		this.gatheringManager = plugin.gatheringManager();
 	}
 
 	@Override
-	public void register() {
-		var builder = super.manager.commandBuilder("gathering");
-		super.manager.command(builder
+	public void register(PaperCommandManager<Source> manager) {
+		var builder = manager.commandBuilder("gathering");
+		manager.command(builder
 				.literal("add")
 				.senderType(PlayerSource.class)
 				.permission(PERMISSION_ADD)
@@ -52,13 +53,13 @@ public final class GatheringCommand extends PaperCommand<FabiCraftPaperSurvival>
 				.required("goal", IntegerParser.integerParser(1))
 				.handler(this::handleAdd)
 		);
-		super.manager.command(builder
+		manager.command(builder
 				.literal("remove")
 				.permission(PERMISSION_REMOVE)
 				.required("name", StringParser.stringParser())
 				.handler(this::handleRemove)
 		);
-		super.manager.command(builder
+		manager.command(builder
 				.literal("list")
 				.permission(PERMISSION_LIST)
 				.handler(this::handleList)
@@ -67,12 +68,12 @@ public final class GatheringCommand extends PaperCommand<FabiCraftPaperSurvival>
 		var editBuilder = builder.literal("edit")
 				.required("gathering", GatheringParser.gatheringParser())
 				.permission(PERMISSION_EDIT);
-		super.manager.command(editBuilder
+		manager.command(editBuilder
 				.literal("displayname")
 				.required("displayName", ComponentParser.miniMessageParser(StringParser.StringMode.GREEDY))
 				.handler(this::handleEditDisplayName)
 		);
-		super.manager.command(editBuilder
+		manager.command(editBuilder
 				.literal("goal")
 				.required("goal", IntegerParser.integerParser(1))
 				.handler(this::handleEditGoal)

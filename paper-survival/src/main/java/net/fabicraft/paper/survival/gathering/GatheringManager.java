@@ -82,7 +82,7 @@ public final class GatheringManager {
 
 					String displayName = set.getString("display_name");
 					if (displayName != null) {
-						gathering.displayName(this.plugin.miniMessage().deserialize(displayName));
+						gathering.displayName(this.plugin.core().miniMessage().deserialize(displayName));
 					}
 					this.gatherings.add(gathering);
 				}
@@ -147,7 +147,7 @@ public final class GatheringManager {
 				statement.setString(5, gathering.material().toString());
 				statement.setInt(6, gathering.goal());
 				statement.setInt(7, gathering.collected());
-				statement.setString(8, this.plugin.miniMessage().serialize(gathering.displayName()));
+				statement.setString(8, this.plugin.core().miniMessage().serialize(gathering.displayName()));
 				statement.executeUpdate();
 			} catch (SQLException exception) {
 				this.plugin.getSLF4JLogger().error("Could not save gathering to the database {}", gathering.identifier(), exception);

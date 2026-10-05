@@ -6,7 +6,7 @@ import io.papermc.paper.registry.data.dialog.body.DialogBody;
 import io.papermc.paper.registry.data.dialog.type.DialogType;
 import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
-import net.fabicraft.paper.common.dialog.DialogFactory;
+import net.fabicraft.paper.core.dialog.DialogFactory;
 import org.bukkit.entity.Player;
 
 import java.util.List;

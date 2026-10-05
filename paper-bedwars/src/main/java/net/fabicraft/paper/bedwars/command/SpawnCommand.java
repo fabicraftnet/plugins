@@ -3,13 +3,14 @@ package net.fabicraft.paper.bedwars.command;
 import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
 import net.fabicraft.paper.bedwars.FabiCraftPaperBedwars;
-import net.fabicraft.paper.common.command.PaperCommand;
+import net.fabicraft.paper.core.command.PaperCommand;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.bukkit.data.MultiplePlayerSelector;
 import org.incendo.cloud.bukkit.parser.selector.MultiplePlayerSelectorParser;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.incendo.cloud.paper.util.sender.Source;
 
@@ -20,14 +21,14 @@ public final class SpawnCommand extends PaperCommand<FabiCraftPaperBedwars> {
 	private static final String PERMISSION_OTHER = "fabicraft.paper.bedwars.command.spawn.other";
 
 	public SpawnCommand(FabiCraftPaperBedwars plugin) {
-		super(plugin, plugin.commandManager());
+		super(plugin);
 	}
 
 	@Override
-	public void register() {
-		var builder = super.manager.commandBuilder("spawn");
-		super.manager.command(builder.senderType(PlayerSource.class).permission(PERMISSION).handler(this::handle));
-		super.manager.command(builder.required("selector", MultiplePlayerSelectorParser.multiplePlayerSelectorParser()).permission(PERMISSION_OTHER).handler(this::handleOther));
+	public void register(PaperCommandManager<Source> manager) {
+		var builder = manager.commandBuilder("spawn");
+		manager.command(builder.senderType(PlayerSource.class).permission(PERMISSION).handler(this::handle));
+		manager.command(builder.required("selector", MultiplePlayerSelectorParser.multiplePlayerSelectorParser()).permission(PERMISSION_OTHER).handler(this::handleOther));
 	}
 
 	private void handle(CommandContext<PlayerSource> context) {

@@ -1,4 +1,4 @@
-package net.fabicraft.paper.common.locale;
+package net.fabicraft.paper.core.locale;
 
 import net.fabicraft.common.locale.Components;
 import net.kyori.adventure.text.ComponentLike;

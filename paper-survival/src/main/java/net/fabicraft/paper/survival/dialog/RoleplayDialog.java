@@ -9,8 +9,8 @@ import io.papermc.paper.registry.data.dialog.input.DialogInput;
 import io.papermc.paper.registry.data.dialog.type.DialogType;
 import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
-import net.fabicraft.paper.common.dialog.DialogFactory;
-import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
+import net.fabicraft.paper.core.dialog.DialogFactory;
+import net.fabicraft.paper.core.hook.PaperLuckPermsManager;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.command.commands.RoleplayCommand;
 import net.fabicraft.paper.survival.config.section.RoleplaySection;
@@ -34,7 +34,7 @@ public final class RoleplayDialog extends DialogFactory {
 	public RoleplayDialog(FabiCraftPaperSurvival plugin, Player player) {
 		super(player);
 		this.plugin = plugin;
-		this.luckPermsManager = plugin.luckPermsManager();
+		this.luckPermsManager = plugin.core().luckPermsManager();
 		this.playerDataManager = plugin.playerDataManager();
 	}
 

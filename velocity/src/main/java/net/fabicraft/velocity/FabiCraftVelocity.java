@@ -11,12 +11,12 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import net.fabicraft.common.command.ExceptionHandler;
 import net.fabicraft.common.command.MinecraftCaptionProvider;
+import net.fabicraft.common.config.ConfigManager;
 import net.fabicraft.common.locale.BrandColor;
 import net.fabicraft.velocity.command.VelocityCommand;
 import net.fabicraft.velocity.command.commands.FabiCraftVelocityCommand;
 import net.fabicraft.velocity.command.commands.HubCommand;
 import net.fabicraft.velocity.config.VelocityConfig;
-import net.fabicraft.velocity.config.VelocityConfigManager;
 import net.fabicraft.velocity.listener.LoginListener;
 import net.fabicraft.velocity.listener.PingListener;
 import net.fabicraft.velocity.locale.VelocityTranslationManager;
@@ -30,7 +30,6 @@ import org.incendo.cloud.velocity.VelocityCommandManager;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
-import java.util.concurrent.ExecutorService;
 import java.util.stream.Stream;
 
 public final class FabiCraftVelocity {
@@ -43,23 +42,21 @@ public final class FabiCraftVelocity {
 	private final ProxyServer server;
 	private final Logger logger;
 	private final Path dataDirectory;
-	private final VelocityConfigManager configManager;
+	private final ConfigManager<VelocityConfig> configManager;
 	private final Injector injector;
 	private final IconManager iconManager;
-	private final ExecutorService executorService;
 	private VelocityCommandManager<CommandSource> commandManager;
 
 	@Inject
-	public FabiCraftVelocity(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory, Injector injector, ExecutorService executorService) {
+	public FabiCraftVelocity(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory, Injector injector) {
 		this.server = server;
 		this.logger = logger;
 		this.dataDirectory = dataDirectory;
 		this.injector = injector;
-		this.executorService = executorService;
 
 		new VelocityTranslationManager(logger);
 
-		this.configManager = new VelocityConfigManager(this);
+		this.configManager = new ConfigManager<>(VelocityConfig.class, dataDirectory, "config.toml", logger);
 		this.iconManager = new IconManager(this);
 	}
 

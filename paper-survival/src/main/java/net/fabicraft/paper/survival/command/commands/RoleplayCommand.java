@@ -5,8 +5,8 @@ import net.draycia.carbon.api.CarbonChatProvider;
 import net.draycia.carbon.api.channels.ChatChannel;
 import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
-import net.fabicraft.paper.common.command.PaperCommand;
-import net.fabicraft.paper.common.luckperms.PaperLuckPermsManager;
+import net.fabicraft.paper.core.command.PaperCommand;
+import net.fabicraft.paper.core.hook.PaperLuckPermsManager;
 import net.fabicraft.paper.survival.FabiCraftPaperSurvival;
 import net.fabicraft.paper.survival.player.PlayerData;
 import net.fabicraft.paper.survival.player.PlayerDataManager;
@@ -17,7 +17,9 @@ import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.bukkit.parser.PlayerParser;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
+import org.incendo.cloud.paper.util.sender.Source;
 import org.incendo.cloud.parser.standard.IntegerParser;
 import org.incendo.cloud.parser.standard.StringParser;
 
@@ -45,28 +47,28 @@ public final class RoleplayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 	private final PlayerHeightController playerHeightController = new PlayerHeightController();
 
 	public RoleplayCommand(FabiCraftPaperSurvival plugin) {
-		super(plugin, plugin.commandManager());
-		this.luckPermsManager = plugin.luckPermsManager();
+		super(plugin);
+		this.luckPermsManager = plugin.core().luckPermsManager();
 		this.playerDataManager = plugin.playerDataManager();
 	}
 
 	@Override
-	public void register() {
-		var builder = super.manager.commandBuilder("roleplay", "rp")
+	public void register(PaperCommandManager<Source> manager) {
+		var builder = manager.commandBuilder("roleplay", "rp")
 				.permission(PERMISSION_BASE)
 				.senderType(PlayerSource.class)
 				.handler(this::handle);
-		super.manager.command(builder);
+		manager.command(builder);
 
 		var nameBuilder = builder.literal("name").permission(PERMISSION_NAME).required("player", PlayerParser.playerParser());
-		super.manager.command(nameBuilder.handler(this::handleName));
-		super.manager.command(nameBuilder.literal("reset").handler(this::handleNameReset));
-		super.manager.command(nameBuilder.literal("set").required("name", StringParser.greedyStringParser()).handler(this::handleNameSet));
+		manager.command(nameBuilder.handler(this::handleName));
+		manager.command(nameBuilder.literal("reset").handler(this::handleNameReset));
+		manager.command(nameBuilder.literal("set").required("name", StringParser.greedyStringParser()).handler(this::handleNameSet));
 
 		var heightBuilder = builder.literal("height").permission(PERMISSION_HEIGHT).required("player", PlayerParser.playerParser());
-		super.manager.command(heightBuilder.handler(this::handleHeight));
-		super.manager.command(heightBuilder.literal("set").required("height", IntegerParser.integerParser()).handler(this::handleHeightSet));
-		super.manager.command(heightBuilder.literal("reset").handler(this::handleHeightReset));
+		manager.command(heightBuilder.handler(this::handleHeight));
+		manager.command(heightBuilder.literal("set").required("height", IntegerParser.integerParser()).handler(this::handleHeightSet));
+		manager.command(heightBuilder.literal("reset").handler(this::handleHeightReset));
 	}
 
 	private void handle(CommandContext<PlayerSource> context) {
@@ -87,7 +89,9 @@ public final class RoleplayCommand extends PaperCommand<FabiCraftPaperSurvival> 
 		} else {
 			this.luckPermsManager.addGroup(player, GROUP_NAME);
 			PlayerData data = Objects.requireNonNull(this.playerDataManager.data(player), "playerdata can not be null");
-			this.playerHeightController.set(player, data.characterHeight());
+			if (data.characterHeight() != null) {
+				this.playerHeightController.set(player, data.characterHeight());
+			}
 			player.sendMessage(COMPONENT_ADD);
 		}
 	}

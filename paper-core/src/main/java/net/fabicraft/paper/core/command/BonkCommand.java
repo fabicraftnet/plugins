@@ -2,7 +2,6 @@ package net.fabicraft.paper.core.command;
 
 import net.fabicraft.common.locale.Components;
 import net.fabicraft.common.locale.MessageType;
-import net.fabicraft.paper.common.command.PaperCommand;
 import net.fabicraft.paper.core.FabiCraftPaperCore;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -13,6 +12,7 @@ import org.bukkit.util.Vector;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.bukkit.data.MultiplePlayerSelector;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.paper.util.sender.Source;
 
 import java.util.Collection;
@@ -31,19 +31,19 @@ public final class BonkCommand extends PaperCommand<FabiCraftPaperCore> {
 	);
 
 	public BonkCommand(FabiCraftPaperCore plugin) {
-		super(plugin, plugin.commandManager());
+		super(plugin);
 	}
 
 	@Override
-	public void register() {
-		Command.Builder<Source> builder = this.manager.commandBuilder("bonk")
+	public void register(PaperCommandManager<Source> manager) {
+		Command.Builder<Source> builder = manager.commandBuilder("bonk")
 				.permission(PERMISSION)
 				.required("players", multiplePlayerSelectorParser(false))
 				.optional("amount", integerParser(1, 10000))
 				.optional("radius", integerParser(0, 100))
 				.handler(this::execute);
 
-		super.manager.command(builder);
+		manager.command(builder);
 	}
 
 	private void execute(CommandContext<Source> context) {
