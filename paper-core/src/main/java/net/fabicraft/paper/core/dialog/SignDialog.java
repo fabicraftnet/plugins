@@ -27,6 +27,7 @@ import java.util.Objects;
 
 @SuppressWarnings("UnstableApiUsage")
 public final class SignDialog extends DialogFactory {
+	private static final int SIGN_LINE_COUNT = 4;
 	private final Sign sign;
 	private final MiniMessage miniMessage;
 	private final NamespacedKey frontKey;
@@ -49,18 +50,18 @@ public final class SignDialog extends DialogFactory {
 		);
 
 		if (raw == null) {
-			List<String> fallback = new ArrayList<>(4);
-			for (int i = 0; i < 4; i++) {
+			List<String> fallback = new ArrayList<>(SIGN_LINE_COUNT);
+			for (int i = 0; i < SIGN_LINE_COUNT; i++) {
 				fallback.add(super.plainTextComponentSerializer.serialize(side.line(i)));
 			}
 			raw = fallback;
 		}
 
-		List<DialogInput> inputs = new ArrayList<>(4);
-		for (int i = 0; i < 4; i++) {
+		List<DialogInput> inputs = new ArrayList<>(SIGN_LINE_COUNT);
+		for (int i = 0; i < SIGN_LINE_COUNT; i++) {
 			inputs.add(DialogInput
 					.text(String.valueOf(i), Component.empty())
-					.initial(raw.get(i))
+					.initial(raw.get(i).substring(0, Math.min(99, raw.get(i).length())))
 					.maxLength(99)
 					.labelVisible(false)
 					.build());
@@ -97,8 +98,8 @@ public final class SignDialog extends DialogFactory {
 	}
 
 	private void save(DialogResponseView view, Sign sign, SignSide side) {
-		List<String> raw = new ArrayList<>(4);
-		for (int i = 0; i < 4; i++) {
+		List<String> raw = new ArrayList<>(SIGN_LINE_COUNT);
+		for (int i = 0; i < SIGN_LINE_COUNT; i++) {
 			String text = Objects.requireNonNullElse(view.getText(String.valueOf(i)), "");
 			raw.add(text);
 			side.line(i, this.miniMessage.deserialize(text));
