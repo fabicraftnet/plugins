@@ -17,6 +17,7 @@ import net.fabicraft.velocity.command.VelocityCommand;
 import net.fabicraft.velocity.command.commands.FabiCraftVelocityCommand;
 import net.fabicraft.velocity.command.commands.HubCommand;
 import net.fabicraft.velocity.config.VelocityConfig;
+import net.fabicraft.velocity.config.liaison.ProtocolVersionLiaison;
 import net.fabicraft.velocity.listener.LoginListener;
 import net.fabicraft.velocity.listener.PingListener;
 import net.fabicraft.velocity.locale.VelocityTranslationManager;
@@ -56,7 +57,13 @@ public final class FabiCraftVelocity {
 
 		new VelocityTranslationManager(logger);
 
-		this.configManager = new ConfigManager<>(VelocityConfig.class, dataDirectory, "config.toml", logger);
+		this.configManager = new ConfigManager<>(
+				VelocityConfig.class,
+				dataDirectory,
+				"config.toml",
+				logger,
+				options -> options.addTypeLiaisons(new ProtocolVersionLiaison())
+		);
 		this.iconManager = new IconManager(this);
 	}
 

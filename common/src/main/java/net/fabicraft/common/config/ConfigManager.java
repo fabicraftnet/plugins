@@ -2,6 +2,7 @@ package net.fabicraft.common.config;
 
 import org.slf4j.Logger;
 import space.arim.dazzleconf.Configuration;
+import space.arim.dazzleconf.ConfigurationBuilder;
 import space.arim.dazzleconf.StandardErrorPrint;
 import space.arim.dazzleconf.backend.Backend;
 import space.arim.dazzleconf.backend.PathRoot;
@@ -10,6 +11,7 @@ import space.arim.dazzleconf.backend.toml.TomlBackend;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.UnaryOperator;
 
 public final class ConfigManager<T> {
 	private final Configuration<T> configuration;
@@ -20,10 +22,14 @@ public final class ConfigManager<T> {
 	private volatile T config;
 
 	public ConfigManager(Class<T> type, Path directory, String fileName, Logger logger) {
+		this(type, directory, fileName, logger, UnaryOperator.identity());
+	}
+
+	public ConfigManager(Class<T> type, Path directory, String fileName, Logger logger, UnaryOperator<ConfigurationBuilder<T>> options) {
 		this.directory = directory;
 		this.logger = logger;
 
-		this.configuration = Configuration.defaultBuilder(type).build();
+		this.configuration = options.apply(Configuration.defaultBuilder(type)).build();
 		this.backend = new TomlBackend(new PathRoot(directory.resolve(fileName)));
 		this.errorPrint = new StandardErrorPrint(output -> this.logger.error(output.printString()));
 	}

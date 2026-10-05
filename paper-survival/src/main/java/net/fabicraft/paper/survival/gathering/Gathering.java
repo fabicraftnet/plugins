@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public final class Gathering implements InventoryHolder {
 	private final String identifier;
@@ -65,7 +65,7 @@ public final class Gathering implements InventoryHolder {
 	}
 
 	@Override
-	public @NotNull Inventory getInventory() {
+	public @NonNull Inventory getInventory() {
 		return Bukkit.createInventory(this, 27, displayName());
 	}
 }

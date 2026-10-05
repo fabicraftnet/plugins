@@ -18,7 +18,7 @@ import net.fabicraft.paper.survival.locale.SurvivalTranslationManager;
 import net.fabicraft.paper.survival.player.PlayerDataManager;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -100,7 +100,7 @@ public final class FabiCraftPaperSurvival extends JavaPlugin implements FabiCraf
 	}
 
 	@Override
-	public @NotNull Path getDataPath() {
+	public @NonNull Path getDataPath() {
 		return getServer().getPluginsFolder().toPath().resolve("FabiCraft/survival");
 	}
 

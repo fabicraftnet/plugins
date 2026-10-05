@@ -1,9 +1,8 @@
 package net.fabicraft.velocity.config.liaison;
 
 import com.velocitypowered.api.network.ProtocolVersion;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import space.arim.dazzleconf.LoadResult;
 import space.arim.dazzleconf.backend.Printable;
 import space.arim.dazzleconf.engine.DeserializeInput;
@@ -32,7 +31,7 @@ public final class ProtocolVersionLiaison implements TypeLiaison {
 				}
 
 				@Override
-				public void serialize(@NotNull ProtocolVersion value, @NonNull SerializeOutput ser) {
+				public void serialize(@NonNull ProtocolVersion value, @NonNull SerializeOutput ser) {
 					ser.outInt(value.getProtocol());
 				}
 			};
