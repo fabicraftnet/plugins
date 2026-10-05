@@ -47,4 +47,14 @@ paperPluginYaml {
 			}
 		}
 	}
+	permissions {
+		register("fabicraft.paper.survival.command.fabicraft.item")
+		register("fabicraft.paper.survival.command.gathering.add")
+		register("fabicraft.paper.survival.command.gathering.remove")
+		register("fabicraft.paper.survival.command.gathering.list")
+		register("fabicraft.paper.survival.command.gathering.edit")
+		register("fabicraft.paper.survival.command.roleplay")
+		register("fabicraft.paper.survival.command.roleplay.name")
+		register("fabicraft.paper.survival.command.roleplay.height")
+	}
 }

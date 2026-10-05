@@ -37,6 +37,16 @@ paperPluginYaml {
 		}
 	}
 	permissions {
+		register("fabicraft.paper.core.command.bonk")
+		register("fabicraft.paper.core.command.bonk.broadcast")
+		register("fabicraft.paper.core.command.bonk.broadcast.sender")
+		register("fabicraft.paper.core.command.builder.nightvision")
+		register("fabicraft.paper.core.command.crafter")
+		register("fabicraft.paper.core.command.fabicraft.reload")
+		register("fabicraft.paper.core.command.sign")
+		register("fabicraft.paper.core.command.sign.glowing")
+		register("fabicraft.paper.core.command.sign.color")
+
 		register("fabicraft.paper.core.join.bypass")
 	}
 }
