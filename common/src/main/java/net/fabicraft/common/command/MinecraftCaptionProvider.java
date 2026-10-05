@@ -1,13 +1,12 @@
 package net.fabicraft.common.command;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.caption.Caption;
 import org.incendo.cloud.caption.CaptionProvider;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public final class MinecraftCaptionProvider<C> implements CaptionProvider<C> {
 	@Override
-	public @NotNull String provide(@NonNull Caption caption, @NotNull C recipient) {
+	public @NonNull String provide(@NonNull Caption caption, @NonNull C recipient) {
 		return caption.key();
 	}
 }

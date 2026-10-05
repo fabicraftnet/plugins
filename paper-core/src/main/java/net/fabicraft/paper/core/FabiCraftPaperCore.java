@@ -20,7 +20,7 @@ import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.paper.util.sender.PaperSimpleSenderMapper;
 import org.incendo.cloud.paper.util.sender.Source;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -95,7 +95,7 @@ public final class FabiCraftPaperCore extends JavaPlugin implements FabiCraftPap
 	}
 
 	@Override
-	public @NotNull Path getDataPath() {
+	public @NonNull Path getDataPath() {
 		return getServer().getPluginsFolder().toPath().resolve("FabiCraft/core");
 	}
 
