@@ -36,7 +36,7 @@ public final class SignDialog extends DialogFactory {
 
 	public SignDialog(FabiCraftPaperCore plugin, Player player, Sign sign) {
 		super(player);
-		this.miniMessage = plugin.miniMessage();
+		this.miniMessage = plugin.userMiniMessage();
 		this.sign = sign;
 		this.frontKey = new NamespacedKey(plugin, "sign_lines_front");
 		this.backKey = new NamespacedKey(plugin, "sign_lines_back");

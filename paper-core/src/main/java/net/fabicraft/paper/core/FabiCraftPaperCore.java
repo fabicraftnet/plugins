@@ -33,6 +33,35 @@ public final class FabiCraftPaperCore extends JavaPlugin implements FabiCraftPap
 					BrandColor.resolver(),
 					MiniPlaceholders.globalPlaceholders()
 			)).build();
+	private final MiniMessage userMM = MiniMessage.builder()
+			.tags(TagResolver.builder()
+					.resolver(StandardTags.color())
+					.resolver(StandardTags.decorations())
+					.resolver(StandardTags.gradient())
+					.resolver(StandardTags.pride())
+					.resolver(StandardTags.rainbow())
+					//.resolver(StandardTags.newline())
+					.resolver(StandardTags.reset())
+					.resolver(StandardTags.sequentialHead())
+					.resolver(StandardTags.shadowColor())
+					.resolver(StandardTags.sprite())
+					.build())
+			.build();
+	private final MiniMessage restrictedMM = MiniMessage.builder()
+			.tags(TagResolver.builder()
+					.resolver(StandardTags.font())
+					.resolver(StandardTags.clickEvent())
+					.resolver(StandardTags.reset())
+					.resolver(StandardTags.hoverEvent())
+					.resolver(StandardTags.keybind())
+					.resolver(StandardTags.translatable())
+					.resolver(StandardTags.insertion())
+					.resolver(StandardTags.newline())
+					.resolver(StandardTags.selector())
+					.resolver(StandardTags.score())
+					.resolver(StandardTags.nbt())
+					.build())
+			.build();
 	private final ConfigManager<CoreConfig> configManager;
 	private final List<FabiCraftPaperPlugin> registered = new ArrayList<>();
 	private final CoreHookManager hookManager;
@@ -89,6 +118,21 @@ public final class FabiCraftPaperCore extends JavaPlugin implements FabiCraftPap
 
 	public MiniMessage miniMessage() {
 		return this.miniMessage;
+	}
+
+	/**
+	 * MiniMessage provider that EXCLUDES player restricted tags.
+	 * @return MiniMessage
+	 */
+	public MiniMessage userMiniMessage() {
+		return this.userMM;
+	}
+	/**
+	 * MiniMessage provider that INCLUDES player restricted tags only. Meant for stripping tags.
+	 * @return MiniMessage
+	 */
+	public MiniMessage restrictedMiniMessage() {
+		return this.restrictedMM;
 	}
 
 	@Override

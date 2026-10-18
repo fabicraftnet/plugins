@@ -86,7 +86,7 @@ public final class RoleplayDialog extends DialogFactory {
 		Boolean enabled = Objects.requireNonNull(view.getBoolean("enabled"), "enabled must not be null");
 		int height = Objects.requireNonNull(view.getFloat("height"), "height must not be null").intValue();
 		String name = Objects.requireNonNull(view.getText("name"), "name must not be null");
-
+		name = plugin.core().restrictedMiniMessage().stripTags(name);
 		data.characterHeight(height);
 		int minNameLength = this.plugin.config().roleplay().minNameLength();
 		if (name.isBlank() || name.length() < minNameLength) {
