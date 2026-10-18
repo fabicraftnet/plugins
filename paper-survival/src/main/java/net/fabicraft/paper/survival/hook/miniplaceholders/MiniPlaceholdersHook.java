@@ -10,6 +10,7 @@ import net.fabicraft.paper.survival.hook.miniplaceholders.gathering.GatheringGoa
 import net.fabicraft.paper.survival.hook.miniplaceholders.gathering.GatheringIdentifierPlaceholder;
 import net.fabicraft.paper.survival.player.PlayerData;
 import net.fabicraft.paper.survival.player.PlayerDataManager;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.bukkit.entity.Player;
 
@@ -29,7 +30,7 @@ public final class MiniPlaceholdersHook implements Hook {
 		builder.audiencePlaceholder(Player.class, "character_name", (player, queue, context) -> {
 			PlayerData data = playerDataManager.data(player);
 			String characterName = data == null || data.characterName() == null ? player.getName() : data.characterName();
-			return Tag.preProcessParsed(characterName);
+			return Tag.selfClosingInserting(Component.text(characterName));
 		});
 
 		this.expansion = builder.build();
