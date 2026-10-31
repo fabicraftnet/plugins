@@ -2,6 +2,7 @@ package net.fabicraft.paper.survival.hook.miniplaceholders.gathering;
 
 import net.fabicraft.paper.survival.gathering.Gathering;
 import net.fabicraft.paper.survival.gathering.GatheringManager;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 
 public final class GatheringCollectedPlaceholder extends GatheringPlaceholder {
@@ -11,6 +12,6 @@ public final class GatheringCollectedPlaceholder extends GatheringPlaceholder {
 
 	@Override
 	protected Tag resolve(Gathering gathering) {
-		return Tag.preProcessParsed(String.valueOf(gathering.collected()));
+		return Tag.selfClosingInserting(Component.text(gathering.collected()));
 	}
 }
