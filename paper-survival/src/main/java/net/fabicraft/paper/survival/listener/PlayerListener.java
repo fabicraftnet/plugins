@@ -51,7 +51,7 @@ public final class PlayerListener implements Listener {
 		World from = event.getFrom().getWorld();
 		World to = event.getTo().getWorld();
 
-		if (from.getName().equalsIgnoreCase(to.getName())) {
+		if (from.getUID().equals(to.getUID())) {
 			return;
 		}
 

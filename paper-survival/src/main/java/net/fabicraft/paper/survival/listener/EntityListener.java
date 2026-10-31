@@ -27,7 +27,7 @@ public final class EntityListener implements Listener {
 
 		World to = toLocation.getWorld();
 
-		if (from.getName().equalsIgnoreCase(to.getName())) {
+		if (from.getUID().equals(to.getUID())) {
 			return;
 		}
 
