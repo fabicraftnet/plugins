@@ -8,7 +8,7 @@ description = "Survival plugin"
 version = "1"
 
 dependencies {
-	compileOnly(project(":paper-core"))
+	compileOnlyApi(project(":paper-core"))
 	compileOnly(libs.plugin.carbon)
 	compileOnly(libs.plugin.citizens) {
 		exclude(group = "*", module = "*")
