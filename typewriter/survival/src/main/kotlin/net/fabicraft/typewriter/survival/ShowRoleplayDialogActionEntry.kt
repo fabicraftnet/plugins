@@ -27,7 +27,7 @@ class ShowRoleplayDialogActionEntry(
 ) : ActionEntry {
 	override fun ActionTrigger.execute() {
 		RoleplayDialog(
-			Bukkit.getPluginManager().getPlugin("FabiCraftPaperSurvival") as FabiCraftPaperSurvival?,
+			Bukkit.getPluginManager().getPlugin("FabiCraft-Paper-Survival") as FabiCraftPaperSurvival?,
 			player
 		).show()
 	}
